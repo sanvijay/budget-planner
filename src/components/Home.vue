@@ -2,14 +2,14 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>
-      This is Hello World.
+      This is Home page.
     </p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'Home',
   props: {
     msg: String
   }
