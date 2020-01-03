@@ -23,7 +23,7 @@
 
 <script>
     export default {
-        data(){
+        data() {
             return {
                 email : "",
                 password : ""
@@ -44,8 +44,8 @@
                       }
                     })
                     .then(response => {
-                        localStorage.setItem('user',JSON.stringify(response.data.user))
-                        localStorage.setItem('jwt',response.data.token)
+                        localStorage.setItem('user', response.data.user)
+                        localStorage.setItem('jwt', response.data.token)
 
                         if (localStorage.getItem('jwt') != null){
                             // this.$emit('loggedIn')
@@ -53,11 +53,11 @@
                                 this.$router.push(this.$route.params.nextUrl)
                             }
                             else {
-                                this.$router.push('home')
+                                this.$router.push('dashboard')
                             }
                         }
                     });
-                    // .catch(function (_error) {
+                    // .catch(function (error) {
                     //     // console.error(error.response);
                     // });
                 }

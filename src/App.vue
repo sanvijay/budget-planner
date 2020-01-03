@@ -2,7 +2,8 @@
   <div id="app">
     Hi
     <div>
-      <button type="submit" @click="logout">Logout</button>
+      <router-link :to="{ name: 'dashboard' }" v-if="!loggedIn">Login</router-link>
+      <button type="submit" @click="logout" v-if="loggedIn">Logout</button>
     </div>
     <router-view></router-view>
   </div>
@@ -11,8 +12,16 @@
 <script>
 export default {
   name: 'app',
+  data: function() {
+    return {
+      loggedIn: (localStorage.getItem('jwt') != null && localStorage.getItem('user') != null)
+    }
+  },
+  computed: {
+
+  },
   methods: {
-    logout() {
+    logout: function() {
         localStorage.removeItem('jwt');
         localStorage.removeItem('user');
         window.location.href = "/";

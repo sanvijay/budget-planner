@@ -3,17 +3,17 @@ import VueRouter from 'vue-router'
 
 import Login from '@/components/Login.vue'
 import Register from '@/components/Register.vue'
-import Home from '@/components/Home.vue'
+import Dashboard from '@/components/Dashboard.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
 
 Vue.use(VueRouter)
 
 let router = new VueRouter({
   routes: [
-    { path: '/',         name: "root",     component: HelloWorld },
-    { path: "/login",    name: "login",    component: Login,    meta: { guest: true } },
-    { path: "/register", name: "register", component: Register, meta: { guest: true } },
-    { path: "/home",     name: "home",     component: Home,     meta: { requiresAuth: true } }
+    { path: '/',           name: "root",       component: HelloWorld },
+    { path: "/login",      name: "login",      component: Login,     meta: { guest: true } },
+    { path: "/register",   name: "register",   component: Register,  meta: { guest: true } },
+    { path: "/dashboard",  name: "dashboard",  component: Dashboard, meta: { requiresAuth: true } }
   ]
 })
 
