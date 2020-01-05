@@ -12,25 +12,30 @@
           <tr>
             <td></td>
             <td></td>
-            <td v-for="month in 3" :key="month">{{ month }} / {{ selectedYear }}</td>
+            <td v-for="month in 12" :key="month">{{ month }} / {{ selectedYear }}</td>
           </tr>
         </thead>
-        <tbody v-for="(subCategories, category) in expectedMonthlyBudget" :key="category">
-          <tr v-for="(yearExpenses, subCategory, idx) in subCategories" :key="subCategory">
-            <td :rowspan="Object.keys(subCategories).length + 1" v-if="idx == 0">
+        <tbody v-for="(subCategories, category) in categories" :key="category">
+          <tr v-if="subCategories.length == 0">
+            <td rowspan="2">
               {{ category }}
             </td>
-
+            <td v-for="empty in 13" :key="empty"></td>
+          </tr>
+          <tr v-for="(subCategory, idx) in subCategories" :key="subCategory">
+            <td :rowspan="subCategories.length + 1" v-if="idx == 0">
+              {{ category }}
+            </td>
             <td>
               {{ subCategory }}
             </td>
 
-            <td v-for="month in 3" :key="month" @dblclick="toggleEditingMoney(yearExpenses[selectedYear][month])">
-              <div v-if="!yearExpenses[selectedYear][month].editing">
-                Rs. {{ yearExpenses[selectedYear][month].value }}
+            <td v-if="expectedMonthlyBudget[category] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" :class="{ 'error-cell': expectedMonthlyBudget[category][subCategory][selectedYear][month].error }">
+              <div v-if="!expectedMonthlyBudget[category][subCategory][selectedYear][month].editing">
+                Rs. {{ expectedMonthlyBudget[category][subCategory][selectedYear][month].value }}
               </div>
-              <div v-if="yearExpenses[selectedYear][month].editing">
-                <input @keyup.esc="cancelEditingMoney(yearExpenses[selectedYear][month])" @keyup.enter="doneEditingMoney(yearExpenses[selectedYear][month])" @blur="doneEditingMoney(yearExpenses[selectedYear][month])" v-focus type="text" v-model="yearExpenses[selectedYear][month].value" />
+              <div v-if="expectedMonthlyBudget[category][subCategory][selectedYear][month].editing">
+                <input @keyup.esc="cancelEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" @keyup.enter="doneEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" @blur="doneEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" v-focus type="text" v-model="expectedMonthlyBudget[category][subCategory][selectedYear][month].value" />
               </div>
             </td>
           </tr>
@@ -39,7 +44,7 @@
             <td>
               <input type="text" placeholder="Add a category..." @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
             </td>
-            <td v-for="month in 3" :key="month"></td>
+            <td v-for="month in 12" :key="month"></td>
           </tr>
 
         </tbody>
@@ -60,6 +65,63 @@ export default {
     }
   },
   methods: {
+    initializeCategories: function() {
+      this.$http.get('http://localhost:3000/users/' + localStorage.getItem('user') + '/categories', {
+          headers: {
+            // https://github.com/axios/axios/issues/475
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Control-Allow-Origin': 'http://localhost:3000'
+          }
+        })
+        .then(response => {
+          for (var category in response.data) {
+            this.$set(this.categories, category, response.data[category])
+          }
+          // this.categories = response.data;
+        })
+        .catch(function (error) {
+            console.error(error.response);
+        });
+    },
+    updateExpectedMonthlyBudget: function() {
+      this.$http.get('http://localhost:3000/users/' + localStorage.getItem('user') + '/monthly_budgets', {
+        params: { "year": this.selectedYear },
+          headers: {
+            // https://github.com/axios/axios/issues/475
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Control-Allow-Origin': 'http://localhost:3000'
+          }
+        })
+        .then(response => {
+          var expectedMonthlyBudget = response.data;
+          var selectedYear = this.selectedYear;
+
+          for (var category in this.categories) {
+            if(this.expectedMonthlyBudget[category] == null) { this.$set(this.expectedMonthlyBudget, category, {}) }
+            if(expectedMonthlyBudget[category] == null) { expectedMonthlyBudget[category] = {} }
+
+            for (var subCategory of this.categories[category]) {
+              if(this.expectedMonthlyBudget[category][subCategory] == null) { this.$set(this.expectedMonthlyBudget[category], subCategory, {}) }
+              if(expectedMonthlyBudget[category][subCategory] == null) { expectedMonthlyBudget[category][subCategory] = {} }
+
+              if(this.expectedMonthlyBudget[category][subCategory][selectedYear] == null) { this.$set(this.expectedMonthlyBudget[category][subCategory], selectedYear, {}) }
+              if(expectedMonthlyBudget[category][subCategory][selectedYear] == null) { expectedMonthlyBudget[category][subCategory][selectedYear] = {} }
+              for (var month = 1; month <= 12; month++) {
+                if(expectedMonthlyBudget[category][subCategory][selectedYear][month] == null) {
+                  this.$set(this.expectedMonthlyBudget[category][subCategory][selectedYear], month, { "value": 0, "editing": false, "error": false })
+                } else {
+                  expectedMonthlyBudget[category][subCategory][selectedYear][month]["editing"] = false
+                  expectedMonthlyBudget[category][subCategory][selectedYear][month]["error"] = false
+                  this.$set(this.expectedMonthlyBudget[category][subCategory][selectedYear], month, expectedMonthlyBudget[category][subCategory][selectedYear][month])
+                }
+              }
+            }
+          }
+        })
+        .catch(function (error) {
+            console.error(error.response);
+        });
+    },
     toggleEditingMoney: function(element) {
       this.cachedMoney = element.value;
       element.editing = true;
@@ -79,25 +141,30 @@ export default {
       this.newCategory[category] = '';
     },
     addSubCategory: function(category) {
-      this.$set(this.expectedMonthlyBudget[category], [this.newCategory[category]], {
+      this.$set(this.expectedMonthlyBudget[category], this.newCategory[category], {
           "2020": {
-            "1": {
-              "value": 0,
-              "editing": false
-            },
-            "2": {
-              "value": 0,
-              "editing": false
-            },
-            "3": {
-              "value": 0,
-              "editing": false
-            }
+            "1": { "value": 0, "editing": false },
+            "2": { "value": 0, "editing": false },
+            "3": { "value": 0, "editing": false },
+            "4": { "value": 0, "editing": false },
+            "5": { "value": 0, "editing": false },
+            "6": { "value": 0, "editing": false },
+            "7": { "value": 0, "editing": false },
+            "8": { "value": 0, "editing": false },
+            "9": { "value": 0, "editing": false },
+            "10": { "value": 0, "editing": false },
+            "11": { "value": 0, "editing": false },
+            "12": { "value": 0, "editing": false },
           }
         });
+      this.categories[category].push(this.newCategory[category]);
 
       this.newCategory[category] = '';
     },
+  },
+  mounted: function () {
+    this.initializeCategories();
+    this.updateExpectedMonthlyBudget();
   },
   data: function() {
     return {
@@ -111,28 +178,8 @@ export default {
         "EquityInvestment": '',
         "DebtInvestment": ''
       },
-      expectedMonthlyBudget: {
-        "Income": {
-          "Salary":  { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } },
-          "Illegal": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } } },
-        "Expense": {
-          "Rent": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } },
-          "Car": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } },
-          "Bike": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } } },
-        "EMI": {
-          "Fridge": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } },
-          "Washing Machine": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } },
-          "TV": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } }
-        },
-        "EquityInvestment": {
-          "MF": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } },
-          "Stocks": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } }
-        },
-        "DebtInvestment": {
-          "FD": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } },
-          "RD": { "2020": { "1": { "value": 1231312, "editing": false }, "2": { "value": 324, "editing": false }, "3": { "value": 324324, "editing": false } } }
-        }
-      }
+      categories: {},
+      expectedMonthlyBudget: {}
     }
   }
 }
