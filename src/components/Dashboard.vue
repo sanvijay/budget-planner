@@ -156,6 +156,7 @@ export default {
         .then(response => {
           var temp = {}
           for(var year of this.years) {
+            if(temp[year.toString()] == null) { temp[year.toString()] = {} }
             for (var month = 1; month <= 12; month++) {
               temp[year.toString()][month.toString()] = { "value": 0, "editing": false }
             }
