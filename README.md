@@ -5,6 +5,11 @@
 npm install
 ```
 
+### Add .env.local file.
+```
+cp .env.local.sample .env.local
+```
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve

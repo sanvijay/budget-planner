@@ -33,14 +33,14 @@
             handleSubmit(e){
                 e.preventDefault()
                 if (this.password.length > 0) {
-                    this.$http.post('http://localhost:3000/login', {
+                    this.$http.post(process.env.VUE_APP_API_URL + 'login', {
                         email: this.email,
                         password: this.password
                     }, {
                       headers: {
                         // https://github.com/axios/axios/issues/475
                         'Content-Type': 'application/x-www-form-urlencoded',
-                        'Access-Control-Allow-Origin': 'http://localhost:3000'
+                        'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
                       }
                     })
                     .then(response => {

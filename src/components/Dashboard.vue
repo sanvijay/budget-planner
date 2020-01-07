@@ -66,11 +66,11 @@ export default {
   },
   methods: {
     initializeCategories: function() {
-      this.$http.get('http://localhost:3000/users/' + localStorage.getItem('user') + '/categories', {
+      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/categories', {
           headers: {
             // https://github.com/axios/axios/issues/475
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': 'http://localhost:3000'
+            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
           }
         })
         .then(response => {
@@ -83,12 +83,12 @@ export default {
         });
     },
     updateExpectedMonthlyBudget: function() {
-      this.$http.get('http://localhost:3000/users/' + localStorage.getItem('user') + '/monthly_budgets', {
+      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/monthly_budgets', {
         params: { "year": this.selectedYear },
           headers: {
             // https://github.com/axios/axios/issues/475
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': 'http://localhost:3000'
+            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
           }
         })
         .then(response => {
@@ -142,7 +142,7 @@ export default {
       this.newCategory[category] = '';
     },
     addSubCategory: function(category) {
-      this.$http.post('http://localhost:3000/users/' + localStorage.getItem('user') + '/categories', {
+      this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/categories', {
           "category": {
             "title": this.newCategory[category],
             "type": category
@@ -150,7 +150,7 @@ export default {
           headers: {
             // https://github.com/axios/axios/issues/475
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': 'http://localhost:3000'
+            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
           }
         })
         .then(response => {
