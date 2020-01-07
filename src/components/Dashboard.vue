@@ -30,7 +30,7 @@
               {{ subCategory }}
             </td>
 
-            <td v-if="expectedMonthlyBudget[category] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" :class="{ 'error-cell': expectedMonthlyBudget[category][subCategory][selectedYear][month].error }">
+            <td v-if="expectedMonthlyBudget[category] != null && expectedMonthlyBudget[category][subCategory][selectedYear] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" :class="{ 'error-cell': expectedMonthlyBudget[category][subCategory][selectedYear][month].error }">
               <div v-if="!expectedMonthlyBudget[category][subCategory][selectedYear][month].editing">
                 Rs. {{ expectedMonthlyBudget[category][subCategory][selectedYear][month].value }}
               </div>
@@ -77,7 +77,6 @@ export default {
           for (var category in response.data) {
             this.$set(this.categories, category, response.data[category])
           }
-          // this.categories = response.data;
         })
         .catch(function (error) {
             console.error(error.response);
@@ -117,6 +116,8 @@ export default {
               }
             }
           }
+
+          this.populatedYears.push(selectedYear);
         })
         .catch(function (error) {
             console.error(error.response);
@@ -141,35 +142,50 @@ export default {
       this.newCategory[category] = '';
     },
     addSubCategory: function(category) {
-      this.$set(this.expectedMonthlyBudget[category], this.newCategory[category], {
-          "2020": {
-            "1": { "value": 0, "editing": false },
-            "2": { "value": 0, "editing": false },
-            "3": { "value": 0, "editing": false },
-            "4": { "value": 0, "editing": false },
-            "5": { "value": 0, "editing": false },
-            "6": { "value": 0, "editing": false },
-            "7": { "value": 0, "editing": false },
-            "8": { "value": 0, "editing": false },
-            "9": { "value": 0, "editing": false },
-            "10": { "value": 0, "editing": false },
-            "11": { "value": 0, "editing": false },
-            "12": { "value": 0, "editing": false },
+      this.$http.post('http://localhost:3000/users/' + localStorage.getItem('user') + '/categories', {
+          "category": {
+            "title": this.newCategory[category],
+            "type": category
+          },
+          headers: {
+            // https://github.com/axios/axios/issues/475
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Control-Allow-Origin': 'http://localhost:3000'
           }
-        });
-      this.categories[category].push(this.newCategory[category]);
+        })
+        .then(response => {
+          var temp = {}
+          for(var year of this.years) {
+            for (var month = 1; month <= 12; month++) {
+              temp[year.toString()][month.toString()] = { "value": 0, "editing": false }
+            }
+          }
+          this.$set(this.expectedMonthlyBudget[category], this.newCategory[category], temp);
 
-      this.newCategory[category] = '';
+          this.categories[category].push(this.newCategory[category]);
+          this.newCategory[category] = '';
+        })
+        .catch(function (error) {
+          console.error(error.response);
+        });
     },
   },
   mounted: function () {
     this.initializeCategories();
     this.updateExpectedMonthlyBudget();
   },
+  watch: {
+    selectedYear: function() {
+      if(this.populatedYears.indexOf(this.selectedYear) == -1) {
+        this.updateExpectedMonthlyBudget();
+      }
+    }
+  },
   data: function() {
     return {
       years: [2019, 2020, 2021],
       selectedYear: 2020,
+      populatedYears: [],
       cachedMoney: 0,
       newCategory: {
         "Income": '',
