@@ -35,7 +35,7 @@
                 Rs. {{ expectedMonthlyBudget[category][subCategory][selectedYear][month].value }}
               </div>
               <div v-if="expectedMonthlyBudget[category][subCategory][selectedYear][month].editing">
-                <input @keyup.esc="cancelEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" @keyup.enter="doneEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" @blur="doneEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" v-focus type="text" v-model="expectedMonthlyBudget[category][subCategory][selectedYear][month].value" />
+                <input @keyup.esc="cancelEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" @keyup.enter="doneEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month], month, selectedYear, subCategory)" @blur="doneEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month], month, selectedYear, subCategory)" v-focus type="text" v-model="expectedMonthlyBudget[category][subCategory][selectedYear][month].value" />
               </div>
             </td>
           </tr>
@@ -127,10 +127,33 @@ export default {
       this.cachedMoney = element.value;
       element.editing = true;
     },
-    doneEditingMoney: function(element) {
+    doneEditingMoney: function(element, month, year, subCategory) {
       if(element.value.toString().trim() == '') { element.value = 0; }
+
       if(isNaN(element.value)) { element.error = true; }
-      else { element.error = false; }
+      else if(element.value != this.cachedMoney) {
+        element.error = false;
+        var formattedMonth = ("0" + month).slice(-2);
+
+        this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year + '/expected_cash_flows', {
+            "cash_flow": {
+              category: subCategory,
+              value: element.value
+            },
+            headers: {
+              // https://github.com/axios/axios/issues/475
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
+            }
+          })
+          .then(response => {
+            element.value = Number(element.value);
+          })
+          .catch(error => {
+            this.cancelEditingMoney(element);
+            console.error(error.response);
+          });
+      }
 
       element.editing = false;
     },
