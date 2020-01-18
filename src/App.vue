@@ -1,9 +1,16 @@
 <template>
   <div id="app">
-    Hi
     <div>
-      <router-link :to="{ name: 'dashboard' }" v-if="!loggedIn">Login</router-link>
-      <button type="submit" @click="logout" v-if="loggedIn">Logout</button>
+      <div v-if="!loggedIn">
+        <router-link :to="{ name: 'login' }">Login</router-link>
+      </div>
+      <div v-if="loggedIn">
+        <router-link :to="{ name: 'dashboard' }">Dashboard</router-link>
+        <router-link :to="{ name: 'goal' }">Goal</router-link>
+        <router-link :to="{ name: 'profile' }">Profile</router-link>
+        <router-link :to="{ name: 'setting' }">Settings</router-link>
+        <a href="#" @click="logout">Logout</a>
+      </div>
     </div>
     <router-view></router-view>
   </div>
@@ -12,13 +19,10 @@
 <script>
 export default {
   name: 'app',
-  data: function() {
-    return {
-      loggedIn: (localStorage.getItem('jwt') != null && localStorage.getItem('user') != null)
-    }
-  },
   computed: {
-
+    loggedIn: function() {
+      return (localStorage.getItem('jwt') != null && localStorage.getItem('user') != null);
+    }
   },
   methods: {
     logout: function() {

@@ -1,14 +1,14 @@
 <template>
   <div class="hello">
     <p>
-      This is HelloWorld page.
+      This is Home page.
     </p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld'
+  name: 'Home'
 }
 </script>
 
