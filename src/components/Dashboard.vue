@@ -25,20 +25,20 @@
               Rs. 0
             </td>
           </tr>
-          <tr v-for="(subCategory, idx) in subCategories" :key="subCategory">
+          <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id">
             <td :rowspan="subCategories.length + 2" v-if="idx == 0">
               {{ category }}
             </td>
             <td>
-              {{ subCategory }}
+              {{ subCategory.title }}
             </td>
 
-            <td v-if="expectedMonthlyBudget[category] != null && expectedMonthlyBudget[category][subCategory][selectedYear] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" :class="{ 'error-cell': expectedMonthlyBudget[category][subCategory][selectedYear][month].error }">
-              <div v-if="!expectedMonthlyBudget[category][subCategory][selectedYear][month].editing">
-                Rs. {{ expectedMonthlyBudget[category][subCategory][selectedYear][month].value }}
+            <td v-if="expectedMonthlyBudget[category] != null && expectedMonthlyBudget[category][subCategory.id][selectedYear] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(expectedMonthlyBudget[category][subCategory.id][selectedYear][month])" :class="{ 'error-cell': expectedMonthlyBudget[category][subCategory.id][selectedYear][month].error }">
+              <div v-if="!expectedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
+                Rs. {{ expectedMonthlyBudget[category][subCategory.id][selectedYear][month].value }}
               </div>
-              <div v-if="expectedMonthlyBudget[category][subCategory][selectedYear][month].editing">
-                <input @keyup.esc="cancelEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month])" @keyup.enter="doneEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month], month, selectedYear, subCategory)" @blur="doneEditingMoney(expectedMonthlyBudget[category][subCategory][selectedYear][month], month, selectedYear, subCategory)" v-focus type="text" v-model="expectedMonthlyBudget[category][subCategory][selectedYear][month].value" />
+              <div v-if="expectedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
+                <input @keyup.esc="cancelEditingMoney(expectedMonthlyBudget[category][subCategory.id][selectedYear][month])" @keyup.enter="doneEditingMoney(expectedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" @blur="doneEditingMoney(expectedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" v-focus type="text" v-model="expectedMonthlyBudget[category][subCategory.id][selectedYear][month].value" />
               </div>
             </td>
           </tr>
@@ -117,18 +117,18 @@ export default {
             if(expectedMonthlyBudget[category] == null) { expectedMonthlyBudget[category] = {} }
 
             for (var subCategory of this.categories[category]) {
-              if(this.expectedMonthlyBudget[category][subCategory] == null) { this.$set(this.expectedMonthlyBudget[category], subCategory, {}) }
-              if(expectedMonthlyBudget[category][subCategory] == null) { expectedMonthlyBudget[category][subCategory] = {} }
+              if(this.expectedMonthlyBudget[category][subCategory.id] == null) { this.$set(this.expectedMonthlyBudget[category], subCategory.id, {}) }
+              if(expectedMonthlyBudget[category][subCategory.id] == null) { expectedMonthlyBudget[category][subCategory.id] = {} }
 
-              if(this.expectedMonthlyBudget[category][subCategory][selectedYear] == null) { this.$set(this.expectedMonthlyBudget[category][subCategory], selectedYear, {}) }
-              if(expectedMonthlyBudget[category][subCategory][selectedYear] == null) { expectedMonthlyBudget[category][subCategory][selectedYear] = {} }
+              if(this.expectedMonthlyBudget[category][subCategory.id][selectedYear] == null) { this.$set(this.expectedMonthlyBudget[category][subCategory.id], selectedYear, {}) }
+              if(expectedMonthlyBudget[category][subCategory.id][selectedYear] == null) { expectedMonthlyBudget[category][subCategory.id][selectedYear] = {} }
               for (var month = 1; month <= 12; month++) {
-                if(expectedMonthlyBudget[category][subCategory][selectedYear][month] == null) {
-                  this.$set(this.expectedMonthlyBudget[category][subCategory][selectedYear], month, { "value": 0, "editing": false, "error": false })
+                if(expectedMonthlyBudget[category][subCategory.id][selectedYear][month] == null) {
+                  this.$set(this.expectedMonthlyBudget[category][subCategory.id][selectedYear], month, { "value": 0, "editing": false, "error": false })
                 } else {
-                  expectedMonthlyBudget[category][subCategory][selectedYear][month]["editing"] = false
-                  expectedMonthlyBudget[category][subCategory][selectedYear][month]["error"] = false
-                  this.$set(this.expectedMonthlyBudget[category][subCategory][selectedYear], month, expectedMonthlyBudget[category][subCategory][selectedYear][month])
+                  expectedMonthlyBudget[category][subCategory.id][selectedYear][month]["editing"] = false
+                  expectedMonthlyBudget[category][subCategory.id][selectedYear][month]["error"] = false
+                  this.$set(this.expectedMonthlyBudget[category][subCategory.id][selectedYear], month, expectedMonthlyBudget[category][subCategory.id][selectedYear][month])
                 }
               }
             }
@@ -154,7 +154,7 @@ export default {
 
         this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year + '/expected_cash_flows', {
             "cash_flow": {
-              category: subCategory,
+              category_id: subCategory,
               value: element.value
             },
             headers: {
@@ -203,7 +203,7 @@ export default {
           }
           this.$set(this.expectedMonthlyBudget[category], this.newCategory[category], temp);
 
-          this.categories[category].push(this.newCategory[category]);
+          this.categories[category].push(response.data);
           this.newCategory[category] = '';
         })
         .catch(function (error) {
