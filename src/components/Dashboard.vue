@@ -17,13 +17,16 @@
         </thead>
         <tbody v-for="(subCategories, category) in categories" :key="category">
           <tr v-if="subCategories.length == 0">
-            <td rowspan="2">
+            <td rowspan="3">
               {{ category }}
             </td>
-            <td v-for="empty in 13" :key="empty"></td>
+            <td> - </td>
+            <td v-for="empty in 12" :key="empty">
+              Rs. 0
+            </td>
           </tr>
           <tr v-for="(subCategory, idx) in subCategories" :key="subCategory">
-            <td :rowspan="subCategories.length + 1" v-if="idx == 0">
+            <td :rowspan="subCategories.length + 2" v-if="idx == 0">
               {{ category }}
             </td>
             <td>
@@ -44,7 +47,14 @@
             <td>
               <input type="text" placeholder="Add a category..." @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
             </td>
-            <td v-for="month in 12" :key="month"></td>
+            <td v-for="empty in 12" :key="empty"></td>
+          </tr>
+
+          <tr>
+            <td> Sub-Total </td>
+            <td v-for="month in 12" :key="month">
+              Rs. {{ subTotal(category, month, selectedYear) }}
+            </td>
           </tr>
 
         </tbody>
@@ -65,6 +75,13 @@ export default {
     }
   },
   methods: {
+    subTotal: function(category, month, year) {
+      var total = 0;
+      for (var subCategory in this.expectedMonthlyBudget[category]) {
+        total += this.expectedMonthlyBudget[category][subCategory][year][month].value;
+      }
+      return total;
+    },
     initializeCategories: function() {
       this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/categories', {
           headers: {
