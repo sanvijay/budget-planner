@@ -5,6 +5,7 @@
         <router-link :to="{ name: 'login' }">Login</router-link>
       </div>
       <div v-if="loggedIn">
+        <router-link :to="{ name: 'home' }">Home</router-link>
         <router-link :to="{ name: 'dashboard' }">Dashboard</router-link>
         <router-link :to="{ name: 'goal' }">Goal</router-link>
         <router-link :to="{ name: 'profile' }">Profile</router-link>
