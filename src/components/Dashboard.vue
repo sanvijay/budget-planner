@@ -77,8 +77,11 @@ export default {
   methods: {
     subTotal: function(category, month, year) {
       var total = 0;
-      for (var subCategory in this.expectedMonthlyBudget[category]) {
-        total += this.expectedMonthlyBudget[category][subCategory][year][month].value;
+
+      for(var subCategory in this.expectedMonthlyBudget[category]) {
+        if(this.expectedMonthlyBudget[category][subCategory][year] != null) {
+          total += this.expectedMonthlyBudget[category][subCategory][year][month].value;
+        }
       }
       return total;
     },
