@@ -53,7 +53,7 @@
           <tr>
             <td> Sub-Total </td>
             <td v-for="month in 12" :key="month">
-              Rs. {{ subTotal(category, month, selectedYear) }}
+              Rs. {{ subTotal(category, month, selectedYear).toFixed(2) }}
             </td>
           </tr>
 

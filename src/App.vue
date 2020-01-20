@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    {{ user_profile.first_name }}
     <div>
       <div v-if="!loggedIn">
         <router-link :to="{ name: 'login' }">Login</router-link>
@@ -30,8 +31,31 @@ export default {
         localStorage.removeItem('jwt');
         localStorage.removeItem('user');
         window.location.href = "/";
+    },
+    setUserProfile: function() {
+      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/user_profiles', {
+          headers: {
+            // https://github.com/axios/axios/issues/475
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
+          }
+        })
+        .then(response => {
+          this.user_profile = response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response);
+        });
     }
-  }
+  },
+  data: function() {
+    return {
+      user_profile: {}
+    }
+  },
+  mounted: function () {
+    this.setUserProfile();
+  },
 }
 </script>
 
