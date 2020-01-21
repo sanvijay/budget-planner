@@ -33,12 +33,12 @@
               {{ subCategory.title }}
             </td>
 
-            <td v-if="expectedMonthlyBudget[category] != null && expectedMonthlyBudget[category][subCategory.id][selectedYear] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(expectedMonthlyBudget[category][subCategory.id][selectedYear][month])" :class="{ 'error-cell': expectedMonthlyBudget[category][subCategory.id][selectedYear][month].error }">
-              <div v-if="!expectedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
-                Rs. {{ expectedMonthlyBudget[category][subCategory.id][selectedYear][month].value }}
+            <td v-if="plannedMonthlyBudget[category] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" :class="{ 'error-cell': plannedMonthlyBudget[category][subCategory.id][selectedYear][month].error }">
+              <div v-if="!plannedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
+                Rs. {{ plannedMonthlyBudget[category][subCategory.id][selectedYear][month].value }}
               </div>
-              <div v-if="expectedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
-                <input @keyup.esc="cancelEditingMoney(expectedMonthlyBudget[category][subCategory.id][selectedYear][month])" @keyup.enter="doneEditingMoney(expectedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" @blur="doneEditingMoney(expectedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" v-focus type="text" v-model="expectedMonthlyBudget[category][subCategory.id][selectedYear][month].value" />
+              <div v-if="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
+                <input @keyup.esc="cancelEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" @keyup.enter="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" @blur="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" v-focus type="text" v-model="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].value" />
               </div>
             </td>
           </tr>
@@ -78,9 +78,9 @@ export default {
     subTotal: function(category, month, year) {
       var total = 0;
 
-      for(var subCategory in this.expectedMonthlyBudget[category]) {
-        if(this.expectedMonthlyBudget[category][subCategory][year] != null) {
-          total += this.expectedMonthlyBudget[category][subCategory][year][month].value;
+      for(var subCategory in this.plannedMonthlyBudget[category]) {
+        if(this.plannedMonthlyBudget[category][subCategory][year] != null) {
+          total += this.plannedMonthlyBudget[category][subCategory][year][month].value;
         }
       }
       return total;
@@ -102,7 +102,7 @@ export default {
             console.error(error.response);
         });
     },
-    updateExpectedMonthlyBudget: function() {
+    updatePlannedMonthlyBudget: function() {
       this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/monthly_budgets', {
         params: { "year": this.selectedYear },
           headers: {
@@ -112,26 +112,26 @@ export default {
           }
         })
         .then(response => {
-          var expectedMonthlyBudget = response.data;
+          var plannedMonthlyBudget = response.data;
           var selectedYear = this.selectedYear;
 
           for (var category in this.categories) {
-            if(this.expectedMonthlyBudget[category] == null) { this.$set(this.expectedMonthlyBudget, category, {}) }
-            if(expectedMonthlyBudget[category] == null) { expectedMonthlyBudget[category] = {} }
+            if(this.plannedMonthlyBudget[category] == null) { this.$set(this.plannedMonthlyBudget, category, {}) }
+            if(plannedMonthlyBudget[category] == null) { plannedMonthlyBudget[category] = {} }
 
             for (var subCategory of this.categories[category]) {
-              if(this.expectedMonthlyBudget[category][subCategory.id] == null) { this.$set(this.expectedMonthlyBudget[category], subCategory.id, {}) }
-              if(expectedMonthlyBudget[category][subCategory.id] == null) { expectedMonthlyBudget[category][subCategory.id] = {} }
+              if(this.plannedMonthlyBudget[category][subCategory.id] == null) { this.$set(this.plannedMonthlyBudget[category], subCategory.id, {}) }
+              if(plannedMonthlyBudget[category][subCategory.id] == null) { plannedMonthlyBudget[category][subCategory.id] = {} }
 
-              if(this.expectedMonthlyBudget[category][subCategory.id][selectedYear] == null) { this.$set(this.expectedMonthlyBudget[category][subCategory.id], selectedYear, {}) }
-              if(expectedMonthlyBudget[category][subCategory.id][selectedYear] == null) { expectedMonthlyBudget[category][subCategory.id][selectedYear] = {} }
+              if(this.plannedMonthlyBudget[category][subCategory.id][selectedYear] == null) { this.$set(this.plannedMonthlyBudget[category][subCategory.id], selectedYear, {}) }
+              if(plannedMonthlyBudget[category][subCategory.id][selectedYear] == null) { plannedMonthlyBudget[category][subCategory.id][selectedYear] = {} }
               for (var month = 1; month <= 12; month++) {
-                if(expectedMonthlyBudget[category][subCategory.id][selectedYear][month] == null) {
-                  this.$set(this.expectedMonthlyBudget[category][subCategory.id][selectedYear], month, { "value": 0, "editing": false, "error": false })
+                if(plannedMonthlyBudget[category][subCategory.id][selectedYear][month] == null) {
+                  this.$set(this.plannedMonthlyBudget[category][subCategory.id][selectedYear], month, { "value": 0, "editing": false, "error": false })
                 } else {
-                  expectedMonthlyBudget[category][subCategory.id][selectedYear][month]["editing"] = false
-                  expectedMonthlyBudget[category][subCategory.id][selectedYear][month]["error"] = false
-                  this.$set(this.expectedMonthlyBudget[category][subCategory.id][selectedYear], month, expectedMonthlyBudget[category][subCategory.id][selectedYear][month])
+                  plannedMonthlyBudget[category][subCategory.id][selectedYear][month]["editing"] = false
+                  plannedMonthlyBudget[category][subCategory.id][selectedYear][month]["error"] = false
+                  this.$set(this.plannedMonthlyBudget[category][subCategory.id][selectedYear], month, plannedMonthlyBudget[category][subCategory.id][selectedYear][month])
                 }
               }
             }
@@ -155,7 +155,7 @@ export default {
         element.error = false;
         var formattedMonth = ("0" + month).slice(-2);
 
-        this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year + '/expected_cash_flows', {
+        this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year + '/planned_cash_flows', {
             "cash_flow": {
               category_id: subCategory,
               value: element.value
@@ -204,7 +204,7 @@ export default {
               temp[year.toString()][month.toString()] = { "value": 0, "editing": false }
             }
           }
-          this.$set(this.expectedMonthlyBudget[category], this.newCategory[category], temp);
+          this.$set(this.plannedMonthlyBudget[category], this.newCategory[category], temp);
 
           this.categories[category].push(response.data);
           this.newCategory[category] = '';
@@ -216,12 +216,12 @@ export default {
   },
   mounted: function () {
     this.initializeCategories();
-    this.updateExpectedMonthlyBudget();
+    this.updatePlannedMonthlyBudget();
   },
   watch: {
     selectedYear: function() {
       if(this.populatedYears.indexOf(this.selectedYear) == -1) {
-        this.updateExpectedMonthlyBudget();
+        this.updatePlannedMonthlyBudget();
       }
     }
   },
@@ -239,7 +239,7 @@ export default {
         "DebtInvestment": ''
       },
       categories: {},
-      expectedMonthlyBudget: {}
+      plannedMonthlyBudget: {}
     }
   }
 }
