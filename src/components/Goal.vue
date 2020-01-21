@@ -11,6 +11,7 @@
           <th>start_date</th>
           <th>end_date</th>
           <th>target</th>
+          <th>planned</th>
           <th>deleted</th>
           <th>completed</th>
         </thead>
@@ -49,6 +50,7 @@
                 <input v-focus type="text" v-model="goal.target" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'target')">
               </div>
             </td>
+            <td>{{ goal.planned }}</td>
             <td>{{ goal.deleted }}</td>
             <td>{{ goal.completed }}</td>
           </tr>

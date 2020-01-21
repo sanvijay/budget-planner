@@ -22,7 +22,7 @@
           <th>Gender</th>
           <td>
             <select v-model="user_profile.gender">
-              <option v-for="gender in genders" :key="gender" :value="gender">{{ user_profile.gender }}</option>
+              <option v-for="gender in genders" :key="gender" :value="gender">{{ gender }}</option>
             </select>
           </td>
         </tr>
@@ -52,7 +52,7 @@ export default {
           }
         })
         .then(response => {
-          this.user_profile = response.data;
+          if(response.data != null) { this.user_profile = response.data; }
         })
         .catch(function (error) {
           console.error(error.response);
