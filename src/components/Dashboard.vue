@@ -53,10 +53,30 @@
           <tr>
             <td> Sub-Total </td>
             <td v-for="month in 12" :key="month">
-              Rs. {{ subTotal(category, month, selectedYear).toFixed(2) }}
+              Rs. {{ subTotal(category, month, selectedYear) }} ({{ calculatePercentage(category, month, selectedYear) }})
             </td>
           </tr>
 
+        </tbody>
+        <tbody>
+          <tr>
+            <td colspan="2">Total Inflow</td>
+            <td v-for="month in 12" :key="month">
+              Rs. {{ totalInflow(month, selectedYear) }}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">Total Outflow</td>
+            <td v-for="month in 12" :key="month">
+              Rs. {{ totalOutflow(month, selectedYear) }}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">Total Balance</td>
+            <td v-for="month in 12" :key="month">
+              Rs. {{ totalInflow(month, selectedYear) - totalOutflow(month, selectedYear) }}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -75,15 +95,39 @@ export default {
     }
   },
   methods: {
+    totalInflow: function(month, year) {
+      return this.subTotal("Income", month, year)
+    },
+    totalOutflow: function(month, year) {
+      return (
+        this.subTotal("Expense", month, year) +
+        this.subTotal("EMI", month, year) +
+        this.subTotal("DebtInvestment", month, year) +
+        this.subTotal("EquityInvestment", month, year)
+      )
+    },
     subTotal: function(category, month, year) {
       var total = 0;
 
       for(var subCategory in this.plannedMonthlyBudget[category]) {
         if(this.plannedMonthlyBudget[category][subCategory][year] != null) {
-          total += this.plannedMonthlyBudget[category][subCategory][year][month].value;
+          total += parseInt(this.plannedMonthlyBudget[category][subCategory][year][month].value);
         }
       }
-      return total;
+
+      if(isNaN(total)) { return 0; }
+      else { return parseInt(total.toFixed(2)); }
+    },
+    calculatePercentage: function(category, month, year) {
+      var percentage = 0;
+      if(category == "Income") {
+        percentage = (this.subTotal(category, month, year) / this.totalInflow(month, year)) * 100
+      } else {
+        percentage = (this.subTotal(category, month, year) / this.totalOutflow(month, year)) * 100
+      }
+
+      if(isNaN(percentage)) { return 0; }
+      else { return percentage.toFixed(2); }
     },
     initializeCategories: function() {
       this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/categories', {
@@ -204,7 +248,7 @@ export default {
               temp[year.toString()][month.toString()] = { "value": 0, "editing": false }
             }
           }
-          this.$set(this.plannedMonthlyBudget[category], this.newCategory[category], temp);
+          this.$set(this.plannedMonthlyBudget[category], response.data.id, temp);
 
           this.categories[category].push(response.data);
           this.newCategory[category] = '';
