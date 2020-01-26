@@ -53,7 +53,7 @@
                                 this.$router.push(this.$route.params.nextUrl)
                             }
                             else {
-                                this.$router.push('dashboard')
+                                window.location.href = "/dashboard";
                             }
                         }
                     });

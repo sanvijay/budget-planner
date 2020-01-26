@@ -26,9 +26,12 @@
             </select>
           </td>
         </tr>
+        <tr>
+          <th>Monthly Income</th>
+          <td><input type="text" v-model="user_profile.monthly_income"></td>
+        </tr>
+        <tr><button @click="saveNewProfile">Save</button></tr>
       </table>
-
-      <button @click="saveNewProfile">Save</button>
     </div>
   </div>
 </template>
@@ -44,7 +47,7 @@ export default {
   },
   methods: {
     loadUserProfile: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/user_profiles', {
+      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/user_profile', {
           headers: {
             // https://github.com/axios/axios/issues/475
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -59,7 +62,7 @@ export default {
         });
     },
     saveNewProfile: function() {
-      this.$http.put(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/user_profiles/', {
+      this.$http.put(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/user_profile/', {
           user_profile: this.user_profile,
           headers: {
             // https://github.com/axios/axios/issues/475

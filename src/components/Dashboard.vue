@@ -111,12 +111,12 @@ export default {
 
       for(var subCategory in this.plannedMonthlyBudget[category]) {
         if(this.plannedMonthlyBudget[category][subCategory][year] != null) {
-          total += parseInt(this.plannedMonthlyBudget[category][subCategory][year][month].value);
+          total += parseFloat(this.plannedMonthlyBudget[category][subCategory][year][month].value);
         }
       }
 
       if(isNaN(total)) { return 0; }
-      else { return parseInt(total.toFixed(2)); }
+      else { return parseFloat(total.toFixed(2)); }
     },
     calculatePercentage: function(category, month, year) {
       var percentage = 0;

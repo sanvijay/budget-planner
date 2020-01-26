@@ -12,6 +12,7 @@
           <th>end_date</th>
           <th>target</th>
           <th>planned</th>
+          <th>score_weightage_out_of_100</th>
           <th>deleted</th>
           <th>completed</th>
         </thead>
@@ -51,19 +52,26 @@
               </div>
             </td>
             <td>{{ goal.planned }}</td>
+            <td @dblclick="toggleEditingGoal(goal, 'score_weightage_out_of_100')">
+              <div v-if="!showInput(goal, 'score_weightage_out_of_100')">
+                {{ goal.score_weightage_out_of_100 }}
+              </div>
+              <div v-if="showInput(goal, 'score_weightage_out_of_100')">
+                <input v-focus type="text" v-model="goal.score_weightage_out_of_100" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'score_weightage_out_of_100')">
+              </div>
+            </td>
             <td>{{ goal.deleted }}</td>
             <td>{{ goal.completed }}</td>
           </tr>
+          <tr>
+            <td><input type="text" v-model="newGoal.description"></td>
+            <td><input type="date" v-model="newGoal.start_date"></td>
+            <td><input type="date" v-model="newGoal.end_date"></td>
+            <td><input type="text" v-model="newGoal.target"></td>
+            <td colspan="3"><button @click="saveNewGoal">Save</button></td>
+          </tr>
         </tbody>
       </table>
-
-      <div>
-        <input type="text" v-model="newGoal.description">
-        <input type="date" v-model="newGoal.start_date">
-        <input type="date" v-model="newGoal.end_date">
-        <input type="text" v-model="newGoal.target">
-        <button @click="saveNewGoal">Save</button>
-      </div>
     </div>
   </div>
 </template>
@@ -79,7 +87,8 @@ export default {
         description: null,
         start_date: null,
         end_date: null,
-        target: null
+        target: null,
+        score_weightage_out_of_100: null
       }
     }
   },
@@ -151,6 +160,7 @@ export default {
           this.newGoal.start_date = null;
           this.newGoal.end_date = null;
           this.newGoal.target = null;
+          this.newGoal.score_weightage_out_of_100 = null;
         })
         .catch(function (error) {
           console.error(error.response);
