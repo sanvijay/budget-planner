@@ -1,77 +1,69 @@
 <template>
-  <div>
-    <p>
-      This is Goal page.
-    </p>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <p class="h5 float-left">
+          Your Goals
+        </p>
+        <br><hr>
 
-    <div>
-      <table border="1">
-        <thead>
-          <th>description</th>
-          <th>start_date</th>
-          <th>end_date</th>
-          <th>target</th>
-          <th>planned</th>
-          <th>score_weightage_out_of_100</th>
-          <th>deleted</th>
-          <th>completed</th>
-        </thead>
+        <div class="shadow-lg" style="padding: 5px;">
+          <table class="table-sm table-bordered">
+            <thead>
+              <th>Description</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Target</th>
+              <th>Planned</th>
+            </thead>
 
-        <tbody>
-          <tr v-for="goal in goals" :key="goal._id.$oid">
-            <td @dblclick="toggleEditingGoal(goal, 'description')">
-              <div v-if="!showInput(goal, 'description')">
-                {{ goal.description }}
-              </div>
-              <div v-if="showInput(goal, 'description')">
-                <input v-focus type="text" v-model="goal.description" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'description')">
-              </div>
-            </td>
-            <td @dblclick="toggleEditingGoal(goal, 'start_date')">
-              <div v-if="!showInput(goal, 'start_date')">
-                {{ goal.start_date }}
-              </div>
-              <div v-if="showInput(goal, 'start_date')">
-                <input v-focus type="date" v-model="goal.start_date" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'start_date')">
-              </div>
-            </td>
-            <td @dblclick="toggleEditingGoal(goal, 'end_date')">
-              <div v-if="!showInput(goal, 'end_date')">
-                {{ goal.end_date }}
-              </div>
-              <div v-if="showInput(goal, 'end_date')">
-                <input v-focus type="date" v-model="goal.end_date" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'end_date')">
-              </div>
-            </td>
-            <td @dblclick="toggleEditingGoal(goal, 'target')">
-              <div v-if="!showInput(goal, 'target')">
-                {{ goal.target }}
-              </div>
-              <div v-if="showInput(goal, 'target')">
-                <input v-focus type="text" v-model="goal.target" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'target')">
-              </div>
-            </td>
-            <td>{{ goal.planned }}</td>
-            <td @dblclick="toggleEditingGoal(goal, 'score_weightage_out_of_100')">
-              <div v-if="!showInput(goal, 'score_weightage_out_of_100')">
-                {{ goal.score_weightage_out_of_100 }}
-              </div>
-              <div v-if="showInput(goal, 'score_weightage_out_of_100')">
-                <input v-focus type="text" v-model="goal.score_weightage_out_of_100" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'score_weightage_out_of_100')">
-              </div>
-            </td>
-            <td>{{ goal.deleted }}</td>
-            <td>{{ goal.completed }}</td>
-          </tr>
-          <tr>
-            <td><input type="text" v-model="newGoal.description"></td>
-            <td><input type="date" v-model="newGoal.start_date"></td>
-            <td><input type="date" v-model="newGoal.end_date"></td>
-            <td><input type="text" v-model="newGoal.target"></td>
-            <td colspan="3"><button @click="saveNewGoal">Save</button></td>
-          </tr>
-        </tbody>
-      </table>
+            <tbody>
+              <tr v-for="goal in goals" :key="goal._id.$oid">
+                <td @dblclick="toggleEditingGoal(goal, 'description')">
+                  <div v-if="!showInput(goal, 'description')">
+                    {{ goal.description }}
+                  </div>
+                  <div v-if="showInput(goal, 'description')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="goal.description" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'description')">
+                  </div>
+                </td>
+                <td @dblclick="toggleEditingGoal(goal, 'start_date')">
+                  <div v-if="!showInput(goal, 'start_date')">
+                    {{ goal.start_date }}
+                  </div>
+                  <div v-if="showInput(goal, 'start_date')">
+                    <input class="form-control input-sm" v-focus type="date" v-model="goal.start_date" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'start_date')">
+                  </div>
+                </td>
+                <td @dblclick="toggleEditingGoal(goal, 'end_date')">
+                  <div v-if="!showInput(goal, 'end_date')">
+                    {{ goal.end_date }}
+                  </div>
+                  <div v-if="showInput(goal, 'end_date')">
+                    <input class="form-control input-sm" v-focus type="date" v-model="goal.end_date" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'end_date')">
+                  </div>
+                </td>
+                <td @dblclick="toggleEditingGoal(goal, 'target')">
+                  <div v-if="!showInput(goal, 'target')">
+                    {{ goal.target }}
+                  </div>
+                  <div v-if="showInput(goal, 'target')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="goal.target" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'target')">
+                  </div>
+                </td>
+                <td>{{ goal.planned.toFixed(2) }}</td>
+              </tr>
+              <tr>
+                <td><input class="form-control input-sm" type="text" v-model="newGoal.description"></td>
+                <td><input class="form-control input-sm" type="date" v-model="newGoal.start_date"></td>
+                <td><input class="form-control input-sm" type="date" v-model="newGoal.end_date"></td>
+                <td><input class="form-control input-sm" type="text" v-model="newGoal.target"></td>
+                <td colspan="1"><button class="btn btn-info" @click="saveNewGoal">Save</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -175,5 +167,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+td {
+  max-width: 120px;
+  min-width: 120px;
+}
+input, button {
+  max-height: 24px;
+  width: 100%;
+}
+button {
+  padding: 0px;
+}
 </style>

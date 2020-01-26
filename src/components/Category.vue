@@ -1,59 +1,64 @@
 <template>
-  <div>
-    <p>
-      This is Category page.
-    </p>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <p class="h5 float-left">
+          Categories
+        </p>
+        <br><hr>
 
-    <div>
-      <table border="1">
-        <thead>
-          <th>Super Category</th>
-          <th>Category</th>
-          <th>Goal</th>
-          <th>Benefits</th>
-        </thead>
+        <div class="shadow-lg" style="padding: 5px;">
+          <table class="table-sm table-bordered">
+            <thead>
+              <th>Super Category</th>
+              <th>Category</th>
+              <th>Goal</th>
+              <th>Benefits</th>
+            </thead>
 
-        <tbody v-for="(subCategories, category) in categories" :key="category">
-          <tr v-if="subCategories.length == 0">
-            <td rowspan="3">
-              {{ category }}
-            </td>
-            <td> - </td>
-            <td> - </td>
-            <td> - </td>
-          </tr>
-          <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id">
-            <td :rowspan="subCategories.length + 2" v-if="idx == 0">
-              {{ category }}
-            </td>
-            <td @dblclick="toggleEditingCategory(subCategory, 'title')">
-              <div v-if="!showInput(subCategory, 'title')">
-                {{ subCategory.title }}
-              </div>
-              <div v-if="showInput(subCategory, 'title')">
-                <input v-focus type="text" v-model="subCategory.title" @blur="updateCategory(subCategory)" @keyup.enter="updateCategory(subCategory)" @keyup.esc="cancelEdit(subCategory, 'title')">
-              </div>
-            </td>
-            <td> - </td>
-            <td @dblclick="toggleEditingCategory(subCategory, 'benefit')">
-              <div v-if="!showInput(subCategory, 'benefit')">
-                {{ subCategory.benefit ? subCategory.benefit.title : '-' }}
-              </div>
-              <div v-if="showInput(subCategory, 'benefit')">
-              <select v-model="subCategory.benefit_id" @blur="updateCategory(subCategory)" @keyup.enter="updateCategory(subCategory)" @keyup.esc="cancelEdit(subCategory, 'benefit')">
-                <option value=""> - none - </option>
-                <option v-for="benefit in benefits" :key="benefit._id.$oid" :value="benefit._id.$oid">{{ benefit.title }}</option>
-              </select>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><input type="text" v-model="newCategory[category]" @keyup.enter="addCategory(category)"></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+            <tbody v-for="(subCategories, category) in categories" :key="category">
+              <tr v-if="subCategories.length == 0">
+                <td rowspan="3">
+                  {{ category }}
+                </td>
+                <td> - </td>
+                <td> - </td>
+                <td> - </td>
+              </tr>
+              <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id">
+                <td :rowspan="subCategories.length + 2" v-if="idx == 0">
+                  {{ category }}
+                </td>
+                <td @dblclick="toggleEditingCategory(subCategory, 'title')">
+                  <div v-if="!showInput(subCategory, 'title')">
+                    {{ subCategory.title }}
+                  </div>
+                  <div v-if="showInput(subCategory, 'title')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="subCategory.title" @blur="updateCategory(subCategory)" @keyup.enter="updateCategory(subCategory)" @keyup.esc="cancelEdit(subCategory, 'title')">
+                  </div>
+                </td>
+                <td> - </td>
+                <td @dblclick="toggleEditingCategory(subCategory, 'benefit')">
+                  <div v-if="!showInput(subCategory, 'benefit')">
+                    {{ subCategory.benefit ? subCategory.benefit.title : '-' }}
+                  </div>
+                  <div v-if="showInput(subCategory, 'benefit')">
+                  <select class="form-control input-sm" v-model="subCategory.benefit_id" @blur="updateCategory(subCategory)" @keyup.enter="updateCategory(subCategory)" @keyup.esc="cancelEdit(subCategory, 'benefit')">
+                    <option value=""> - none - </option>
+                    <option v-for="benefit in benefits" :key="benefit._id.$oid" :value="benefit._id.$oid">{{ benefit.title }}</option>
+                  </select>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><input class="form-control input-sm" type="text" v-model="newCategory[category]" @keyup.enter="addCategory(category)"></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -201,5 +206,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+th {
+  min-width: 120px;
+}
+input, button, select {
+  max-height: 24px;
+  width: 100%;
+}
+button {
+  padding: 0px;
+}
 </style>
