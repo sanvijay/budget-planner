@@ -1,7 +1,13 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <Profile />
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8">
+            <Profile />
+          </div>
+        </div>
+      </div>
       <br>
       <Goal />
       <br>

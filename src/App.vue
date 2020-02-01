@@ -31,6 +31,10 @@
       </b-collapse>
     </b-navbar>
 
+    <b-modal id="ask-for-user-profile" :no-close-on-esc="true" :no-close-on-backdrop="true" :hide-header-close="true" :hide-footer="true" :hide-header="true">
+      <Profile />
+    </b-modal>
+
     <div style="padding-top: 70px; margin-bottom: 1000">
       <router-view></router-view>
     </div>
@@ -38,12 +42,17 @@
 </template>
 
 <script>
+import Profile from './components/Profile.vue'
+
 export default {
   name: 'app',
   computed: {
     loggedIn: function() {
       return (localStorage.getItem('jwt') != null && localStorage.getItem('user') != null);
     }
+  },
+  components: {
+    Profile
   },
   methods: {
     logout: function() {
@@ -76,7 +85,8 @@ export default {
   },
   data: function() {
     return {
-      user_profile: {}
+      user_profile: {},
+      showModal: false
     }
   },
   mounted: function () {
