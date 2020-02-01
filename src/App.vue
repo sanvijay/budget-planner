@@ -1,44 +1,35 @@
 <template>
   <div id="app">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top shadow-lg fixed-top">
-      <a class="navbar-brand" href="#">
+    <b-navbar toggleable="lg" fixed="top" type="light" variant="light" class="shadow-lg">
+      <b-navbar-brand href="#">
         <img src="./assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Budget Planner
-      </a>
+      </b-navbar-brand>
 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto" v-if="loggedIn">
-          <li class="nav-item" :class="{ 'active': ($route.path == '/') }">
-            <router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
-          </li>
-          <li class="nav-item" :class="{ 'active': ($route.path == '/dashboard') }">
-            <router-link :to="{ name: 'dashboard' }" class="nav-link">Dashboard</router-link>
-          </li>
-          <li class="nav-item" :class="{ 'active': ($route.path == '/summary') }">
-            <router-link :to="{ name: 'summary' }" class="nav-link">Summary</router-link>
-          </li>
-          <li class="nav-item" :class="{ 'active': ($route.path == '/setting') }">
-            <router-link :to="{ name: 'setting' }" class="nav-link">Setting</router-link>
-          </li>
-          <li class="nav-item">
-            <a href="#" @click="logout" class="nav-link">Logout</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav mr-auto" v-if="!loggedIn">
-          <li class="nav-item" :class="{ 'active': ($route.path == '/') }">
-            <router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
-          </li>
-          <li class="nav-item" :class="{ 'active': ($route.path == '/login') }">
-            <router-link :to="{ name: 'login' }" class="nav-link">Login</router-link>
-          </li>
-        </ul>
-      </div>
-    </nav>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav v-if="loggedIn">
+          <b-nav-item :to="{ name: 'home' }">Home</b-nav-item>
+          <b-nav-item :to="{ name: 'dashboard' }">Dashboard</b-nav-item>
+          <b-nav-item :to="{ name: 'summary' }">Summary</b-nav-item>
+          <b-nav-item :to="{ name: 'setting' }">Setting</b-nav-item>
+          <b-nav-item href="#" @click="logout">Logout</b-nav-item>
+        </b-navbar-nav>
+
+        <b-navbar-nav v-if="!loggedIn">
+          <b-nav-item :to="{ name: 'home' }">Home</b-nav-item>
+          <b-nav-item :to="{ name: 'register' }">Sign Up</b-nav-item>
+          <b-nav-item :to="{ name: 'login' }">Login</b-nav-item>
+        </b-navbar-nav>
+
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item href="#" v-if="user_profile.first_name">Hi {{ user_profile.first_name }}!</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
 
     <div style="padding-top: 70px; margin-bottom: 1000">
       <router-view></router-view>
