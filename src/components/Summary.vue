@@ -1,20 +1,26 @@
 <template>
-  <div>
-    <Profile />
-    <br>
-    <Goal />
+  <div class="row">
+    <div class="col-md-12">
+      <Profile />
+      <br>
+      <Goal />
+      <br>
+      <Asset />
+    </div>
   </div>
 </template>
 
 <script>
 import Profile from './Profile.vue'
 import Goal from './Goal.vue'
+import Asset from './Asset.vue'
 
 export default {
   name: 'Summary',
   components: {
     Profile,
     Goal,
+    Asset
   }
 }
 </script>

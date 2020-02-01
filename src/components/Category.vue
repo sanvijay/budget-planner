@@ -13,7 +13,8 @@
               <th>Super Category</th>
               <th>Category</th>
               <th>Goal</th>
-              <th>Benefits</th>
+              <th>Benefit</th>
+              <th>Asset</th>
             </thead>
 
             <tbody v-for="(subCategories, category) in categories" :key="category">
@@ -21,6 +22,7 @@
                 <td rowspan="3">
                   {{ category }}
                 </td>
+                <td> - </td>
                 <td> - </td>
                 <td> - </td>
                 <td> - </td>
@@ -43,15 +45,27 @@
                     {{ subCategory.benefit ? subCategory.benefit.title : '-' }}
                   </div>
                   <div v-if="showInput(subCategory, 'benefit')">
-                  <select class="form-control input-sm" v-model="subCategory.benefit_id" @blur="updateCategory(subCategory)" @keyup.enter="updateCategory(subCategory)" @keyup.esc="cancelEdit(subCategory, 'benefit')">
+                  <select class="form-control input-sm" v-focus v-model="subCategory.benefit_id" @blur="updateCategory(subCategory)" @keyup.enter="updateCategory(subCategory)" @keyup.esc="cancelEdit(subCategory, 'benefit')">
                     <option value=""> - none - </option>
                     <option v-for="benefit in benefits" :key="benefit._id.$oid" :value="benefit._id.$oid">{{ benefit.title }}</option>
                   </select>
                   </div>
                 </td>
+                <td @dblclick="toggleEditingCategory(subCategory, 'asset')">
+                  <div v-if="!showInput(subCategory, 'asset')">
+                    {{ subCategory.asset ? subCategory.asset.title : '-' }}
+                  </div>
+                  <div v-if="showInput(subCategory, 'asset')">
+                  <select class="form-control input-sm" v-focus v-model="subCategory.asset_id" @blur="updateCategory(subCategory)" @keyup.enter="updateCategory(subCategory)" @keyup.esc="cancelEdit(subCategory, 'asset')">
+                    <option value=""> - none - </option>
+                    <option v-for="asset in assets" :key="asset._id.$oid" :value="asset._id.$oid">{{ asset.title }}</option>
+                  </select>
+                  </div>
+                </td>
               </tr>
               <tr>
-                <td><input class="form-control input-sm" type="text" v-model="newCategory[category]" @keyup.enter="addCategory(category)"></td>
+                <td><input class="form-control input-sm" type="text" v-model="newCategory[category]" @keyup.enter="addCategory(category)" placeholder="New Category ..."></td>
+                <td></td>
                 <td></td>
                 <td></td>
               </tr>
@@ -70,6 +84,7 @@ export default {
     return {
       categories: [],
       benefits: [],
+      assets: [],
       previousValue: null,
       newCategory: {
         "Income": '',
@@ -143,6 +158,21 @@ export default {
           console.error(error.response);
         });
     },
+    loadAssets: function() {
+      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/assets', {
+          headers: {
+            // https://github.com/axios/axios/issues/475
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL,
+          }
+        })
+        .then(response => {
+          this.assets = response.data;
+        })
+        .catch(function (error) {
+          console.error(error.response);
+        });
+    },
     toggleEditingCategory: function(category, field) {
       this.previousValue = category[field];
       this.$set(category, 'editing', field)
@@ -165,6 +195,13 @@ export default {
             category.benefit_id = response.data.benefit_id.$oid;
           }
           category.benefit = response.data.benefit;
+
+          category.asset_id = null;
+          if(response.data.asset_id != null) {
+            category.asset_id = response.data.asset_id.$oid;
+          }
+          category.asset = response.data.asset;
+
           category.editing = null;
         })
         .catch(error => {
@@ -200,6 +237,7 @@ export default {
   mounted: function () {
     this.loadCategories();
     this.loadBenefits();
+    this.loadAssets();
   },
 }
 </script>
