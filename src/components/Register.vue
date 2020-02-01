@@ -1,112 +1,86 @@
 <template>
-    <div>
-        <h4>Register</h4>
-        <form>
-            <label for="name">Name</label>
-            <div>
-                <input id="name" type="text" v-model="name" required autofocus>
-            </div>
-
-            <label for="email" >E-Mail Address</label>
-            <div>
-                <input id="email" type="email" v-model="email" required>
-            </div>
-
-            <label for="password">Password</label>
-            <div>
-                <input id="password" type="password" v-model="password" required>
-            </div>
-
-            <label for="password-confirm">Confirm Password</label>
-            <div>
-                <input id="password-confirm" type="password" v-model="password_confirmation" required>
-            </div>
-
-            <label for="password-confirm">Is this an administrator account?</label>
-            <div>
-                <select v-model="is_admin">
-                    <option value=1>Yes</option>
-                    <option value=0>No</option>
-                </select>
-            </div>
-
-            <div>
-                <button type="submit" @click="handleSubmit">
-                    Register
-                </button>
-            </div>
-        </form>
+  <div>
+    <div class="container">
+      <div class="row">
+        <div class="absolute-center is-responsive bg-light shadow-lg">
+          <div class="col-sm-12 col-md-12">
+            <form action="">
+              <div class="form-group">
+                <input class="form-control input-sm" type="text" v-model="email" placeholder="email"/>          
+              </div>
+              <div class="form-group">
+                <input class="form-control input-sm" type="password" v-model="password" placeholder="password"/>     
+              </div>
+              <div class="form-group">
+                <input class="form-control input-sm" type="password" v-model="password_confirmation" placeholder="confirm password"/>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"> I agree to the <a href="#">Terms and Conditions</a>
+                </label>
+              </div>
+              <div class="form-group">
+                <button type="button" @click="handleSubmit" class="btn btn-info btn-block">Register</button>
+              </div>
+              <div class="form-group text-center">
+                Already a User: <a href="#" @click="goToSignInPage">Sign In</a>
+              </div>
+              <div class="form-group text-center">
+                <a href="#">Support</a>
+              </div>
+            </form>        
+          </div>  
+        </div>    
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        props : ["nextUrl"],
-        data(){
-            return {
-                name : "",
-                email : "",
-                password : "",
-                password_confirmation : "",
-                is_admin : null
-            }
-        },
-        methods : {
-            handleSubmit(e) {
-                e.preventDefault()
+  export default {
+    data(){
+      return {
+        email : "",
+        password : "",
+        password_confirmation : ""
+      }
+    },
+    methods : {
+      goToSignInPage: function() {
+        this.$router.push({path: 'login', name: 'login'})
+      },
+      handleSubmit: function(e) {
+        e.preventDefault()
 
-                if (this.password === this.password_confirmation && this.password.length > 0)
-                {
-                    let url = "http://localhost:3000/register"
-                    if(this.is_admin != null || this.is_admin == 1) url = "http://localhost:3000/register-admin"
-                    this.$http.post(url, {
-                        name: this.name,
-                        email: this.email,
-                        password: this.password,
-                        is_admin: this.is_admin
-                    })
-                    .then(response => {
-                        localStorage.setItem('user',JSON.stringify(response.data.user))
-                        localStorage.setItem('jwt',response.data.token)
-
-                        if (localStorage.getItem('jwt') != null){
-                            // this.$emit('loggedIn')
-                            if(this.$route.params.nextUrl != null){
-                                this.$router.push(this.$route.params.nextUrl)
-                            }
-                            else{
-                                this.$router.push('/')
-                            }
-                        }
-                    });
-                    // .catch(error => {
-                    //     console.error(error);
-                    // });
-                } else {
-                    this.password = ""
-                    this.passwordConfirm = ""
-
-                    return alert("Passwords do not match")
-                }
-            }
+        if (this.password.length > 0 && this.password === this.password_confirmation) {
+          this.$http.post("/signup", {
+            user: { email: this.email, password: this.password }
+          })
+          .then(response => {
+            this.$router.push('/registeration-complete')
+          });
+        } else {
+          this.password = ""
+          this.password_confirmation = ""
         }
+      }
     }
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.absolute-center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+
+.absolute-center.is-responsive {
+  width: 50%; 
+  height: 50%;
+  min-width: 200px;
+  max-width: 400px;
+  padding: 40px;
 }
 </style>
