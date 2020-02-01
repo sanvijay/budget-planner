@@ -1,86 +1,84 @@
 <template>
-  <div class="container shadow-lg">
-    <div class="row">
-      <table class="table-sm table-bordered table-hover table-responsive">
-        <thead class="bg-light">
-          <tr>
-            <th></th>
-            <th></th>
-            <th v-for="month in 12" :key="month">{{ monthFromInt(month - 1) }}</th>
-          </tr>
-        </thead>
-        <tbody v-for="(subCategories, category) in categories" :key="category">
-          <tr v-if="subCategories.length == 0">
-            <td rowspan="3" class="bg-light">
-              {{ category }}
-            </td>
-            <td> - </td>
-            <td v-for="empty in 12" :key="empty">
-              &#8377; 0
-            </td>
-          </tr>
-          <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id">
-            <td :rowspan="subCategories.length + 2" v-if="idx == 0" class="bg-light">
-              {{ category }}
-            </td>
-            <td class="truncate">
-              {{ subCategory.title }}
-            </td>
+  <div class="container"><div class="row shadow-lg bg-light">
+    <table class="table-sm table-bordered table-hover table-responsive sectioned">
+      <thead class="bg-light">
+        <tr>
+          <th></th>
+          <th></th>
+          <th v-for="month in 12" :key="month"><b>{{ monthFromInt(month - 1) }}</b></th>
+        </tr>
+      </thead>
+      <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
+        <tr v-if="subCategories.length == 0">
+          <td rowspan="3" class="bg-light">
+            <b>{{ category }}</b>
+          </td>
+          <td> - </td>
+          <td v-for="empty in 12" :key="empty">
+            &#8377; 0
+          </td>
+        </tr>
+        <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id">
+          <td :rowspan="subCategories.length + 2" v-if="idx == 0" class="bg-light">
+            <b>{{ category }}</b>
+          </td>
+          <td class="truncate">
+            {{ subCategory.title }}
+          </td>
 
-            <td class="truncate" v-if="plannedMonthlyBudget[category] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" :class="{ 'error-cell': plannedMonthlyBudget[category][subCategory.id][selectedYear][month].error }">
-              <div v-if="!plannedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
-                &#8377; {{ plannedMonthlyBudget[category][subCategory.id][selectedYear][month].value }}
-              </div>
-              <div v-if="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
-                
-                <input class="form-control input-sm" @keyup.esc="cancelEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" @keyup.enter="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" @blur="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" v-focus type="text" v-model="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].value" />
-              </div>
-            </td>
-          </tr>
+          <td class="truncate" v-if="plannedMonthlyBudget[category] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" :class="{ 'error-cell': plannedMonthlyBudget[category][subCategory.id][selectedYear][month].error }">
+            <div v-if="!plannedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
+              &#8377; {{ plannedMonthlyBudget[category][subCategory.id][selectedYear][month].value }}
+            </div>
+            <div v-if="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
+              
+              <input class="form-control input-sm" @keyup.esc="cancelEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" @keyup.enter="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" @blur="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" v-focus type="text" v-model="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].value" />
+            </div>
+          </td>
+        </tr>
 
-          <tr>
-            <td class="truncate">
-              <input class="form-control input-sm" type="text" placeholder="Add category" @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
-            </td>
-            <td v-for="empty in 12" :key="empty"></td>
-          </tr>
+        <tr>
+          <td class="truncate">
+            <input class="form-control input-sm" type="text" placeholder="Add category" @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
+          </td>
+          <td v-for="empty in 12" :key="empty"></td>
+        </tr>
 
-          <tr>
-            <td> Sub-Total </td>
-            <td v-for="month in 12" :key="month" class="truncate">
-              &#8377; {{ subTotal(category, month, selectedYear) }} ({{ calculatePercentage(category, month, selectedYear) }}%)
-            </td>
-          </tr>
+        <tr>
+          <td> <b>Sub-Total</b> </td>
+          <td v-for="month in 12" :key="month" class="truncate">
+            &#8377; {{ subTotal(category, month, selectedYear) }} ({{ calculatePercentage(category, month, selectedYear) }}%)
+          </td>
+        </tr>
 
-        </tbody>
-        <tbody>
-          <tr>
-            <td colspan="2">Total Inflow</td>
-            <td v-for="month in 12" :key="month" class="truncate">
-              &#8377; {{ totalInflow(month, selectedYear) }}
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2">Total Outflow</td>
-            <td v-for="month in 12" :key="month" class="truncate">
-              &#8377; {{ totalOutflow(month, selectedYear) }}
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2">Total Balance</td>
-            <td v-for="month in 12" :key="month" class="truncate">
-              &#8377; {{ totalInflow(month, selectedYear) - totalOutflow(month, selectedYear) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div style="background-color: #f1f3f4">
-        <select v-model="selectedYear">
-          <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
-        </select>
-      </div>
+      </tbody>
+      <tbody>
+        <tr>
+          <td colspan="2"><b>Total Inflow</b></td>
+          <td v-for="month in 12" :key="month" class="truncate">
+            &#8377; {{ totalInflow(month, selectedYear) }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"><b>Total Outflow</b></td>
+          <td v-for="month in 12" :key="month" class="truncate">
+            &#8377; {{ totalOutflow(month, selectedYear) }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"><b>Total Balance</b></td>
+          <td v-for="month in 12" :key="month" class="truncate">
+            &#8377; {{ totalInflow(month, selectedYear) - totalOutflow(month, selectedYear) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="background-color: #f1f3f4">
+      <select v-model="selectedYear">
+        <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+      </select>
     </div>
-  </div>
+  </div></div>
 </template>
 
 <script>
@@ -307,5 +305,43 @@ export default {
 
 .table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
   background-color: inherit;
+}
+
+.tbody-striped > tr {
+  background-color: white;
+}
+/*
+.tbody-striped.income > tr:nth-child(odd) {
+  background-color: #e7f9f0;
+}
+
+.tbody-striped.expense > tr:nth-child(odd) {
+  background-color: #ffe6dd;
+}
+
+.tbody-striped.emi > tr:nth-child(odd) {
+  background-color: #fef8e3;
+}
+
+.tbody-striped.equityinvestment > tr:nth-child(odd) {
+  background-color: #e0f7fa;
+}
+
+.tbody-striped.debtinvestment > tr:nth-child(odd) {
+  background-color: #e9f0fe;
+}
+*/
+table {
+  border-collapse: collapse;
+}
+
+table.sectioned tbody {
+  border: 2px solid #a9a9a9;
+  border-collapse: separate;
+  border-spacing: 4px;
+}
+
+table.sectioned thead {
+  border-bottom: 3px solid #a9a9a9;
 }
 </style>
