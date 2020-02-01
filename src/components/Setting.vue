@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <Benefit />
-    <br>
-    <Category />
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <Benefit />
+        <br>
+        <Category />
+      </div>
+    </div>
   </div>
 </template>
 

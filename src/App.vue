@@ -47,24 +47,31 @@ export default {
   },
   methods: {
     logout: function() {
-        localStorage.removeItem('jwt');
-        localStorage.removeItem('user');
-        window.location.href = "/";
-    },
-    setUserProfile: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/user_profile', {
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.delete('logout')
         .then(response => {
-          this.user_profile = response.data;
+          localStorage.removeItem('jwt');
+          localStorage.removeItem('user');
+          window.location.href = "/";
         })
         .catch(function (error) {
           console.error(error.response);
         });
+    },
+    setUserProfile: function() {
+      if(this.loggedIn) {
+        this.$http.get('users/' + localStorage.getItem('user') + '/user_profile')
+          .then(response => {
+            if(response.data.first_name == null) {
+              // window.location.href = "/";
+              this.$bvModal.show("ask-for-user-profile");
+            } else {
+              this.user_profile = response.data;
+            }
+          })
+          .catch(function (error) {
+            console.error(error.response);
+          });
+      }
     }
   },
   data: function() {

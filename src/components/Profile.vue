@@ -35,7 +35,7 @@
             </tr>
             <tr>
               <td></td>
-              <td><button class="btn btn-info form-control" @click="saveNewProfile">Save</button></td>
+              <td><button class="btn btn-info form-control" @click="saveProfile">Save</button></td>
             </tr>
           </table>
         </div>
@@ -55,13 +55,7 @@ export default {
   },
   methods: {
     loadUserProfile: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/user_profile', {
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.get('users/' + localStorage.getItem('user') + '/user_profile')
         .then(response => {
           if(response.data != null) { this.user_profile = response.data; }
         })
@@ -69,14 +63,10 @@ export default {
           console.error(error.response);
         });
     },
-    saveNewProfile: function() {
-      this.$http.put(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/user_profile/', {
-          user_profile: this.user_profile,
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
+    saveProfile: function() {
+      this.$http.put('users/' + localStorage.getItem('user') + '/user_profile', { user_profile: this.user_profile })
+        .then(response => {
+          location.reload();
         })
         .catch(error => {
           // TODO: Refactor this with a feature.

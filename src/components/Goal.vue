@@ -45,13 +45,13 @@
                 </td>
                 <td @dblclick="toggleEditingGoal(goal, 'target')">
                   <div v-if="!showInput(goal, 'target')">
-                    {{ goal.target }}
+                    &#8377; {{ goal.target }}
                   </div>
                   <div v-if="showInput(goal, 'target')">
                     <input class="form-control input-sm" v-focus type="text" v-model="goal.target" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'target')">
                   </div>
                 </td>
-                <td>{{ goal.planned.toFixed(2) }}</td>
+                <td>&#8377; {{ goal.planned.toFixed(2) }}</td>
               </tr>
               <tr>
                 <td><input class="form-control input-sm" type="text" v-model="newGoal.description"></td>
@@ -79,8 +79,7 @@ export default {
         description: null,
         start_date: null,
         end_date: null,
-        target: null,
-        score_weightage_out_of_100: null
+        target: null
       }
     }
   },
@@ -98,13 +97,7 @@ export default {
       goal.editing = null;
     },
     loadGoals: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/goals', {
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.get('users/' + localStorage.getItem('user') + '/goals')
         .then(response => {
           this.goals = response.data;
         })
@@ -120,13 +113,8 @@ export default {
       return (goal.editing == field);
     },
     updateGoal: function(goal) {
-      this.$http.put(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/goals/' + goal._id.$oid, {
-          goal: goal,
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
+      this.$http.put('users/' + localStorage.getItem('user') + '/goals/' + goal._id.$oid, {
+          goal: goal
         })
         .then(response => {
           goal.editing = null;
@@ -138,13 +126,8 @@ export default {
         });
     },
     saveNewGoal: function() {
-      this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/goals', {
-          goal: this.newGoal,
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
+      this.$http.post('users/' + localStorage.getItem('user') + '/goals', {
+          goal: this.newGoal
         })
         .then(response => {
           this.goals.push(response.data);

@@ -29,7 +29,7 @@
                 </td>
                 <td @dblclick="toggleEditingBenefit(benefit, 'value')">
                   <div v-if="!showInput(benefit, 'value')">
-                    {{ benefit.value }}
+                    &#8377; {{ benefit.value }}
                   </div>
                   <div v-if="showInput(benefit, 'value')">
                     <input class="form-control input-sm" v-focus type="text" v-model="benefit.value" @blur="updateBenefit(benefit)" @keyup.enter="updateBenefit(benefit)" @keyup.esc="cancelEdit(benefit, 'value')">
@@ -87,13 +87,7 @@ export default {
       benefit.editing = null;
     },
     loadBenefits: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/benefits', {
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.get('users/' + localStorage.getItem('user') + '/benefits')
         .then(response => {
           this.benefits = response.data;
         })
@@ -109,14 +103,7 @@ export default {
       return (benefit.editing == field);
     },
     updateBenefit: function(benefit) {
-      this.$http.put(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/benefits/' + benefit._id.$oid, {
-          benefit: benefit,
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.put('users/' + localStorage.getItem('user') + '/benefits/' + benefit._id.$oid, { benefit: benefit })
         .then(response => {
           benefit.editing = null;
         })
@@ -127,14 +114,7 @@ export default {
         });
     },
     saveNewBenefit: function() {
-      this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/benefits', {
-          benefit: this.newBenefit,
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.post('users/' + localStorage.getItem('user') + '/benefits', { benefit: this.newBenefit })
         .then(response => {
           this.benefits.push(response.data);
           this.newBenefit.title = null;

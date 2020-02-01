@@ -53,13 +53,7 @@ export default {
   },
   methods: {
     loadCustomRule: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/custom_rule', {
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.get('users/' + localStorage.getItem('user') + '/custom_rule')
         .then(response => {
           if(response.data != null) { this.custom_rule = response.data; }
         })
@@ -68,13 +62,8 @@ export default {
         });
     },
     saveNewCustomRule: function() {
-      this.$http.put(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/custom_rule/', {
-          custom_rule: this.custom_rule,
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
+      this.$http.put('users/' + localStorage.getItem('user') + '/custom_rule/', {
+          custom_rule: this.custom_rule
         })
         .catch(error => {
           // TODO: Refactor this with a feature.

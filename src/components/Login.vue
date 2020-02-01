@@ -1,85 +1,94 @@
 <template>
-    <div>
-        <h4>Login</h4>
-        <form>
-            <label for="email" >E-Mail Address</label>
-            <div>
-                <input id="email" type="email" v-model="email" required autofocus>
-            </div>
-            <div>
-                <label for="password" >Password</label>
-                <div>
-                    <input id="password" type="password" v-model="password" required>
-                </div>
-            </div>
-            <div>
-                <button type="submit" @click="handleSubmit">
-                    Login
-                </button>
-            </div>
-        </form>
+  <div>
+    <div class="container">
+      <div class="row">
+        <div class="absolute-center is-responsive bg-light shadow-lg">
+          <div class="col-sm-12 col-md-12">
+            <form action="">
+              <div class="form-group">
+                <input class="form-control input-sm" type="text" v-model="email" placeholder="email"/>          
+              </div>
+              <div class="form-group">
+                <input class="form-control input-sm" type="password" v-model="password" placeholder="password"/>     
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" v-model="remember_me"> Remember me
+                </label>
+              </div>
+              <div class="form-group">
+                <button type="button" @click="handleSubmit" class="btn btn-info btn-block">Login</button>
+              </div>
+              <div class="form-group text-center">
+                New User: <a href="#" @click="goToRegisterPage">Sign Up</a>
+              </div>
+              <div class="form-group text-center">
+                <a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>
+              </div>
+            </form>        
+          </div>  
+        </div>    
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                email : "",
-                password : ""
-            }
-        },
-        methods: {
-            handleSubmit(e){
-                e.preventDefault()
-                if (this.password.length > 0) {
-                    this.$http.post(process.env.VUE_APP_API_URL + 'login', {
-                        email: this.email,
-                        password: this.password
-                    }, {
-                      headers: {
-                        // https://github.com/axios/axios/issues/475
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-                      }
-                    })
-                    .then(response => {
-                        localStorage.setItem('user', response.data.user)
-                        localStorage.setItem('jwt', response.data.token)
-
-                        if (localStorage.getItem('jwt') != null){
-                            // this.$emit('loggedIn')
-                            if(this.$route.params.nextUrl != null){
-                                this.$router.push(this.$route.params.nextUrl)
-                            }
-                            else {
-                                window.location.href = "/";
-                            }
-                        }
-                    });
-                    // .catch(function (error) {
-                    //     // console.error(error.response);
-                    // });
-                }
-            }
-        }
+export default {
+  data: function() {
+    return {
+      email : "",
+      password : "",
+      remember_me: false
     }
+  },
+  methods: {
+    handleSubmit: function(e) {
+      e.preventDefault()
+      if (this.password.length > 0) {
+        this.$http.post('login', {
+          user: {
+            email: this.email,
+            password: this.password,
+            remember_me: this.remember_me
+          }
+        })
+        .then(response => {
+          localStorage.setItem('user', response.data._id.$oid)
+          localStorage.setItem('jwt', response.headers.authorization)
+
+          if (localStorage.getItem('jwt') != null){
+            // this.$emit('loggedIn')
+            if(this.$route.params.nextUrl != null){
+              this.$router.push(this.$route.params.nextUrl)
+            }
+            else {
+              window.location.href = "/";
+            }
+          }
+        });
+      }
+    },
+    goToRegisterPage: function() {
+      this.$router.push({path: 'register', name: 'register'})
+    }
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.absolute-center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+
+.absolute-center.is-responsive {
+  width: 50%; 
+  height: 50%;
+  min-width: 200px;
+  max-width: 400px;
+  padding: 40px;
 }
 </style>

@@ -105,15 +105,10 @@ export default {
   },
   methods: {
     addCategory: function(category) {
-      this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/categories', {
+      this.$http.post('users/' + localStorage.getItem('user') + '/categories', {
           "category": {
             "title": this.newCategory[category],
             "type": category
-          },
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
           }
         })
         .then(response => {
@@ -129,13 +124,7 @@ export default {
       category.editing = null;
     },
     loadCategories: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/categories', {
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.get('users/' + localStorage.getItem('user') + '/categories')
         .then(response => {
           this.categories = response.data;
         })
@@ -144,13 +133,7 @@ export default {
         });
     },
     loadBenefits: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/benefits', {
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.get('users/' + localStorage.getItem('user') + '/benefits')
         .then(response => {
           this.benefits = response.data;
         })
@@ -159,13 +142,7 @@ export default {
         });
     },
     loadAssets: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/assets', {
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL,
-          }
-        })
+      this.$http.get('users/' + localStorage.getItem('user') + '/assets')
         .then(response => {
           this.assets = response.data;
         })
@@ -181,14 +158,7 @@ export default {
       return (category.editing == field);
     },
     updateCategory: function(category) {
-      this.$http.put(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/categories/' + category.id, {
-          category: category,
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.put('users/' + localStorage.getItem('user') + '/categories/' + category.id, { category: category })
         .then(response => {
           category.benefit_id = null;
           if(response.data.benefit_id != null) {
@@ -211,13 +181,8 @@ export default {
         });
     },
     saveNewCategory: function() {
-      this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/categories', {
-          category: this.newCategory,
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
+      this.$http.post('users/' + localStorage.getItem('user') + '/categories', {
+          category: this.newCategory
         })
         .then(response => {
           this.categories.push(response.data);

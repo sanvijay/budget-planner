@@ -99,15 +99,7 @@ export default {
       return (asset.editing == field);
     },
     updateAsset: function(asset) {
-      this.$http.put(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/assets/' + asset._id.$oid, {
-          asset: asset,
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL,
-            'Authorization': localStorage.getItem('jwt')
-          }
-        })
+      this.$http.put('users/' + localStorage.getItem('user') + '/assets/' + asset._id.$oid, { asset: asset })
         .then(response => {
           asset.editing = null;
         })
@@ -118,15 +110,7 @@ export default {
         });
     },
     saveNewAsset: function() {
-      this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/assets', {
-          asset: this.newAsset,
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL,
-            'Authorization': localStorage.getItem('jwt')
-          }
-        })
+      this.$http.post('users/' + localStorage.getItem('user') + '/assets', { asset: this.newAsset })
         .then(response => {
           this.assets.push(response.data);
           this.newAsset.title = null;

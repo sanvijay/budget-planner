@@ -147,13 +147,7 @@ export default {
       else { return percentage.toFixed(2); }
     },
     initializeCategories: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/categories', {
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
-        })
+      this.$http.get('users/' + localStorage.getItem('user') + '/categories')
         .then(response => {
           for (var category in response.data) {
             this.$set(this.categories, category, response.data[category])
@@ -164,13 +158,8 @@ export default {
         });
     },
     updatePlannedMonthlyBudget: function() {
-      this.$http.get(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/monthly_budgets', {
-        params: { "year": this.selectedYear },
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
-          }
+      this.$http.get('users/' + localStorage.getItem('user') + '/monthly_budgets', {
+          params: { "year": this.selectedYear }
         })
         .then(response => {
           var plannedMonthlyBudget = response.data;
@@ -216,15 +205,10 @@ export default {
         element.error = false;
         var formattedMonth = ("0" + month).slice(-2);
 
-        this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year + '/planned_cash_flows', {
+        this.$http.post('users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year + '/planned_cash_flows', {
             "cash_flow": {
               category_id: subCategory,
               value: element.value
-            },
-            headers: {
-              // https://github.com/axios/axios/issues/475
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
             }
           })
           .then(response => {
@@ -246,15 +230,10 @@ export default {
       this.newCategory[category] = '';
     },
     addSubCategory: function(category) {
-      this.$http.post(process.env.VUE_APP_API_URL + 'users/' + localStorage.getItem('user') + '/categories', {
+      this.$http.post('users/' + localStorage.getItem('user') + '/categories', {
           "category": {
             "title": this.newCategory[category],
             "type": category
-          },
-          headers: {
-            // https://github.com/axios/axios/issues/475
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': process.env.VUE_APP_API_URL
           }
         })
         .then(response => {
