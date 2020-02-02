@@ -8,7 +8,7 @@
         <br><hr>
 
         <div class="shadow-lg" style="padding: 5px;">
-          <table class="table-sm table-bordered">
+          <table class="table-sm table-bordered table-responsive">
             <thead>
               <th>Description</th>
               <th>Start Date</th>
@@ -24,7 +24,7 @@
                     {{ goal.description }}
                   </div>
                   <div v-if="showInput(goal, 'description')">
-                    <input class="form-control input-sm" v-focus type="text" v-model="goal.description" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'description')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="goal.description" @blur="updateGoal(goal)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(goal, 'description')">
                   </div>
                 </td>
                 <td @dblclick="toggleEditingGoal(goal, 'start_date')">
@@ -32,7 +32,7 @@
                     {{ goal.start_date }}
                   </div>
                   <div v-if="showInput(goal, 'start_date')">
-                    <input class="form-control input-sm" v-focus type="date" v-model="goal.start_date" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'start_date')">
+                    <input class="form-control input-sm" v-focus type="date" v-model="goal.start_date" @blur="updateGoal(goal)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(goal, 'start_date')">
                   </div>
                 </td>
                 <td @dblclick="toggleEditingGoal(goal, 'end_date')">
@@ -40,7 +40,7 @@
                     {{ goal.end_date }}
                   </div>
                   <div v-if="showInput(goal, 'end_date')">
-                    <input class="form-control input-sm" v-focus type="date" v-model="goal.end_date" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'end_date')">
+                    <input class="form-control input-sm" v-focus type="date" v-model="goal.end_date" @blur="updateGoal(goal)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(goal, 'end_date')">
                   </div>
                 </td>
                 <td @dblclick="toggleEditingGoal(goal, 'target')">
@@ -48,7 +48,7 @@
                     &#8377; {{ goal.target }}
                   </div>
                   <div v-if="showInput(goal, 'target')">
-                    <input class="form-control input-sm" v-focus type="text" v-model="goal.target" @blur="updateGoal(goal)" @keyup.enter="updateGoal(goal)" @keyup.esc="cancelEdit(goal, 'target')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="goal.target" @blur="updateGoal(goal)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(goal, 'target')">
                   </div>
                 </td>
                 <td>&#8377; {{ goal.planned.toFixed(2) }}</td>

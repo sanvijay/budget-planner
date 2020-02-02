@@ -8,7 +8,7 @@
         <br><hr>
 
         <div class="shadow-lg" style="padding: 5px;">
-          <table class="table-sm table-bordered">
+          <table class="table-sm table-bordered table-responsive">
             <thead>
               <th>Super Category</th>
               <th>Category</th>
@@ -36,7 +36,7 @@
                     {{ subCategory.title }}
                   </div>
                   <div v-if="showInput(subCategory, 'title')">
-                    <input class="form-control input-sm" v-focus type="text" v-model="subCategory.title" @blur="updateCategory(subCategory)" @keyup.enter="updateCategory(subCategory)" @keyup.esc="cancelEdit(subCategory, 'title')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="subCategory.title" @blur="updateCategory(subCategory)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(subCategory, 'title')">
                   </div>
                 </td>
                 <td> - </td>
@@ -45,7 +45,7 @@
                     {{ subCategory.benefit ? subCategory.benefit.title : '-' }}
                   </div>
                   <div v-if="showInput(subCategory, 'benefit')">
-                  <select class="form-control input-sm" v-focus v-model="subCategory.benefit_id" @blur="updateCategory(subCategory)" @keyup.enter="updateCategory(subCategory)" @keyup.esc="cancelEdit(subCategory, 'benefit')">
+                  <select class="form-control input-sm" v-focus v-model="subCategory.benefit_id" @blur="updateCategory(subCategory)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(subCategory, 'benefit')">
                     <option value=""> - none - </option>
                     <option v-for="benefit in benefits" :key="benefit._id.$oid" :value="benefit._id.$oid">{{ benefit.title }}</option>
                   </select>
@@ -56,7 +56,7 @@
                     {{ subCategory.asset ? subCategory.asset.title : '-' }}
                   </div>
                   <div v-if="showInput(subCategory, 'asset')">
-                  <select class="form-control input-sm" v-focus v-model="subCategory.asset_id" @blur="updateCategory(subCategory)" @keyup.enter="updateCategory(subCategory)" @keyup.esc="cancelEdit(subCategory, 'asset')">
+                  <select class="form-control input-sm" v-focus v-model="subCategory.asset_id" @blur="updateCategory(subCategory)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(subCategory, 'asset')">
                     <option value=""> - none - </option>
                     <option v-for="asset in assets" :key="asset._id.$oid" :value="asset._id.$oid">{{ asset.title }}</option>
                   </select>

@@ -8,7 +8,7 @@
         <br><hr>
 
         <div class="shadow-lg" style="padding: 5px;">
-          <table class="table-sm table-bordered">
+          <table class="table-sm table-bordered table-responsive">
 
             <thead>
               <th>Title</th>
@@ -23,7 +23,7 @@
                     {{ asset.title }}
                   </div>
                   <div v-if="showInput(asset, 'title')">
-                    <input class="form-control input-sm" v-focus type="text" v-model="asset.title" @blur="updateAsset(asset)" @keyup.enter="updateAsset(asset)" @keyup.esc="cancelEdit(asset, 'title')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="asset.title" @blur="updateAsset(asset)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(asset, 'title')">
                   </div>
                 </td>
                 <td @dblclick="toggleEditingAsset(asset, 'value')">
@@ -31,7 +31,7 @@
                     &#8377; {{ asset.value }}
                   </div>
                   <div v-if="showInput(asset, 'value')">
-                    <input class="form-control input-sm" v-focus type="text" v-model="asset.value" @blur="updateAsset(asset)" @keyup.enter="updateAsset(asset)" @keyup.esc="cancelEdit(asset, 'value')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="asset.value" @blur="updateAsset(asset)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(asset, 'value')">
                   </div>
                 </td>
                 <td></td>

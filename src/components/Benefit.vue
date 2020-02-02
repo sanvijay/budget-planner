@@ -8,7 +8,7 @@
         <br><hr>
 
         <div class="shadow-lg" style="padding: 5px;">
-          <table class="table-sm table-bordered">
+          <table class="table-sm table-bordered table-responsive">
 
             <thead>
               <th>title</th>
@@ -24,7 +24,7 @@
                     {{ benefit.title }}
                   </div>
                   <div v-if="showInput(benefit, 'title')">
-                    <input class="form-control input-sm" v-focus type="text" v-model="benefit.title" @blur="updateBenefit(benefit)" @keyup.enter="updateBenefit(benefit)" @keyup.esc="cancelEdit(benefit, 'title')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="benefit.title" @blur="updateBenefit(benefit)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(benefit, 'title')">
                   </div>
                 </td>
                 <td @dblclick="toggleEditingBenefit(benefit, 'value')">
@@ -32,7 +32,7 @@
                     &#8377; {{ benefit.value }}
                   </div>
                   <div v-if="showInput(benefit, 'value')">
-                    <input class="form-control input-sm" v-focus type="text" v-model="benefit.value" @blur="updateBenefit(benefit)" @keyup.enter="updateBenefit(benefit)" @keyup.esc="cancelEdit(benefit, 'value')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="benefit.value" @blur="updateBenefit(benefit)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(benefit, 'value')">
                   </div>
                 </td>
                 <td @dblclick="toggleEditingBenefit(benefit, 'score_weightage_out_of_100')">
@@ -40,7 +40,7 @@
                     {{ benefit.score_weightage_out_of_100 }}
                   </div>
                   <div v-if="showInput(benefit, 'score_weightage_out_of_100')">
-                    <input class="form-control input-sm" v-focus type="text" v-model="benefit.score_weightage_out_of_100" @blur="updateBenefit(benefit)" @keyup.enter="updateBenefit(benefit)" @keyup.esc="cancelEdit(benefit, 'score_weightage_out_of_100')">
+                    <input class="form-control input-sm" v-focus type="text" v-model="benefit.score_weightage_out_of_100" @blur="updateBenefit(benefit)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(benefit, 'score_weightage_out_of_100')">
                   </div>
                 </td>
                 <td></td>

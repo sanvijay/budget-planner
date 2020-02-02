@@ -28,11 +28,11 @@
 
           <td class="truncate" v-if="plannedMonthlyBudget[category] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" :class="{ 'error-cell': plannedMonthlyBudget[category][subCategory.id][selectedYear][month].error }">
             <div v-if="!plannedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
-              &#8377; {{ plannedMonthlyBudget[category][subCategory.id][selectedYear][month].value }}
+              &#8377; {{ plannedMonthlyBudget[category][subCategory.id][selectedYear][month].planned }}
             </div>
             <div v-if="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
               
-              <input class="form-control input-sm" @keyup.esc="cancelEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" @keyup.enter="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" @blur="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" v-focus type="text" v-model="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].value" />
+              <input class="form-control input-sm" @keyup.esc="cancelEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" @keyup.enter="$event.target.blur()" @blur="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" v-focus type="text" v-model="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].planned" />
             </div>
           </td>
         </tr>
@@ -126,7 +126,7 @@ export default {
 
       for(var subCategory in this.plannedMonthlyBudget[category]) {
         if(this.plannedMonthlyBudget[category][subCategory][year] != null) {
-          total += parseFloat(this.plannedMonthlyBudget[category][subCategory][year][month].value);
+          total += parseFloat(this.plannedMonthlyBudget[category][subCategory][year][month].planned);
         }
       }
 
@@ -175,7 +175,7 @@ export default {
               if(plannedMonthlyBudget[category][subCategory.id][selectedYear] == null) { plannedMonthlyBudget[category][subCategory.id][selectedYear] = {} }
               for (var month = 1; month <= 12; month++) {
                 if(plannedMonthlyBudget[category][subCategory.id][selectedYear][month] == null) {
-                  this.$set(this.plannedMonthlyBudget[category][subCategory.id][selectedYear], month, { "value": 0, "editing": false, "error": false })
+                  this.$set(this.plannedMonthlyBudget[category][subCategory.id][selectedYear], month, { "planned": 0, "editing": false, "error": false })
                 } else {
                   plannedMonthlyBudget[category][subCategory.id][selectedYear][month]["editing"] = false
                   plannedMonthlyBudget[category][subCategory.id][selectedYear][month]["error"] = false
@@ -192,25 +192,25 @@ export default {
         });
     },
     toggleEditingMoney: function(element) {
-      this.cachedMoney = element.value;
+      this.cachedMoney = element.planned;
       element.editing = true;
     },
     doneEditingMoney: function(element, month, year, subCategory) {
-      if(element.value.toString().trim() == '') { element.value = 0; }
+      if(element.planned.toString().trim() == '') { element.planned = 0; }
 
-      if(isNaN(element.value)) { element.error = true; }
-      else if(element.value != this.cachedMoney) {
+      if(isNaN(element.planned)) { element.error = true; }
+      else if(element.planned != this.cachedMoney) {
         element.error = false;
         var formattedMonth = ("0" + month).slice(-2);
 
-        this.$http.post('users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year + '/planned_cash_flows', {
+        this.$http.post('users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year + '/cash_flows', {
             "cash_flow": {
               category_id: subCategory,
-              value: element.value
+              planned: element.planned
             }
           })
           .then(response => {
-            element.value = Number(element.value);
+            element.planned = Number(element.planned);
           })
           .catch(error => {
             this.cancelEditingMoney(element);
@@ -221,7 +221,7 @@ export default {
       element.editing = false;
     },
     cancelEditingMoney: function(element) {
-      element.value = this.cachedMoney;
+      element.planned = this.cachedMoney;
       element.editing = false;
     },
     cancelAddingSubCategory: function(category) {
@@ -239,7 +239,7 @@ export default {
           for(var year of this.years) {
             if(temp[year.toString()] == null) { temp[year.toString()] = {} }
             for (var month = 1; month <= 12; month++) {
-              temp[year.toString()][month.toString()] = { "value": 0, "editing": false }
+              temp[year.toString()][month.toString()] = { "planned": 0, "editing": false }
             }
           }
           this.$set(this.plannedMonthlyBudget[category], response.data.id, temp);
@@ -305,6 +305,10 @@ export default {
 
 .table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
   background-color: inherit;
+}
+
+.table-responsive {
+  margin-bottom: 0;
 }
 
 .tbody-striped > tr {
