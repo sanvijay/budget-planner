@@ -1,10 +1,10 @@
 <template>
-  <div class="container"><div class="row shadow-lg bg-light">
+  <div class="container"><div class="row shadow-lg bg-light"><div class="col">
     <table class="table-sm table-bordered table-hover table-responsive sectioned">
       <thead class="bg-light">
         <tr>
           <th></th>
-          <th></th>
+          <th class="left-sticky bg-light"></th>
           <th v-for="month in 12" :key="month"><b>{{ monthFromInt(month - 1) }}</b></th>
         </tr>
       </thead>
@@ -13,7 +13,7 @@
           <td rowspan="3" class="bg-light">
             <b>{{ category }}</b>
           </td>
-          <td> - </td>
+          <td class="left-sticky bg-light"> - </td>
           <td v-for="empty in 12" :key="empty">
             &#8377; 0
           </td>
@@ -22,7 +22,7 @@
           <td :rowspan="subCategories.length + 2" v-if="idx == 0" class="bg-light">
             <b>{{ category }}</b>
           </td>
-          <td class="truncate">
+          <td class="truncate bg-light left-sticky">
             {{ subCategory.title }}
           </td>
 
@@ -38,14 +38,14 @@
         </tr>
 
         <tr>
-          <td class="truncate">
+          <td class="truncate left-sticky bg-light">
             <input class="form-control input-sm" type="text" placeholder="Add category" @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
           </td>
           <td v-for="empty in 12" :key="empty"></td>
         </tr>
 
         <tr>
-          <td> <b>Sub-Total</b> </td>
+          <td class="left-sticky bg-light"> <b>Sub-Total</b> </td>
           <td v-for="month in 12" :key="month" class="truncate">
             &#8377; {{ subTotal(category, month, selectedYear) }} ({{ calculatePercentage(category, month, selectedYear) }}%)
           </td>
@@ -54,19 +54,22 @@
       </tbody>
       <tbody>
         <tr>
-          <td colspan="2"><b>Total Inflow</b></td>
+          <td></td>
+          <td class="bg-light left-sticky"><b>Total Inflow</b></td>
           <td v-for="month in 12" :key="month" class="truncate">
             &#8377; {{ totalInflow(month, selectedYear) }}
           </td>
         </tr>
         <tr>
-          <td colspan="2"><b>Total Outflow</b></td>
+          <td></td>
+          <td class="bg-light left-sticky"><b>Total Outflow</b></td>
           <td v-for="month in 12" :key="month" class="truncate">
             &#8377; {{ totalOutflow(month, selectedYear) }}
           </td>
         </tr>
         <tr>
-          <td colspan="2"><b>Total Balance</b></td>
+          <td></td>
+          <td class="bg-light left-sticky"><b>Total Balance</b></td>
           <td v-for="month in 12" :key="month" class="truncate">
             &#8377; {{ totalInflow(month, selectedYear) - totalOutflow(month, selectedYear) }}
           </td>
@@ -78,7 +81,7 @@
         <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
       </select>
     </div>
-  </div></div>
+  </div></div></div>
 </template>
 
 <script>
@@ -347,5 +350,10 @@ table.sectioned tbody {
 
 table.sectioned thead {
   border-bottom: 3px solid #a9a9a9;
+}
+
+.left-sticky {
+  position: sticky;
+  left: 0px;
 }
 </style>

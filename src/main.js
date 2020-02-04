@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import Axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
+import Datetime from 'vue-datetime'
 
 Vue.prototype.$http = Axios;
 Axios.defaults.baseURL = process.env.VUE_APP_API_URL;
@@ -14,8 +15,10 @@ Axios.defaults.headers.post['Access-Control-Allow-Origin'] = process.env.VUE_APP
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
 Vue.use(BootstrapVue)
+
+import 'vue-datetime/dist/vue-datetime.css'
+Vue.use(Datetime)
 
 Vue.config.productionTip = false
 

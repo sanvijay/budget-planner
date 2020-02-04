@@ -1,18 +1,18 @@
 <template>
-  <div>
-    <div class="container">
-      <div class="row">
-        <div class="absolute-center is-responsive bg-light shadow-lg">
-          <div class="col-sm-12 col-md-12">
-            <form action="">
+  <div class="parent">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+
+          <div class="col-md-3 col-sm-6 col-12 bg-light shadow-lg">
+            <form class="form-container">
               <div class="form-group">
-                <input class="form-control input-sm" type="text" v-model="email" placeholder="email"/>          
+                <input class="form-control input-lg" type="text" v-model="email" placeholder="email"/>          
               </div>
               <div class="form-group">
-                <input class="form-control input-sm" type="password" v-model="password" placeholder="password"/>     
+                <input class="form-control input-lg" type="password" v-model="password" placeholder="password"/>     
               </div>
               <div class="form-group">
-                <input class="form-control input-sm" type="password" v-model="password_confirmation" placeholder="confirm password"/>
+                <input class="form-control input-lg" type="password" v-model="password_confirmation" placeholder="confirm password"/>
               </div>
               <div class="checkbox">
                 <label>
@@ -28,9 +28,9 @@
               <div class="form-group text-center">
                 <a href="#">Support</a>
               </div>
-            </form>        
-          </div>  
-        </div>    
+            </form>
+          </div>
+
       </div>
     </div>
   </div>
@@ -70,17 +70,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.absolute-center {
-  margin: auto;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+.parent {
+  padding-top: 5vh;
 }
-
-.absolute-center.is-responsive {
-  width: 50%; 
-  height: 50%;
-  min-width: 200px;
-  max-width: 400px;
-  padding: 40px;
+.form-container {
+  padding: 30px;
 }
 </style>
