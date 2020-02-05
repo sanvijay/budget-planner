@@ -91,8 +91,8 @@ export default {
         .then(response => {
           this.benefits = response.data;
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.$parent.toast(error);
         });
     },
     toggleEditingBenefit: function(benefit, field) {
@@ -110,7 +110,7 @@ export default {
         .catch(error => {
           // TODO: Refactor this with a feature.
           this.loadBenefits();
-          console.error(error.response);
+          this.$parent.$parent.toast(error);
         });
     },
     saveNewBenefit: function() {
@@ -121,8 +121,8 @@ export default {
           this.newBenefit.value = null;
           this.newBenefit.score_weightage_out_of_100 = null;
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.$parent.toast(error);
         });
     }
   },

@@ -87,9 +87,9 @@ export default {
         .then(response => {
           this.assets = response.data;
         })
-        .catch(function (error) {
-          console.error(error.response);
-        });
+        .catch(error => {
+          this.$parent.$parent.toast(error);
+        });;
     },
     toggleEditingAsset: function(asset, field) {
       this.previousValue = asset[field];
@@ -106,7 +106,7 @@ export default {
         .catch(error => {
           // TODO: Refactor this with a feature.
           this.loadAssets();
-          console.error(error.response);
+          this.$parent.$parent.toast(error);
         });
     },
     saveNewAsset: function() {
@@ -116,9 +116,9 @@ export default {
           this.newAsset.title = null;
           this.newAsset.value = null;
         })
-        .catch(function (error) {
-          console.error(error.response);
-        });
+        .catch(error => {
+          this.$parent.$parent.toast(error);
+        });;
     }
   },
   mounted: function () {

@@ -55,8 +55,8 @@ export default {
         .then(response => {
           if(response.data != null) { this.user_profile = response.data; }
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.$parent.toast(error);
         });
     },
     saveProfile: function() {
@@ -67,7 +67,7 @@ export default {
         .catch(error => {
           // TODO: Refactor this with a feature.
           this.loadUserProfile();
-          console.error(error.response);
+          this.$parent.$parent.toast(error);
         });
       }
   },

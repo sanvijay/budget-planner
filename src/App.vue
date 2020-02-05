@@ -58,14 +58,50 @@ export default {
   methods: {
     logout: function() {
       this.$http.delete('logout')
-        .then(response => {
-          localStorage.removeItem('jwt');
-          localStorage.removeItem('user');
-          window.location.href = "/";
-        })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.toast(error);
         });
+
+      localStorage.removeItem('jwt');
+      localStorage.removeItem('user');
+      window.location.href = "/";
+    },
+    toast: function(error) {
+      var finalContent = null;
+
+      if(error.response == null) {
+        finalContent = error.message
+      } else if (error.response.status == 400 || error.response.status == 422) {
+        var content = [];
+        var content_hash = error.response.data;
+
+        const h = this.$createElement
+
+        for(var content_key in content_hash) {
+          for(var content_string_index in content_hash[content_key]){
+            content.push(h('p', {}, content_key + " " + content_hash[content_key][content_string_index]));
+          }
+        }
+
+        finalContent = [h('span', {}, content)];
+      } else if (error.response.status == 401) {
+        finalContent = error.response.data;
+      } else if (error.response.status == 500) {
+        finalContent = "Some error occured"
+      // } else if (error.response.status == 400) {
+      // } else if (error.response.status == 400) {
+      // } else if (error.response.status == 400) {
+      // } else if (error.response.status == 400) {
+
+      }
+
+
+      this.$bvToast.toast(finalContent, {
+        title: "Error",
+        toaster: "b-toaster-bottom-right",
+        solid: true,
+        appendToast: false
+      })
     },
     setUserProfile: function() {
       if(this.loggedIn) {
@@ -78,16 +114,15 @@ export default {
               this.user_profile = response.data;
             }
           })
-          .catch(function (error) {
-            console.error(error.response);
+          .catch(error => {
+            this.toast(error);
           });
       }
     }
   },
   data: function() {
     return {
-      user_profile: {},
-      showModal: false
+      user_profile: {}
     }
   },
   mounted: function () {

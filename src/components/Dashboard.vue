@@ -154,8 +154,8 @@ export default {
             this.$set(this.categories, category, response.data[category])
           }
         })
-        .catch(function (error) {
-            console.error(error.response);
+        .catch(error => {
+          this.$parent.toast(error);
         });
     },
     updatePlannedMonthlyBudget: function() {
@@ -190,8 +190,8 @@ export default {
 
           this.populatedYears.push(selectedYear);
         })
-        .catch(function (error) {
-            console.error(error.response);
+        .catch(error => {
+          this.$parent.toast(error);
         });
     },
     toggleEditingMoney: function(element) {
@@ -217,7 +217,7 @@ export default {
           })
           .catch(error => {
             this.cancelEditingMoney(element);
-            console.error(error.response);
+            this.$parent.toast(error);
           });
       }
 
@@ -250,8 +250,8 @@ export default {
           this.categories[category].push(response.data);
           this.newCategory[category] = '';
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.toast(error);
         });
     },
   },

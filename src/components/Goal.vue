@@ -122,7 +122,7 @@ export default {
         .catch(error => {
           // TODO: Refactor this with a feature.
           this.loadGoals();
-          console.error(error.response);
+          this.$parent.$parent.toast(error);
         });
     },
     saveNewGoal: function() {
@@ -137,8 +137,8 @@ export default {
           this.newGoal.target = null;
           this.newGoal.score_weightage_out_of_100 = null;
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.$parent.toast(error);
         });
     }
   },

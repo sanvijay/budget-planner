@@ -180,8 +180,8 @@ export default {
           this.addExpenseForm = {};
           this.showAddExpenseModal = !this.showAddExpenseModal;
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.toast(error);
         });
     },
     monthFromInt: function(int) {
@@ -242,8 +242,8 @@ export default {
             this.$set(this.categories, category, response.data[category])
           }
         })
-        .catch(function (error) {
-            console.error(error.response);
+        .catch(error => {
+          this.$parent.toast(error);
         });
     },
     updatePlannedMonthlyBudget: function() {
@@ -276,8 +276,8 @@ export default {
 
           this.populatedYears.push(selectedYear);
         })
-        .catch(function (error) {
-            console.error(error.response);
+        .catch(error => {
+          this.$parent.toast(error);
         });
     },
     cancelAddingSubCategory: function(category) {
@@ -303,8 +303,8 @@ export default {
           this.categories[category].push(response.data);
           this.newCategory[category] = '';
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.toast(error);
         });
     },
   },

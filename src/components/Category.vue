@@ -105,6 +105,8 @@ export default {
   },
   methods: {
     addCategory: function(category) {
+      if(this.newCategory[category].toString().trim() == '') { return; }
+
       this.$http.post('users/' + localStorage.getItem('user') + '/categories', {
           "category": {
             "title": this.newCategory[category],
@@ -115,8 +117,8 @@ export default {
           this.categories[category].push(response.data);
           this.newCategory[category] = '';
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.$parent.toast(error);
         });
     },
     cancelEdit: function(category, field) {
@@ -128,8 +130,8 @@ export default {
         .then(response => {
           this.categories = response.data;
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.$parent.toast(error);
         });
     },
     loadBenefits: function() {
@@ -146,8 +148,8 @@ export default {
         .then(response => {
           this.assets = response.data;
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.$parent.toast(error);
         });
     },
     toggleEditingCategory: function(category, field) {
@@ -177,7 +179,7 @@ export default {
         .catch(error => {
           // TODO: Refactor this with a feature.
           this.loadCategories();
-          console.error(error.response);
+          this.$parent.$parent.toast(error);
         });
     },
     saveNewCategory: function() {
@@ -194,8 +196,8 @@ export default {
             "DebtInvestment": ''
           }
         })
-        .catch(function (error) {
-          console.error(error.response);
+        .catch(error => {
+          this.$parent.$parent.toast(error);
         });
     }
   },
