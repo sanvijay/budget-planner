@@ -40,7 +40,7 @@
               New User: <a href="#" @click="goToRegisterPage">Sign Up</a>
             </div>
             <div class="form-group text-center">
-              <a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>
+              <a href="#" @click="goToForgotPasswordPage">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>
             </div>
 
           </div>
@@ -51,6 +51,7 @@
 
 <script>
 export default {
+  name: 'Login',
   data: function() {
     return {
       email : "",
@@ -90,6 +91,9 @@ export default {
     },
     goToRegisterPage: function() {
       this.$router.push({path: 'register', name: 'register'})
+    },
+    goToForgotPasswordPage: function() {
+      this.$router.push({path: 'forgot-password', name: 'forgot-password'})
     }
   }
 }
