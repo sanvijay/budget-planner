@@ -86,7 +86,7 @@
 
 <script>
 export default {
-  name: 'Dashboard',
+  name: 'Planning',
   directives: {
     focus: {
       // directive definition

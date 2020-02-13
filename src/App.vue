@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 
-    <b-navbar toggleable="lg" fixed="top" type="light" variant="light" class="shadow-lg">
+    <b-navbar toggleable="lg" fixed="top" type="light" variant="light" class="shadow-lg" v-if="this.$route.path !== '/'">
       <b-navbar-brand href="#">
         <img src="./assets/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
         Budget Planner
@@ -11,8 +11,7 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav v-if="loggedIn">
-          <b-nav-item :to="{ name: 'home' }">Home</b-nav-item>
-          <b-nav-item :to="{ name: 'dashboard' }">Dashboard</b-nav-item>
+          <b-nav-item :to="{ name: 'planning' }">Planning</b-nav-item>
           <b-nav-item :to="{ name: 'expenditure' }">Expenditure</b-nav-item>
           <b-nav-item :to="{ name: 'summary' }">Summary</b-nav-item>
           <b-nav-item :to="{ name: 'setting' }">Setting</b-nav-item>

@@ -147,7 +147,7 @@
 
 <script>
 export default {
-  name: 'Dashboard',
+  name: 'Expenditure',
   directives: {
     focus: {
       // directive definition
