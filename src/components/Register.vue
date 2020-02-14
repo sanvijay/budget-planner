@@ -44,7 +44,7 @@
               </b-form-checkbox-group>
             </b-form-group>
 
-            <b-button type="submit" variant="info" class="btn-block">Register</b-button>
+            <b-button type="submit" variant="primary" class="btn-block">Register</b-button>
           </b-form>
 
           <div class="form-group text-center">

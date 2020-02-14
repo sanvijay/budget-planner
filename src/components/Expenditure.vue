@@ -137,7 +137,7 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-button type="submit" variant="info" style="margin-right: 5px;">Submit</b-button> 
+            <b-button type="submit" variant="primary" style="margin-right: 5px;">Submit</b-button> 
             <b-button type="reset" variant="light">Cancel</b-button>
           </b-form>
       </b-modal>
@@ -421,7 +421,7 @@ table.sectioned thead {
 }
 
 .add-expense {
-  background-color : #31B0D5;
+  background-color : #007bff;
   color: white;
   font-size: 25px;
   padding: 5px 15px;

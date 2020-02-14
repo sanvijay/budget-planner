@@ -33,7 +33,7 @@
                 </b-form-checkbox-group>
               </b-form-group>
 
-              <b-button type="submit" variant="info" class="btn-block">Login</b-button>
+              <b-button type="submit" variant="primary" class="btn-block">Login</b-button>
             </b-form>
 
             <div class="form-group text-center">

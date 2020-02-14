@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-8">
         <p class="h5 float-left">
-          Your Assets
+          Your Assets / Liabilities
         </p>
         <br><hr>
 
@@ -39,7 +39,7 @@
               <tr>
                 <td><input class="form-control input-sm" type="text" v-model="newAsset.title"></td>
                 <td><input class="form-control input-sm" type="text" v-model="newAsset.value"></td>
-                <td colspan="3" style="min-width: 70px"><button class="btn btn-info" @click="saveNewAsset">Save</button></td>
+                <td colspan="3" style="min-width: 70px"><button class="btn btn-primary" @click="saveNewAsset">Save</button></td>
               </tr>
             </tbody>
           </table>

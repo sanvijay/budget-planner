@@ -33,7 +33,7 @@
         </tr>
         <tr>
           <td></td>
-          <td><button class="btn btn-info form-control" @click="saveProfile">Save</button></td>
+          <td><button class="btn btn-primary form-control" @click="saveProfile">Save</button></td>
         </tr>
       </table>
     </div>

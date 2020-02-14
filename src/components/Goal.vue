@@ -58,7 +58,7 @@
                 <td><input class="form-control input-sm" type="date" v-model="newGoal.start_date"></td>
                 <td><input class="form-control input-sm" type="date" v-model="newGoal.end_date"></td>
                 <td><input class="form-control input-sm" type="text" v-model="newGoal.target"></td>
-                <td colspan="1"><button class="btn btn-info" @click="saveNewGoal">Save</button></td>
+                <td colspan="1"><button class="btn btn-primary" @click="saveNewGoal">Save</button></td>
               </tr>
             </tbody>
           </table>

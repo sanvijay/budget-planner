@@ -49,7 +49,7 @@
                 <td><input class="form-control input-sm" type="text" v-model="newBenefit.title"></td>
                 <td><input class="form-control input-sm" type="text" v-model="newBenefit.value"></td>
                 <td><input class="form-control input-sm" type="text" v-model="newBenefit.score_weightage_out_of_100"></td>
-                <td colspan="3" style="min-width: 70px"><button class="btn btn-info" @click="saveNewBenefit">Save</button></td>
+                <td colspan="3" style="min-width: 70px"><button class="btn btn-primary" @click="saveNewBenefit">Save</button></td>
               </tr>
             </tbody>
           </table>

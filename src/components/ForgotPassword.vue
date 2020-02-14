@@ -15,7 +15,7 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-button type="submit" variant="info" class="btn-block">Send Forgot Password Instructions</b-button>
+            <b-button type="submit" variant="primary" class="btn-block">Send Forgot Password Instructions</b-button>
           </b-form>
 
           <div class="form-group text-center">
@@ -47,7 +47,7 @@
         })
         .then(response => {
           this.$bvToast.toast("Check your email for reset instructions.", {
-            title: "Info",
+            title: "primary",
             toaster: "b-toaster-bottom-right",
             solid: true,
             appendToast: false
