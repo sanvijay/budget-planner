@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
             next()
         }
         else {
-            next({ name: 'dashboard'})
+            next({ name: 'planning'})
         }
     } else {
         next() 

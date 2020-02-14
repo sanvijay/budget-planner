@@ -6,7 +6,7 @@
           <div class="col-md-3 col-sm-6 col-12 bg-light shadow-lg">
 
 
-            <b-form @submit="handleSubmit" class="form-container">
+            <b-form @submit="handleSubmit()" class="form-container">
               <b-form-group id="input-group-1">
                 <b-form-input
                   id="input-1"
@@ -60,8 +60,7 @@ export default {
     }
   },
   methods: {
-    handleSubmit: function(e) {
-      e.preventDefault()
+    handleSubmit: function() {
       if (this.password.length > 0) {
         this.$http.post('login', {
           user: {
@@ -74,13 +73,11 @@ export default {
           localStorage.setItem('user', response.data._id.$oid)
           localStorage.setItem('jwt', response.headers.authorization)
 
-          if (localStorage.getItem('jwt') != null){
-            // this.$emit('loggedIn')
-            if(this.$route.params.nextUrl != null){
+          if (localStorage.getItem('jwt') != null) {
+            if (this.$route.params.nextUrl != null) {
               this.$router.push(this.$route.params.nextUrl)
-            }
-            else {
-              window.location.href = "/";
+            } else {
+              window.location.href = "/#/planning";
             }
           }
         })

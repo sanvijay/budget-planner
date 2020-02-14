@@ -21,7 +21,7 @@
                 <h1>Finally Achieve Financial Peace of Mind</h1>
                 <p class="mb-5">When you’re on top of your money, life is good. We help you effortlessly manage your finances in one place.</p>
                 <div>
-                  <a href="#" @click="goToRegisterPage" style="margin-right: 20px;">Sign In</a>
+                  <a href="#" @click="goToSignInPage" style="margin-right: 20px;">Sign In</a>
                   <a href="#" class="btn btn-primary mr-2 mb-2" @click="goToRegisterPage">Create an account</a>
                 </div>
               </div>
@@ -140,6 +140,9 @@ export default {
   methods: {
     goToRegisterPage: function() {
       this.$router.push({path: 'register', name: 'register'})
+    },
+    goToSignInPage: function() {
+      this.$router.push({path: 'login', name: 'login'})
     },
   }
 }
