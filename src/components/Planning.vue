@@ -5,7 +5,7 @@
         <tr>
           <th></th>
           <th class="left-sticky bg-light"></th>
-          <th v-for="month in 12" :key="month"><b>{{ monthFromInt(month - 1) }}</b></th>
+          <th v-for="month in monthYear" :key="month[0]"><b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b></th>
         </tr>
       </thead>
       <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
@@ -14,7 +14,7 @@
             <b>{{ category }}</b>
           </td>
           <td class="left-sticky bg-light"> - </td>
-          <td v-for="empty in 12" :key="empty">
+          <td v-for="empty in monthYear" :key="empty[0]">
             &#8377; 0
           </td>
         </tr>
@@ -26,13 +26,12 @@
             {{ subCategory.title }}
           </td>
 
-          <td class="truncate" v-if="plannedMonthlyBudget[category] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear] != null" v-for="month in 12" :key="month" @dblclick="toggleEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" :class="{ 'error-cell': plannedMonthlyBudget[category][subCategory.id][selectedYear][month].error }">
-            <div v-if="!plannedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
-              &#8377; {{ plannedMonthlyBudget[category][subCategory.id][selectedYear][month].planned }}
+          <td class="truncate" v-if="plannedMonthlyBudget[category] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear + 1] != null" v-for="month in monthYear" :key="month[0]" @dblclick="toggleEditingMoney(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]])" :class="{ 'error-cell': erroredCell(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]]) }">
+            <div v-if="!editingCell(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]])">
+              <div v-if="plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]]">&#8377; {{ plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]].planned }}</div>
             </div>
-            <div v-if="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].editing">
-              
-              <input class="form-control input-sm" @keyup.esc="cancelEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month])" @keyup.enter="$event.target.blur()" @blur="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][selectedYear][month], month, selectedYear, subCategory.id)" v-focus type="text" v-model="plannedMonthlyBudget[category][subCategory.id][selectedYear][month].planned" />
+            <div v-if="editingCell(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]])">
+              <input v-if="plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]]" class="form-control input-sm" @keyup.esc="cancelEditingMoney(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]])" @keyup.enter="$event.target.blur()" @blur="doneEditingMoney(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]], month[0], month[1], subCategory.id)" v-focus type="text" v-model="plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]].planned" />
             </div>
           </td>
         </tr>
@@ -41,13 +40,13 @@
           <td class="truncate left-sticky bg-light">
             <input class="form-control input-sm" type="text" placeholder="Add category" @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
           </td>
-          <td v-for="empty in 12" :key="empty"></td>
+          <td v-for="empty in monthYear" :key="empty[0]"></td>
         </tr>
 
         <tr>
           <td class="left-sticky bg-light"> <b>Sub-Total</b> </td>
-          <td v-for="month in 12" :key="month" class="truncate">
-            &#8377; {{ subTotal(category, month, selectedYear) }} ({{ calculatePercentage(category, month, selectedYear) }}%)
+          <td v-for="month in monthYear" :key="month[0]" class="truncate">
+            &#8377; {{ subTotal(category, month[0], month[1]) }} ({{ calculatePercentage(category, month[0], month[1]) }}%)
           </td>
         </tr>
 
@@ -56,31 +55,26 @@
         <tr>
           <td></td>
           <td class="bg-light left-sticky"><b>Total Inflow</b></td>
-          <td v-for="month in 12" :key="month" class="truncate">
-            &#8377; {{ totalInflow(month, selectedYear) }}
+          <td v-for="month in monthYear" :key="month[0]" class="truncate">
+            &#8377; {{ totalInflow(month[0], month[1]) }}
           </td>
         </tr>
         <tr>
           <td></td>
           <td class="bg-light left-sticky"><b>Total Outflow</b></td>
-          <td v-for="month in 12" :key="month" class="truncate">
-            &#8377; {{ totalOutflow(month, selectedYear) }}
+          <td v-for="month in monthYear" :key="month[0]" class="truncate">
+            &#8377; {{ totalOutflow(month[0], month[1]) }}
           </td>
         </tr>
         <tr>
           <td></td>
           <td class="bg-light left-sticky"><b>Total Balance</b></td>
-          <td v-for="month in 12" :key="month" class="truncate">
-            &#8377; {{ totalInflow(month, selectedYear) - totalOutflow(month, selectedYear) }}
+          <td v-for="month in monthYear" :key="month[0]" class="truncate">
+            &#8377; {{ totalInflow(month[0], month[1]) - totalOutflow(month[0], month[1]) }}
           </td>
         </tr>
       </tbody>
     </table>
-    <div style="background-color: #f1f3f4">
-      <select v-model="selectedYear">
-        <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
-      </select>
-    </div>
   </div></div></div>
 </template>
 
@@ -128,7 +122,7 @@ export default {
       var total = 0;
 
       for(var subCategory in this.plannedMonthlyBudget[category]) {
-        if(this.plannedMonthlyBudget[category][subCategory][year] != null) {
+        if(this.plannedMonthlyBudget[category][subCategory][year] != null && this.plannedMonthlyBudget[category][subCategory][year][month] != null) {
           total += parseFloat(this.plannedMonthlyBudget[category][subCategory][year][month].planned);
         }
       }
@@ -158,9 +152,15 @@ export default {
           this.$parent.toast(error);
         });
     },
+    erroredCell: function(el) {
+      if(el != null) { return el.error; }
+    },
+    editingCell: function(el) {
+      if(el != null) { return el.editing; }
+    },
     updatePlannedMonthlyBudget: function() {
       this.$http.get('users/' + localStorage.getItem('user') + '/monthly_budgets', {
-          params: { "year": this.selectedYear }
+          params: { "financial_year": this.selectedYear }
         })
         .then(response => {
           var plannedMonthlyBudget = response.data;
@@ -174,15 +174,19 @@ export default {
               if(this.plannedMonthlyBudget[category][subCategory.id] == null) { this.$set(this.plannedMonthlyBudget[category], subCategory.id, {}) }
               if(plannedMonthlyBudget[category][subCategory.id] == null) { plannedMonthlyBudget[category][subCategory.id] = {} }
 
-              if(this.plannedMonthlyBudget[category][subCategory.id][selectedYear] == null) { this.$set(this.plannedMonthlyBudget[category][subCategory.id], selectedYear, {}) }
-              if(plannedMonthlyBudget[category][subCategory.id][selectedYear] == null) { plannedMonthlyBudget[category][subCategory.id][selectedYear] = {} }
-              for (var month = 1; month <= 12; month++) {
-                if(plannedMonthlyBudget[category][subCategory.id][selectedYear][month] == null) {
-                  this.$set(this.plannedMonthlyBudget[category][subCategory.id][selectedYear], month, { "planned": 0, "editing": false, "error": false })
+              var monthYear = this.monthYear;
+              for(var i = 0; i < monthYear.length; i++) {
+                var month = monthYear[i];
+
+                if(this.plannedMonthlyBudget[category][subCategory.id][month[1]] == null) { this.$set(this.plannedMonthlyBudget[category][subCategory.id], month[1], {}) }
+                if(plannedMonthlyBudget[category][subCategory.id][month[1]] == null) { plannedMonthlyBudget[category][subCategory.id][month[1]] = {} }
+
+                if(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]] == null) {
+                  this.$set(this.plannedMonthlyBudget[category][subCategory.id][month[1]], month[0], { "planned": 0, "editing": false, "error": false })
                 } else {
-                  plannedMonthlyBudget[category][subCategory.id][selectedYear][month]["editing"] = false
-                  plannedMonthlyBudget[category][subCategory.id][selectedYear][month]["error"] = false
-                  this.$set(this.plannedMonthlyBudget[category][subCategory.id][selectedYear], month, plannedMonthlyBudget[category][subCategory.id][selectedYear][month])
+                  plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]]["editing"] = false
+                  plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]]["error"] = false
+                  this.$set(this.plannedMonthlyBudget[category][subCategory.id][month[1]], month[0], plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]])
                 }
               }
             }
@@ -238,13 +242,15 @@ export default {
           }
         })
         .then(response => {
-          var temp = {}
-          for(var year of this.years) {
-            if(temp[year.toString()] == null) { temp[year.toString()] = {} }
-            for (var month = 1; month <= 12; month++) {
-              temp[year.toString()][month.toString()] = { "planned": 0, "editing": false }
-            }
+          var temp = {};
+
+          var monthYear = this.monthYear;
+          for(var i = 0; i < monthYear.length; i++) {
+            var month = monthYear[i];
+            if(temp[month[1].toString()] == null) { temp[month[1].toString()] = {} }
+            temp[month[1].toString()][month[0].toString()] = { "planned": 0, "editing": false }
           }
+
           this.$set(this.plannedMonthlyBudget[category], response.data.id, temp);
 
           this.categories[category].push(response.data);
@@ -255,9 +261,30 @@ export default {
         });
     },
   },
+  props: {
+    selectedYear: Number
+  },
   mounted: function () {
     this.initializeCategories();
-    this.updatePlannedMonthlyBudget();
+    if (this.selectedYear !== null) { this.updatePlannedMonthlyBudget(); }
+  },
+  computed: {
+    monthYear: function() {
+      return [
+        [4, this.selectedYear],
+        [5, this.selectedYear],
+        [6, this.selectedYear],
+        [7, this.selectedYear],
+        [8, this.selectedYear],
+        [9, this.selectedYear],
+        [10, this.selectedYear],
+        [11, this.selectedYear],
+        [12, this.selectedYear],
+        [1, this.selectedYear + 1],
+        [2, this.selectedYear + 1],
+        [3, this.selectedYear + 1]
+      ];
+    }
   },
   watch: {
     selectedYear: function() {
@@ -268,8 +295,6 @@ export default {
   },
   data: function() {
     return {
-      years: [2019, 2020, 2021],
-      selectedYear: 2020,
       populatedYears: [],
       cachedMoney: 0,
       newCategory: {

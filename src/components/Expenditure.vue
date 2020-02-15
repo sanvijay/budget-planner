@@ -6,7 +6,7 @@
           <tr>
             <th></th>
             <th class="left-sticky bg-light"></th>
-            <th v-for="month in 12" :key="month"><b>{{ monthFromInt(month - 1) }}</b></th>
+            <th v-for="month in monthYear" :key="month[0]"><b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b></th>
           </tr>
         </thead>
         <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
@@ -15,7 +15,7 @@
               <b>{{ category }}</b>
             </td>
             <td class="left-sticky bg-light"> - </td>
-            <td v-for="empty in 12" :key="empty">
+            <td v-for="empty in monthYear" :key="empty[0]">
               &#8377; 0
             </td>
           </tr>
@@ -27,27 +27,27 @@
               {{ subCategory.title }}
             </td>
 
-            <td class="" v-if="monthlyBudget[category] != null && monthlyBudget[category][subCategory.id][selectedYear] != null" v-for="month in 12" :key="month">
+            <td v-if="monthlyBudget[category] != null && monthlyBudget[category][subCategory.id][selectedYear] != null && monthlyBudget[category][subCategory.id][selectedYear + 1] != null" v-for="month in monthYear" :key="month[0]">
 
-              <div v-if="monthlyBudget[category][subCategory.id][selectedYear][month].logs.length > 0">
-                <b-link class="link-as-text" :id="monthlyBudget[category][subCategory.id][selectedYear][month].id">
-                  &#8377; {{ monthlyBudget[category][subCategory.id][selectedYear][month].actual }}
+              <div v-if="monthlyBudget[category][subCategory.id][month[1]][month[0]].logs.length > 0">
+                <b-link class="link-as-text" :id="monthlyBudget[category][subCategory.id][month[1]][month[0]].id">
+                  &#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}
                 </b-link>
 
-                <b-popover variant="dark" triggers="focus" :target="monthlyBudget[category][subCategory.id][selectedYear][month].id" title="Expenses">
+                <b-popover variant="dark" triggers="focus" :target="monthlyBudget[category][subCategory.id][month[1]][month[0]].id" title="Expenses">
                   <table border="2">
                     <tr>
                       <th>Description</th>
                       <th>Value</th>
                     </tr>
-                    <tr v-for="log in monthlyBudget[category][subCategory.id][selectedYear][month].logs" :key="log._id.$oid">
+                    <tr v-for="log in monthlyBudget[category][subCategory.id][month[1]][month[0]].logs" :key="log._id.$oid">
                       <td>{{ log.description }}</td>
                       <td>{{ log.value }}</td>
                     </tr>
                   </table>
                 </b-popover>
               </div>
-              <div v-else>&#8377; {{ monthlyBudget[category][subCategory.id][selectedYear][month].actual }}</div>
+              <div v-else>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</div>
 
             </td>
           </tr>
@@ -56,13 +56,13 @@
             <td class="truncate left-sticky bg-light">
               <input class="form-control input-sm" type="text" placeholder="Add category" @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
             </td>
-            <td v-for="empty in 12" :key="empty"></td>
+            <td v-for="empty in monthYear" :key="empty[0]"></td>
           </tr>
 
           <tr>
             <td class="left-sticky bg-light"> <b>Sub-Total</b> </td>
-            <td v-for="month in 12" :key="month" class="truncate">
-              &#8377; {{ subTotal(category, month, selectedYear) }} ({{ calculatePercentage(category, month, selectedYear) }}%)
+            <td v-for="month in monthYear" :key="month[0]" class="truncate">
+              &#8377; {{ subTotal(category, month[0], month[1]) }} ({{ calculatePercentage(category, month[0], month[1]) }}%)
             </td>
           </tr>
 
@@ -71,31 +71,26 @@
           <tr>
             <td></td>
             <td class="bg-light left-sticky"><b>Total Inflow</b></td>
-            <td v-for="month in 12" :key="month" class="truncate">
-              &#8377; {{ totalInflow(month, selectedYear) }}
+            <td v-for="month in monthYear" :key="month[0]" class="truncate">
+              &#8377; {{ totalInflow(month[0], month[1]) }}
             </td>
           </tr>
           <tr>
             <td></td>
             <td class="bg-light left-sticky"><b>Total Outflow</b></td>
-            <td v-for="month in 12" :key="month" class="truncate">
-              &#8377; {{ totalOutflow(month, selectedYear) }}
+            <td v-for="month in monthYear" :key="month[0]" class="truncate">
+              &#8377; {{ totalOutflow(month[0], month[1]) }}
             </td>
           </tr>
           <tr>
             <td></td>
             <td class="bg-light left-sticky"><b>Total Balance</b></td>
-            <td v-for="month in 12" :key="month" class="truncate">
-              &#8377; {{ totalInflow(month, selectedYear) - totalOutflow(month, selectedYear) }}
+            <td v-for="month in monthYear" :key="month[0]" class="truncate">
+              &#8377; {{ totalInflow(month[0], month[1]) - totalOutflow(month[0], month[1]) }}
             </td>
           </tr>
         </tbody>
       </table>
-      <div style="background-color: #f1f3f4">
-        <select v-model="selectedYear">
-          <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
-        </select>
-      </div>
     </div></div>
     <div class="right-bottom-fixed">
       <b-button class="add-expense" @click="showAddExpenseModal = !showAddExpenseModal">+</b-button>
@@ -216,7 +211,7 @@ export default {
       var total = 0;
 
       for(var subCategory in this.monthlyBudget[category]) {
-        if(this.monthlyBudget[category][subCategory][year] != null) {
+        if(this.monthlyBudget[category][subCategory][year] != null && this.monthlyBudget[category][subCategory][year][month] != null) {
           total += parseFloat(this.monthlyBudget[category][subCategory][year][month].actual);
         }
       }
@@ -235,6 +230,12 @@ export default {
       if(isNaN(percentage)) { return 0; }
       else { return percentage.toFixed(2); }
     },
+    erroredCell: function(el) {
+      if(el != null) { return el.error; }
+    },
+    editingCell: function(el) {
+      if(el != null) { return el.editing; }
+    },
     initializeCategories: function() {
       this.$http.get('users/' + localStorage.getItem('user') + '/categories')
         .then(response => {
@@ -248,7 +249,7 @@ export default {
     },
     updatePlannedMonthlyBudget: function() {
       this.$http.get('users/' + localStorage.getItem('user') + '/monthly_budgets', {
-          params: { "year": this.selectedYear }
+          params: { "financial_year": this.selectedYear }
         })
         .then(response => {
           var monthlyBudget = response.data;
@@ -262,13 +263,17 @@ export default {
               if(this.monthlyBudget[category][subCategory.id] == null) { this.$set(this.monthlyBudget[category], subCategory.id, {}) }
               if(monthlyBudget[category][subCategory.id] == null) { monthlyBudget[category][subCategory.id] = {} }
 
-              if(this.monthlyBudget[category][subCategory.id][selectedYear] == null) { this.$set(this.monthlyBudget[category][subCategory.id], selectedYear, {}) }
-              if(monthlyBudget[category][subCategory.id][selectedYear] == null) { monthlyBudget[category][subCategory.id][selectedYear] = {} }
-              for (var month = 1; month <= 12; month++) {
-                if(monthlyBudget[category][subCategory.id][selectedYear][month] == null) {
-                  this.$set(this.monthlyBudget[category][subCategory.id][selectedYear], month, { "planned": 0, "actual": 0, "id": Math.random().toString(36), "logs": [] })
+              var monthYear = this.monthYear;
+              for(var i = 0; i < monthYear.length; i++) {
+                var month = monthYear[i];
+
+                if(this.monthlyBudget[category][subCategory.id][month[1]] == null) { this.$set(this.monthlyBudget[category][subCategory.id], month[1], {}) }
+                if(monthlyBudget[category][subCategory.id][month[1]] == null) { monthlyBudget[category][subCategory.id][month[1]] = {} }
+
+                if(monthlyBudget[category][subCategory.id][month[1]][month[0]] == null) {
+                  this.$set(this.monthlyBudget[category][subCategory.id][month[1]], month[0], { "planned": 0, "actual": 0, "id": Math.random().toString(36), "logs": [] })
                 } else {
-                  this.$set(this.monthlyBudget[category][subCategory.id][selectedYear], month, monthlyBudget[category][subCategory.id][selectedYear][month])
+                  this.$set(this.monthlyBudget[category][subCategory.id][month[1]], month[0], monthlyBudget[category][subCategory.id][month[1]][month[0]])
                 }
               }
             }
@@ -291,13 +296,15 @@ export default {
           }
         })
         .then(response => {
-          var temp = {}
-          for(var year of this.years) {
-            if(temp[year.toString()] == null) { temp[year.toString()] = {} }
-            for (var month = 1; month <= 12; month++) {
-              temp[year.toString()][month.toString()] = { "planned": 0, "actual": 0, "logs": [], "id": Math.random().toString(36) }
-            }
+          var temp = {};
+
+          var monthYear = this.monthYear;
+          for(var i = 0; i < monthYear.length; i++) {
+            var month = monthYear[i];
+            if(temp[month[1].toString()] == null) { temp[month[1].toString()] = {} }
+            temp[month[1].toString()][month[0].toString()] = { "planned": 0, "actual": 0, "logs": [], "id": Math.random().toString(36) }
           }
+
           this.$set(this.monthlyBudget[category], response.data.id, temp);
 
           this.categories[category].push(response.data);
@@ -310,7 +317,10 @@ export default {
   },
   mounted: function () {
     this.initializeCategories();
-    this.updatePlannedMonthlyBudget();
+    if (this.selectedYear !== null) { this.updatePlannedMonthlyBudget(); }
+  },
+  props: {
+    selectedYear: Number
   },
   watch: {
     selectedYear: function() {
@@ -328,12 +338,26 @@ export default {
         }
       }
       return dropdownList;
-    }
+    },
+    monthYear: function() {
+      return [
+        [4, this.selectedYear],
+        [5, this.selectedYear],
+        [6, this.selectedYear],
+        [7, this.selectedYear],
+        [8, this.selectedYear],
+        [9, this.selectedYear],
+        [10, this.selectedYear],
+        [11, this.selectedYear],
+        [12, this.selectedYear],
+        [1, this.selectedYear + 1],
+        [2, this.selectedYear + 1],
+        [3, this.selectedYear + 1]
+      ];
+    },
   },
   data: function() {
     return {
-      years: [2019, 2020, 2021],
-      selectedYear: 2020,
       populatedYears: [],
       cachedMoney: 0,
       newCategory: {

@@ -25,8 +25,12 @@
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto">
-          <b-nav-item href="#" v-if="user_profile.first_name">Hi {{ user_profile.first_name }}!</b-nav-item>
+        <b-navbar-nav class="ml-auto" v-if="loggedIn">
+          <b-nav-item-dropdown :text="selectedFinancialYearText">
+            <b-dropdown-item v-for="financialYear in allFinancialYear" :key="financialYear" @click="selectFinancialYear(financialYear)">{{ financialYear }} - {{ financialYear + 1 }}</b-dropdown-item>
+          </b-nav-item-dropdown>
+
+          <b-nav-item href="#" v-if="userProfile.first_name">Hi {{ userProfile.first_name }}!</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -36,7 +40,7 @@
     </b-modal>
 
     <div style="padding-top: 70px; margin-bottom: 1000">
-      <router-view></router-view>
+      <router-view :selectedYear="selectedFinancialYear"></router-view>
     </div>
   </div>
 </template>
@@ -49,6 +53,9 @@ export default {
   computed: {
     loggedIn: function() {
       return (localStorage.getItem('jwt') != null && localStorage.getItem('user') != null);
+    },
+    selectedFinancialYearText: function() {
+      return this.selectedFinancialYear + " - " + (this.selectedFinancialYear + 1);
     }
   },
   components: {
@@ -87,13 +94,7 @@ export default {
         finalContent = error.response.data;
       } else if (error.response.status == 500) {
         finalContent = "Some error occured"
-      // } else if (error.response.status == 400) {
-      // } else if (error.response.status == 400) {
-      // } else if (error.response.status == 400) {
-      // } else if (error.response.status == 400) {
-
       }
-
 
       this.$bvToast.toast(finalContent, {
         title: "Error",
@@ -110,22 +111,57 @@ export default {
               // window.location.href = "/";
               this.$bvModal.show("ask-for-user-profile");
             } else {
-              this.user_profile = response.data;
+              this.userProfile = response.data;
             }
           })
           .catch(error => {
             this.toast(error);
           });
       }
+    },
+    selectFinancialYear: function(financialYear){
+      this.selectedFinancialYear = financialYear;
+    },
+    setAllFinancialYear: function() {
+      this.$http.get('users/' + localStorage.getItem('user') + '/all_financial_years')
+        .then(response => {
+          var yearCreated = response.data;
+          var defaultYears = [this.currentFinancialYear() - 1, this.currentFinancialYear()];
+
+          this.allFinancialYear = yearCreated.concat(defaultYears).sort().filter(function(el,i,a) { return i === a.indexOf(el) });
+        })
+        .catch(error => {
+          this.toast(error);
+        });
+    },
+    currentFinancialYear: function() {
+      var fiscalyear = "";
+      var today = new Date();
+
+      if ((today.getMonth() + 1) <= 3) {
+        fiscalyear = (today.getFullYear() - 1);
+      } else {
+        fiscalyear = today.getFullYear();
+      }
+      return fiscalyear;
+    },
+    setCurrentFinancialYear: function() {
+      this.selectedFinancialYear = this.currentFinancialYear();
     }
   },
   data: function() {
     return {
-      user_profile: {}
+      userProfile: {},
+      selectedFinancialYear: null,
+      allFinancialYear: []
     }
   },
   mounted: function () {
-    this.setUserProfile();
+    if(this.loggedIn) {
+      this.setUserProfile();
+      this.setCurrentFinancialYear();
+      this.setAllFinancialYear();
+    }
   },
 }
 </script>
