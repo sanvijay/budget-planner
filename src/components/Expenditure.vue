@@ -101,8 +101,8 @@
         </p>
         <br><hr>
           <b-form @submit="submitExpenseModal" @reset="resetExpenseModal()">
-            <b-form-group id="input-group-1" label="Spent On:" label-for="input-1" inline>
-              <datetime required input-class="form-control input-sm" v-model="addExpenseForm.spent_on" type="datetime"></datetime>
+            <b-form-group id="input-group-1" label="Spent for:" label-for="input-1" inline>
+              <datetime required input-class="form-control input-sm" v-model="addExpenseForm.spent_for" type="datetime"></datetime>
             </b-form-group>
 
             <b-form-group id="input-group-2" label="Description:" label-for="input-2">
@@ -115,12 +115,11 @@
             </b-form-group>
 
             <b-form-group id="input-group-3" label="Category:" label-for="input-3">
-              <b-form-select
-                id="input-3"
-                v-model="addExpenseForm.category_id"
-                :options="allCategoriesDropdown"
-                required
-              ></b-form-select>
+              <b-form-select class="input-3" v-model="addExpenseForm.category">
+                <b-form-select-option-group v-for="(subCategories, category) in categories" :key="category" :label="category" required>
+                  <b-form-select-option v-for="(subCategory, idx) in subCategories" :key="subCategory.id" :value="{ subCategory: subCategory.id, category: category }">{{ subCategory.title }}</b-form-select-option>
+                </b-form-select-option-group>
+              </b-form-select>
             </b-form-group>
 
             <b-form-group id="input-group-4" label="Amount:" label-for="input-4">
@@ -158,22 +157,29 @@ export default {
     },
     submitExpenseModal: function(e) {
       e.preventDefault();
-      var d = new Date(this.addExpenseForm.spent_on);
+      var d = new Date(this.addExpenseForm.spent_for);
       var month = d.getMonth() + 1;
       var year = d.getFullYear();
       var formattedMonth = ("0" + month).slice(-2);
+
+      this.addExpenseForm.category_id = this.addExpenseForm.category.subCategory;
+      var category = this.addExpenseForm.category.category;
 
       this.$http.post('users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year + '/actual_cash_flow_logs', {
           "actual_cash_flow_log": this.addExpenseForm
         })
         .then(response => {
-          this.monthlyBudget["Income"][this.addExpenseForm.category_id][year][month].actual += parseFloat(this.addExpenseForm.value);
+          if(this.monthlyBudget[category][this.addExpenseForm.category_id][year] == null || this.monthlyBudget[category][this.addExpenseForm.category_id][year][month] == null) {
+            this.showAddExpenseModal = !this.showAddExpenseModal;
+            return;
+          }
+          this.monthlyBudget[category][this.addExpenseForm.category_id][year][month].actual += parseFloat(this.addExpenseForm.value);
           var temp = this.addExpenseForm;
           temp._id = {};
           temp._id.$oid = Math.random().toString(36);
-          this.monthlyBudget["Income"][this.addExpenseForm.category_id][year][month].logs.push(this.addExpenseForm);
+          this.monthlyBudget[category][this.addExpenseForm.category_id][year][month].logs.push(this.addExpenseForm);
           this.addExpenseForm = {};
-          this.showAddExpenseModal = !this.showAddExpenseModal;
+          
         })
         .catch(error => {
           this.$parent.toast(error);
@@ -330,15 +336,6 @@ export default {
     }
   },
   computed: {
-    allCategoriesDropdown: function() {
-      var dropdownList = [{ text: " - Select One - ", value: null }];
-      for (var category in this.categories) {
-        for (var subCategory of this.categories[category]) {
-          dropdownList.push({ text: subCategory.title, value: subCategory.id })
-        }
-      }
-      return dropdownList;
-    },
     monthYear: function() {
       return [
         [4, this.selectedYear],
