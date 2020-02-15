@@ -2,11 +2,8 @@
   <div class="parent">
     <div class="container-fluid">
       <div class="row justify-content-center">
-
-          <div class="col-md-3 col-sm-6 col-12 bg-light shadow-lg">
-
-
-            <b-form @submit="handleSubmit()" class="form-container">
+          <div class="col-lg-3 col-md-6 col-sm-6 bg-light shadow-lg">
+            <b-form @submit="handleSubmit" class="form-container">
               <b-form-group id="input-group-1">
                 <b-form-input
                   id="input-1"
@@ -60,7 +57,9 @@ export default {
     }
   },
   methods: {
-    handleSubmit: function() {
+    handleSubmit: function(e) {
+      e.preventDefault();
+
       if (this.password.length > 0) {
         this.$http.post('login', {
           user: {
@@ -77,7 +76,7 @@ export default {
             if (this.$route.params.nextUrl != null) {
               this.$router.push(this.$route.params.nextUrl)
             } else {
-              window.location.href = "/#/planning";
+              location.reload();
             }
           }
         })
@@ -91,7 +90,7 @@ export default {
     },
     goToForgotPasswordPage: function() {
       this.$router.push({path: 'forgot-password', name: 'forgot-password'})
-    }
+    },
   }
 }
 </script>

@@ -16,7 +16,7 @@
         <div class="row align-items-center justify-content-center">
           <div class="col-md-12" style="position: relative;" data-aos="fade-up" data-aos-delay="200">
             <img src="img/undraw_investing_7u74.svg" alt="Image" class="img-fluid img-absolute">
-            <div class="row mb-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="row mb-4">
               <div class="col-lg-6 mr-auto">
                 <h1>Finally Achieve Financial Peace of Mind</h1>
                 <p class="mb-5">When you’re on top of your money, life is good. We help you effortlessly manage your finances in one place.</p>
@@ -52,10 +52,10 @@
             <p class="mb-4">Understand about your assets and liabilities.</p>
           </div>
         </div>
-
       </div>
     </div>
-    <div class="site-section" id="features-section">
+
+    <!-- <div class="site-section" id="features-section">
       <div class="container">
         <div class="row mb-5 justify-content-center text-center"  data-aos="fade-up">
           <div class="col-7 text-center  mb-5">
@@ -102,7 +102,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="site-section bg-light" id="about-section">
       <div class="container">
@@ -130,7 +130,6 @@
     </div>
   </div>
 </div>
-
 
 </template>
 

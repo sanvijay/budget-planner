@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row justify-content-center">
 
-        <div class="col-md-3 col-sm-6 col-12 bg-light shadow-lg">
+        <div class="col-md-6 col-sm-6 col-lg-3 bg-light shadow-lg">
           <b-form @submit="handleSubmit" class="form-container">
             <b-form-group
               id="input-group-1"
@@ -59,14 +59,14 @@
 <script>
   export default {
     name: 'Register',
-    data(){
+    data() {
       return {
         email : "",
         password : "",
         password_confirmation : ""
       }
     },
-    methods : {
+    methods: {
       goToSignInPage: function() {
         this.$router.push({path: 'login', name: 'login'})
       },
