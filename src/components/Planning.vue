@@ -26,7 +26,7 @@
             {{ subCategory.title }}
           </td>
 
-          <td class="truncate" v-if="plannedMonthlyBudget[category] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear + 1] != null" v-for="month in monthYear" :key="month[0]" @dblclick="toggleEditingMoney(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]])" :class="{ 'error-cell': erroredCell(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]]) }">
+          <td class="truncate" v-if="plannedMonthlyBudget[category] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear] != null && plannedMonthlyBudget[category][subCategory.id][selectedYear + 1] != null" v-for="month in monthYear" :key="month[0]" @click="toggleEditingMoney(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]])" :class="{ 'error-cell': erroredCell(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]]) }">
             <div v-if="!editingCell(plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]])">
               <div v-if="plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]]">&#8377; {{ plannedMonthlyBudget[category][subCategory.id][month[1]][month[0]].planned }}</div>
             </div>

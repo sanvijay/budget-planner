@@ -31,7 +31,7 @@
                 <td :rowspan="subCategories.length + 2" v-if="idx == 0">
                   {{ category }}
                 </td>
-                <td @dblclick="toggleEditingCategory(subCategory, 'title')">
+                <td @click="toggleEditingCategory(subCategory, 'title')">
                   <div v-if="!showInput(subCategory, 'title')">
                     {{ subCategory.title }}
                   </div>
@@ -40,7 +40,7 @@
                   </div>
                 </td>
                 <td> - </td>
-                <td @dblclick="toggleEditingCategory(subCategory, 'benefit')">
+                <td @click="toggleEditingCategory(subCategory, 'benefit')">
                   <div v-if="!showInput(subCategory, 'benefit')">
                     {{ subCategory.benefit ? subCategory.benefit.title : '-' }}
                   </div>
@@ -51,7 +51,7 @@
                   </select>
                   </div>
                 </td>
-                <td @dblclick="toggleEditingCategory(subCategory, 'asset')">
+                <td @click="toggleEditingCategory(subCategory, 'asset')">
                   <div v-if="!showInput(subCategory, 'asset')">
                     {{ subCategory.asset ? subCategory.asset.title : '-' }}
                   </div>

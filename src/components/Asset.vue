@@ -19,7 +19,7 @@
 
             <tbody>
               <tr v-for="asset in assets" :key="asset._id.$oid">
-                <td @dblclick="toggleEditingAsset(asset, 'title')">
+                <td @click="toggleEditingAsset(asset, 'title')">
                   <div v-if="!showInput(asset, 'title')">
                     {{ asset.title }}
                   </div>
@@ -27,7 +27,7 @@
                     <input class="form-control input-sm" v-focus type="text" v-model="asset.title" @blur="updateAsset(asset)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(asset, 'title')">
                   </div>
                 </td>
-                <td @dblclick="toggleEditingAsset(asset, 'value')">
+                <td @click="toggleEditingAsset(asset, 'value')">
                   <div v-if="!showInput(asset, 'value')">
                     &#8377; {{ asset.value }}
                   </div>

@@ -18,7 +18,7 @@
 
             <tbody>
               <tr v-for="benefit in benefits" :key="benefit._id.$oid">
-                <td @dblclick="toggleEditingBenefit(benefit, 'title')">
+                <td @click="toggleEditingBenefit(benefit, 'title')">
                   <div v-if="!showInput(benefit, 'title')">
                     {{ benefit.title }}
                   </div>
@@ -26,7 +26,7 @@
                     <input class="form-control input-sm" v-focus type="text" v-model="benefit.title" @blur="updateBenefit(benefit)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(benefit, 'title')">
                   </div>
                 </td>
-                <td @dblclick="toggleEditingBenefit(benefit, 'value')">
+                <td @click="toggleEditingBenefit(benefit, 'value')">
                   <div v-if="!showInput(benefit, 'value')">
                     &#8377; {{ benefit.value }}
                   </div>

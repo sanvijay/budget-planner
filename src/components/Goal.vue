@@ -20,7 +20,7 @@
 
             <tbody>
               <tr v-for="goal in goals" :key="goal._id.$oid">
-                <td @dblclick="toggleEditingGoal(goal, 'description')">
+                <td @click="toggleEditingGoal(goal, 'description')">
                   <div v-if="!showInput(goal, 'description')">
                     {{ goal.description }}
                   </div>
@@ -28,7 +28,7 @@
                     <input class="form-control input-sm" v-focus type="text" v-model="goal.description" @blur="updateGoal(goal)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(goal, 'description')">
                   </div>
                 </td>
-                <td @dblclick="toggleEditingGoal(goal, 'start_date')">
+                <td @click="toggleEditingGoal(goal, 'start_date')">
                   <div v-if="!showInput(goal, 'start_date')">
                     {{ goal.start_date }}
                   </div>
@@ -36,7 +36,7 @@
                     <input class="form-control input-sm" v-focus type="date" v-model="goal.start_date" @blur="updateGoal(goal)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(goal, 'start_date')">
                   </div>
                 </td>
-                <td @dblclick="toggleEditingGoal(goal, 'end_date')">
+                <td @click="toggleEditingGoal(goal, 'end_date')">
                   <div v-if="!showInput(goal, 'end_date')">
                     {{ goal.end_date }}
                   </div>
@@ -44,7 +44,7 @@
                     <input class="form-control input-sm" v-focus type="date" v-model="goal.end_date" @blur="updateGoal(goal)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(goal, 'end_date')">
                   </div>
                 </td>
-                <td @dblclick="toggleEditingGoal(goal, 'target')">
+                <td @click="toggleEditingGoal(goal, 'target')">
                   <div v-if="!showInput(goal, 'target')">
                     &#8377; {{ goal.target }}
                   </div>
