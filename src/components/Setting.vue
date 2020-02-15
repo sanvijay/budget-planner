@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <Benefit />
+        <Benefit :selectedYear="selectedYear" />
         <br>
         <Category />
       </div>
@@ -16,6 +16,9 @@ import Category from './Category.vue'
 
 export default {
   name: 'Setting',
+  props: {
+    selectedYear: Number
+  },
   components: {
     Benefit,
     Category

@@ -11,7 +11,7 @@
       <br>
       <Goal />
       <br>
-      <Asset />
+      <Asset :selectedYear="selectedYear" />
     </div>
   </div>
 </template>
@@ -23,6 +23,9 @@ import Asset from './Asset.vue'
 
 export default {
   name: 'Summary',
+  props: {
+    selectedYear: Number
+  },
   components: {
     Profile,
     Goal,

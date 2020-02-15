@@ -15,6 +15,7 @@
               <th>End Date</th>
               <th>Target</th>
               <th>Planned</th>
+              <th>Overall Saved</th>
             </thead>
 
             <tbody>
@@ -52,13 +53,14 @@
                   </div>
                 </td>
                 <td>&#8377; {{ goal.planned.toFixed(2) }}</td>
+                <td>&#8377; {{ goal.actual.toFixed(2) }}</td>
               </tr>
               <tr>
                 <td><input class="form-control input-sm" type="text" v-model="newGoal.description"></td>
                 <td><input class="form-control input-sm" type="date" v-model="newGoal.start_date"></td>
                 <td><input class="form-control input-sm" type="date" v-model="newGoal.end_date"></td>
                 <td><input class="form-control input-sm" type="text" v-model="newGoal.target"></td>
-                <td colspan="1"><button class="btn btn-primary" @click="saveNewGoal">Save</button></td>
+                <td colspan="2"><button class="btn btn-primary" @click="saveNewGoal">Save</button></td>
               </tr>
             </tbody>
           </table>
@@ -130,7 +132,10 @@ export default {
           goal: this.newGoal
         })
         .then(response => {
-          this.goals.push(response.data);
+          var data = response.data;
+          data.actual = 0;
+          data.planned = 0;
+          this.goals.push(data);
           this.newGoal.description = null;
           this.newGoal.start_date = null;
           this.newGoal.end_date = null;

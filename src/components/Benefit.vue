@@ -11,10 +11,9 @@
           <table class="table-sm table-bordered table-responsive">
 
             <thead>
-              <th>title</th>
-              <th>value</th>
-              <th>score_weightage_out_of_100</th>
-              <th></th>
+              <th>Title</th>
+              <th>Value</th>
+              <th>Year's Total</th>
             </thead>
 
             <tbody>
@@ -35,21 +34,12 @@
                     <input class="form-control input-sm" v-focus type="text" v-model="benefit.value" @blur="updateBenefit(benefit)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(benefit, 'value')">
                   </div>
                 </td>
-                <td @dblclick="toggleEditingBenefit(benefit, 'score_weightage_out_of_100')">
-                  <div v-if="!showInput(benefit, 'score_weightage_out_of_100')">
-                    {{ benefit.score_weightage_out_of_100 }}
-                  </div>
-                  <div v-if="showInput(benefit, 'score_weightage_out_of_100')">
-                    <input class="form-control input-sm" v-focus type="text" v-model="benefit.score_weightage_out_of_100" @blur="updateBenefit(benefit)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(benefit, 'score_weightage_out_of_100')">
-                  </div>
-                </td>
-                <td></td>
+                <td>{{ benefit.yearly_total }}</td>
               </tr>
               <tr>
                 <td><input class="form-control input-sm" type="text" v-model="newBenefit.title"></td>
                 <td><input class="form-control input-sm" type="text" v-model="newBenefit.value"></td>
-                <td><input class="form-control input-sm" type="text" v-model="newBenefit.score_weightage_out_of_100"></td>
-                <td colspan="3" style="min-width: 70px"><button class="btn btn-primary" @click="saveNewBenefit">Save</button></td>
+                <td colspan="1" style="min-width: 70px"><button class="btn btn-primary" @click="saveNewBenefit">Save</button></td>
               </tr>
             </tbody>
           </table>
@@ -62,6 +52,9 @@
 <script>
 export default {
   name: 'Benefit',
+  props: {
+    selectedYear: Number
+  },
   data: function() {
     return {
       benefits: [],
@@ -69,7 +62,7 @@ export default {
       newBenefit: {
         title: null,
         value: null,
-        score_weightage_out_of_100: null
+        yearly_total: null
       }
     }
   },
@@ -87,7 +80,11 @@ export default {
       benefit.editing = null;
     },
     loadBenefits: function() {
-      this.$http.get('users/' + localStorage.getItem('user') + '/benefits')
+      if(this.selectedYear == null) { return; }
+
+      this.$http.get('users/' + localStorage.getItem('user') + '/benefits', {
+          params: { "financial_year": this.selectedYear }
+        })
         .then(response => {
           this.benefits = response.data;
         })
@@ -116,10 +113,13 @@ export default {
     saveNewBenefit: function() {
       this.$http.post('users/' + localStorage.getItem('user') + '/benefits', { benefit: this.newBenefit })
         .then(response => {
-          this.benefits.push(response.data);
+          var data = response.data;
+          data.yearly_total = 0;
+
+          this.benefits.push(data);
           this.newBenefit.title = null;
           this.newBenefit.value = null;
-          this.newBenefit.score_weightage_out_of_100 = null;
+          this.newBenefit.yearly_total = null;
         })
         .catch(error => {
           this.$parent.$parent.toast(error);
@@ -129,6 +129,11 @@ export default {
   mounted: function () {
     this.loadBenefits();
   },
+  watch: {
+    selectedYear: function() {
+      this.loadBenefits();
+    }
+  }
 }
 </script>
 

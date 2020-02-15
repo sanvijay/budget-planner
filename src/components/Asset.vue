@@ -13,7 +13,8 @@
             <thead>
               <th>Title</th>
               <th>Value</th>
-              <th></th>
+              <th>Year's Expenses</th>
+              <th>Overall Expenses</th>
             </thead>
 
             <tbody>
@@ -34,20 +35,22 @@
                     <input class="form-control input-sm" v-focus type="text" v-model="asset.value" @blur="updateAsset(asset)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(asset, 'value')">
                   </div>
                 </td>
-                <td></td>
+                <td>
+                  <div class="green">+ {{ asset.yearly_cost.inflow }}</div>
+                  <div class="red">- {{ asset.yearly_cost.outflow }}</div>
+                </td>
+                <td>
+                  <div class="green">+ {{ asset.total_cost.inflow }}</div>
+                  <div class="red">- {{ asset.total_cost.outflow }}</div>
+                </td>
               </tr>
               <tr>
                 <td><input class="form-control input-sm" type="text" v-model="newAsset.title"></td>
                 <td><input class="form-control input-sm" type="text" v-model="newAsset.value"></td>
-                <td colspan="3" style="min-width: 70px"><button class="btn btn-primary" @click="saveNewAsset">Save</button></td>
+                <td colspan="2" style="min-width: 70px"><button class="btn btn-primary" @click="saveNewAsset">Save</button></td>
               </tr>
             </tbody>
           </table>
-          <!-- <div style="background-color: #f1f3f4">
-            <select v-model="selectedYear">
-              <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
-            </select>
-          </div> -->
         </div>
       </div>
     </div>
@@ -57,15 +60,17 @@
 <script>
 export default {
   name: 'Asset',
+  props: {
+    selectedYear: Number
+  },
   data: function() {
     return {
       assets: [],
       previousValue: null,
-      selectedYear: 2019,
-      years: [2019, 2020],
       newAsset: {
         title: null,
-        value: null
+        value: null,
+        valid_from: null
       }
     }
   },
@@ -82,8 +87,12 @@ export default {
       asset[field] = this.previousValue;
       asset.editing = null;
     },
-    loadAssets: function(year) {
-      this.$http.get('users/' + localStorage.getItem('user') + '/assets')
+    loadAssets: function() {
+      if(this.selectedYear == null) { return; }
+
+      this.$http.get('users/' + localStorage.getItem('user') + '/assets', {
+          params: { "financial_year": this.selectedYear }
+        })
         .then(response => {
           this.assets = response.data;
         })
@@ -122,11 +131,11 @@ export default {
     }
   },
   mounted: function () {
-    this.loadAssets(this.selectedYear);
+    this.loadAssets();
   },
   watch: {
     selectedYear: function() {
-      this.loadAssets(this.selectedYear);
+      this.loadAssets();
     }
   }
 }
@@ -140,5 +149,13 @@ input, button {
 }
 button {
   padding: 0px;
+}
+.green {
+  color: green;
+  font-weight: bold;
+}
+.red {
+  color: red;
+  font-weight: bold;
 }
 </style>
