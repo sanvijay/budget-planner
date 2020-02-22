@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <div style="min-width: 250px">
+      <div style="min-width: 250px; max-height: 110px">
         <Adsense
           :data-ad-client="ad_client"
           :data-ad-slot="ad_slot"
