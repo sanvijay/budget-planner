@@ -1,17 +1,13 @@
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8">
-            <Profile />
-          </div>
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <Profile :showAd="true" />
+        <br>
+        <Goal />
+        <br>
+        <Asset :selectedYear="selectedYear" />
       </div>
-      <br>
-      <Goal />
-      <br>
-      <Asset :selectedYear="selectedYear" />
     </div>
   </div>
 </template>

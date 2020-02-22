@@ -1,5 +1,16 @@
 <template>
-  <div class="container"><div class="row shadow-lg bg-light"><div class="col">
+  <div class="container">
+    <div class="row">
+      <div style="min-width: 250px">
+        <Adsense
+          :data-ad-client="ad_client"
+          :data-ad-slot="ad_slot"
+        >
+        </Adsense>
+      </div>
+    </div>
+
+    <div class="row shadow-lg bg-light"><div class="col">
     <table class="table-sm table-bordered table-hover table-responsive sectioned">
       <thead class="bg-light">
         <tr>
@@ -305,7 +316,9 @@ export default {
         "DebtInvestment": ''
       },
       categories: {},
-      plannedMonthlyBudget: {}
+      plannedMonthlyBudget: {},
+      ad_client: process.env.VUE_APP_ADSENSE_PUB,
+      ad_slot: process.env.VUE_APP_ADSENSE_HORIZONTAL_SLOT
     }
   }
 }

@@ -66,6 +66,16 @@
           </table>
         </div>
       </div>
+      <div class="col-md-4">
+        <div style="min-width: 250px">
+          <Adsense
+            :data-ad-client="ad_client"
+            :data-ad-slot="ad_slot"
+            data-ad-format="auto"
+          >
+          </Adsense>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -82,7 +92,9 @@ export default {
         start_date: null,
         end_date: null,
         target: null
-      }
+      },
+      ad_client: process.env.VUE_APP_ADSENSE_PUB,
+      ad_slot: process.env.VUE_APP_ADSENSE_SQUARE_SLOT
     }
   },
   directives: {

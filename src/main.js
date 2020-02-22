@@ -4,6 +4,7 @@ import router from './router'
 import Axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 import Datetime from 'vue-datetime'
+import Ads from 'vue-google-adsense'
 
 Vue.prototype.$http = Axios;
 Axios.defaults.baseURL = process.env.VUE_APP_API_URL;
@@ -19,6 +20,15 @@ Vue.use(BootstrapVue)
 
 import 'vue-datetime/dist/vue-datetime.css'
 Vue.use(Datetime)
+
+Vue.use(require('vue-script2'))
+
+Vue.use(Ads.AutoAdsense, { adClient: 'YOUR_GOOGLE_AD_CLIENT' })
+Vue.use(Ads.Adsense)
+Vue.use(Ads.InArticleAdsense)
+Vue.use(Ads.InFeedAdsense)
+
+import Adsense from 'vue-google-adsense/dist/Adsense.min.js'
 
 Vue.config.productionTip = false
 
