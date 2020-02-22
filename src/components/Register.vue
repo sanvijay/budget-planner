@@ -71,7 +71,7 @@
         this.$router.push({path: 'login', name: 'login'})
       },
       handleSubmit: function(e) {
-        e.preventDefault()
+        e.preventDefault();
 
         if (this.password.length > 0 && this.password === this.password_confirmation) {
           this.$http.post("/signup", {
@@ -84,7 +84,7 @@
             this.$parent.toast(error);
           });
         } else {
-          this.$parent.toast('Password and confirm password does not match');
+          this.$parent.toast("Password and confirm password does not match");
           this.password = ""
           this.password_confirmation = ""
         }

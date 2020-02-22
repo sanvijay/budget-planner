@@ -75,7 +75,9 @@ export default {
     toast: function(error) {
       var finalContent = null;
 
-      if(error.response == null) {
+      if (typeof error === 'string' || error instanceof String) {
+        finalContent = error;
+      } else if(error.response == null) {
         finalContent = error.message
       } else if (error.response.status == 400 || error.response.status == 422) {
         var content = [];

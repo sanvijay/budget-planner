@@ -34,7 +34,7 @@
                   &#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}
                 </b-link>
 
-                <b-popover variant="dark" triggers="focus" :target="monthlyBudget[category][subCategory.id][month[1]][month[0]].id" title="Expenses">
+                <b-popover variant="dark" triggers="focus" :target="monthlyBudget[category][subCategory.id][month[1]][month[0]].id" :title="plannedTitle(monthlyBudget[category][subCategory.id][month[1]][month[0]].planned)">
                   <table border="2">
                     <tr>
                       <th>Description</th>
@@ -151,6 +151,9 @@ export default {
     }
   },
   methods: {
+    plannedTitle: function(plannedValue) {
+      return "Planned: " + plannedValue;
+    },
     resetExpenseModal: function() {
       this.addExpenseForm = {};
       this.showAddExpenseModal = !this.showAddExpenseModal;
@@ -179,7 +182,7 @@ export default {
           temp._id.$oid = Math.random().toString(36);
           this.monthlyBudget[category][this.addExpenseForm.category_id][year][month].logs.push(this.addExpenseForm);
           this.addExpenseForm = {};
-          
+          this.showAddExpenseModal = !this.showAddExpenseModal;
         })
         .catch(error => {
           this.$parent.toast(error);

@@ -11,6 +11,7 @@ import Expenditure from '@/components/Expenditure.vue'
 import ForgotPassword from '@/components/ForgotPassword.vue'
 import ResetPassword from '@/components/ResetPassword.vue'
 import RegistrationComplete from '@/components/RegistrationComplete.vue'
+import EmailVerified from '@/components/EmailVerified.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,7 @@ let router = new VueRouter({
     { path: "/summary",     name: "summary",     component: Summary,     meta: { requiresAuth: true } },
     { path: "/setting",     name: "setting",     component: Setting,     meta: { requiresAuth: true } },
     { path: "/expenditure", name: "expenditure", component: Expenditure, meta: { requiresAuth: true } },
+    { path: "/email-verified",         name: "email-verified",         component: EmailVerified,        meta: { guest: true } },
     { path: "/reset-password",         name: "reset-password",         component: ResetPassword,        meta: { guest: true } },
     { path: "/forgot-password",        name: "forgot-password",        component: ForgotPassword,       meta: { guest: true } },
     { path: "/registeration-complete", name: "registeration-complete", component: RegistrationComplete, meta: { guest: true } },
