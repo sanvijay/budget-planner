@@ -15,6 +15,7 @@
           <b-nav-item :to="{ name: 'expenditure' }">Expenditure</b-nav-item>
           <b-nav-item :to="{ name: 'summary' }">Summary</b-nav-item>
           <b-nav-item :to="{ name: 'setting' }">Setting</b-nav-item>
+          <b-nav-item :to="{ name: 'feedback' }">Feedback</b-nav-item>
           <b-nav-item href="#" @click="logout">Logout</b-nav-item>
         </b-navbar-nav>
 

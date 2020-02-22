@@ -12,6 +12,7 @@ import ForgotPassword from '@/components/ForgotPassword.vue'
 import ResetPassword from '@/components/ResetPassword.vue'
 import RegistrationComplete from '@/components/RegistrationComplete.vue'
 import EmailVerified from '@/components/EmailVerified.vue'
+import Feedback from '@/components/Feedback.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,7 @@ let router = new VueRouter({
     { path: "/planning",    name: "planning",    component: Planning,    meta: { requiresAuth: true } },
     { path: "/summary",     name: "summary",     component: Summary,     meta: { requiresAuth: true } },
     { path: "/setting",     name: "setting",     component: Setting,     meta: { requiresAuth: true } },
+    { path: "/feedback",    name: "feedback",    component: Feedback,    meta: { requiresAuth: true } },
     { path: "/expenditure", name: "expenditure", component: Expenditure, meta: { requiresAuth: true } },
     { path: "/email-verified",         name: "email-verified",         component: EmailVerified,        meta: { guest: true } },
     { path: "/reset-password",         name: "reset-password",         component: ResetPassword,        meta: { guest: true } },
