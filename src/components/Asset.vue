@@ -3,11 +3,14 @@
     <div class="row">
       <div class="col-md-8">
         <p class="h5 float-left">
-          Your Assets / Liabilities
+          Your Assets / Liabilities <b-link id="tooltip-target-asset" style="text-decoration: none;">&#128161;</b-link>
+          <b-tooltip target="tooltip-target-asset" triggers="hover">
+            Add all your properties here (like car, home, etc.). We will track your expenses and map to your properties. Such that you can know if it is your real asset or liability. Check category section to map your properties.
+          </b-tooltip>
         </p>
         <br><hr>
 
-        <div class="shadow-lg" style="padding: 5px;">
+        <div class="shadow-lg bg-light" style="padding: 5px;">
           <table class="table-sm table-bordered table-responsive">
 
             <thead>

@@ -1,6 +1,18 @@
 <template>
   <div class="parent">
-    <div class="container-fluid">
+
+    <div class="LeadImage">
+      <div class="image" style="background-image: url('img/common-backgroud.svg'), url('img/common-backgroud.svg');"></div>
+      <div class="ie-hack-vertical"></div>
+      <div class="ie-hack-horizontal"></div>
+      <div class="triangle">
+        <svg fill="white" preserveAspectRatio="none" viewBox="0 0 25 100" class="jsx-4194311832 Triangle">
+          <polygon points="0,100 25,0 25,100" class="jsx-4194311832"></polygon>
+        </svg>
+      </div>
+    </div>
+
+    <div class="container">
       <div class="row" v-html="thanksMessage" style="text-align: center; display: inline-block"></div>
       <div class="row justify-content-center">
 
@@ -21,6 +33,13 @@
 
             <b-button type="submit" variant="primary" class="btn-block">Send Feedback</b-button>
           </b-form>
+        </div>
+      </div>
+      <hr>
+      <div class="row justify-content-center">
+
+        <div class="col-md-6 col-sm-6 col-lg-3 bg-light shadow-lg">
+          <p>Consider supporting us. Please email us to <a href="mailto:team.finsey@gmail.com">team.finsey@gmail.com</a></p>
         </div>
       </div>
     </div>

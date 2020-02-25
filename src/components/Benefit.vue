@@ -3,11 +3,14 @@
     <div class="row">
       <div class="col-md-12">
         <p class="h5 float-left">
-          Benefits
+          Benefits <b-link id="tooltip-target-benefit" style="text-decoration: none;">&#128161;</b-link>
+          <b-tooltip target="tooltip-target-benefit" triggers="hover">
+            Benefits like 80C, LTA, etc.
+          </b-tooltip>
         </p>
         <br><hr>
 
-        <div class="shadow-lg" style="padding: 5px;">
+        <div class="shadow-lg bg-light" style="padding: 5px;">
           <table class="table-sm table-bordered table-responsive">
 
             <thead>
@@ -34,7 +37,7 @@
                     <input class="form-control input-sm" v-focus type="text" v-model="benefit.value" @blur="updateBenefit(benefit)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(benefit, 'value')">
                   </div>
                 </td>
-                <td>{{ benefit.yearly_total }}</td>
+                <td>&#8377; {{ benefit.yearly_total }}</td>
               </tr>
               <tr>
                 <td><input class="form-control input-sm" type="text" v-model="newBenefit.title"></td>

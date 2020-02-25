@@ -1,6 +1,19 @@
 <template>
 <div>
 
+  <header class="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
+    <div class="container">
+      <div class="row align-items-center">
+        
+        <div class="col-6 col-md-3 col-xl-4  d-block">
+          <h1 class="mb-0 site-logo"><a href="#" class="text-black h2 mb-0">finsey<span class="text-primary">.</span> </a></h1>
+        </div>
+
+        <div class="col-6 col-md-9 d-inline-block d-lg-none ml-md-0" ><a href="#" class="site-menu-toggle js-menu-toggle text-black float-right"><span class="icon-menu h3"></span></a></div>
+      </div>
+    </div>
+  </header>
+
   <div class="site-wrap"  id="home-section">
     <div class="site-mobile-menu site-navbar-target">
       <div class="site-mobile-menu-header">
@@ -108,7 +121,7 @@
       <div class="container">
         <div class="row mb-5">
           <div class="col-12 text-center">
-            <h2 class="section-title mb-3">About Us</h2>
+            <h2 class="section-title mb-3">Contact Us</h2>
           </div>
         </div>
         <div class="row mb-5">
@@ -116,14 +129,14 @@
             <img src="img/undraw_bookmarks_r6up.svg" alt="Image" class="img-fluid">
           </div>
           <div class="col-lg-5 ml-auto pl-lg-5">
-            <h2 class="text-black mb-4 h3 font-weight-bold">Our Mission</h2>
-            <p class="mb-4">Eos cumque optio dolores excepturi rerum temporibus magni recusandae eveniet, totam omnis consectetur maxime quibusdam expedita dolorem dolor nobis dicta labore quaerat esse magnam unde, aperiam delectus! At maiores, itaque.</p>
-            <ul class="ul-check mb-5 list-unstyled success">
+            <h2 class="text-black mb-4 h3 font-weight-bold"></h2>
+            <p class="mb-4">Mail us at <a href="mailto:team.finsey@gmail.com">team.finsey@gmail.com</a></p>
+            <!-- <ul class="ul-check mb-5 list-unstyled success">
               <li>Laborum enim quasi at modi</li>
               <li>Ad at tempore</li>
               <li>Labore quaerat esse</li>
-            </ul>
-            <p><a href="#" class="btn btn-primary">Learn More</a></p>
+            </ul> -->
+            <!-- <p><a href="#" class="btn btn-primary">Learn More</a></p> -->
           </div>
         </div>
       </div>

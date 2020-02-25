@@ -3,11 +3,14 @@
     <div class="row">
       <div class="col-md-12">
         <p class="h5 float-left">
-          Categories
+          Categories <b-link id="tooltip-target-category" style="text-decoration: none;">&#128161;</b-link>
+          <b-tooltip target="tooltip-target-category" triggers="hover">
+            Manage your categories. Map your assets, benefits here.
+          </b-tooltip>
         </p>
         <br><hr>
 
-        <div class="shadow-lg" style="padding: 5px;">
+        <div class="shadow-lg bg-light" style="padding: 5px;">
           <table class="table-sm table-bordered table-responsive">
             <thead>
               <th>Super Category</th>
@@ -64,7 +67,12 @@
                 </td>
               </tr>
               <tr>
-                <td><input class="form-control input-sm" type="text" v-model="newCategory[category]" @keyup.enter="addCategory(category)" placeholder="New Category ..."></td>
+                <td class="truncate left-sticky bg-light">
+                  <form class="add-category-form">
+                    <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter="addCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
+                    <button class="add-category-button btn btn-primary" @click="addCategory(category)" v-if="newCategoryShowButton[category]">+</button>
+                  </form>
+                </td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -92,7 +100,14 @@ export default {
         "EMI": '',
         "EquityInvestment": '',
         "DebtInvestment": ''
-      }
+      },
+      newCategoryShowButton: {
+        "Income": false,
+        "Expense": false,
+        "EMI": false,
+        "EquityInvestment": false,
+        "DebtInvestment": false
+      },
     }
   },
   directives: {
@@ -104,6 +119,12 @@ export default {
     }
   },
   methods: {
+    showAddCategoryButton: function(category) {
+      this.newCategoryShowButton[category] = true;
+    },
+    hideAddCategoryButton: function(category) {
+      setTimeout(() => { this.newCategoryShowButton[category] = false; }, 500);
+    },
     addCategory: function(category) {
       if(this.newCategory[category].toString().trim() == '') { return; }
 
@@ -220,5 +241,31 @@ input, button, select {
 }
 button {
   padding: 0px;
+}
+
+.add-category-form {
+  /* This bit sets up the horizontal layout */
+  display:flex;
+  flex-direction:row;
+}
+
+.add-category-input {
+  /* Tell the input to use all the available space */
+  flex-grow:2;
+  /* And hide the input's outline, so the form looks like the outline */
+  border:none;
+}
+
+.add-category-input:focus {
+  /* removing the input focus blue box. Put this on the form if you like. */
+  outline: none;
+}
+
+.add-category-button {
+  /* Just a little styling to make it pretty */
+  color:white;
+  padding: 0px 2px;
+  max-height: 24px;
+  width: 10%;
 }
 </style>

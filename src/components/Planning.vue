@@ -1,5 +1,15 @@
 <template>
   <div class="container">
+    <div class="LeadImage">
+      <div class="image" style="background-image: url('img/common-backgroud.svg'), url('img/common-backgroud.svg');"></div>
+      <div class="ie-hack-vertical"></div>
+      <div class="ie-hack-horizontal"></div>
+      <div class="triangle">
+        <svg fill="white" preserveAspectRatio="none" viewBox="0 0 25 100" class="jsx-4194311832 Triangle">
+          <polygon points="0,100 25,0 25,100" class="jsx-4194311832"></polygon>
+        </svg>
+      </div>
+    </div>
     <div class="row">
       <div style="min-width: 250px; max-height: 110px">
         <Adsense
@@ -9,6 +19,13 @@
         </Adsense>
       </div>
     </div>
+    <p class="h5 float-left">
+      Plan your Savings & Expenses <b-link id="tooltip-target-plan" style="text-decoration: none;">&#128161;</b-link>
+      <b-tooltip target="tooltip-target-plan" triggers="hover">
+        Here you can plan and visualize your future expenses.
+      </b-tooltip>
+    </p>
+    <br><hr>
 
     <div class="row shadow-lg bg-light"><div class="col">
     <table class="table-sm table-bordered table-hover table-responsive sectioned">
@@ -49,7 +66,10 @@
 
         <tr>
           <td class="truncate left-sticky bg-light">
-            <input class="form-control input-sm" type="text" placeholder="Add category" @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
+            <form class="add-category-form">
+              <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
+              <button class="add-category-button btn btn-primary" @click="addSubCategory(category)" v-if="newCategoryShowButton[category]">+</button>
+            </form>
           </td>
           <td v-for="empty in monthYear" :key="empty[0]"></td>
         </tr>
@@ -213,6 +233,12 @@ export default {
       this.cachedMoney = element.planned;
       element.editing = true;
     },
+    showAddCategoryButton: function(category) {
+      this.newCategoryShowButton[category] = true;
+    },
+    hideAddCategoryButton: function(category) {
+      setTimeout(() => { this.newCategoryShowButton[category] = false; }, 500);
+    },
     doneEditingMoney: function(element, month, year, subCategory) {
       if(element.planned.toString().trim() == '') { element.planned = 0; }
 
@@ -317,6 +343,13 @@ export default {
       },
       categories: {},
       plannedMonthlyBudget: {},
+      newCategoryShowButton: {
+        "Income": false,
+        "Expense": false,
+        "EMI": false,
+        "EquityInvestment": false,
+        "DebtInvestment": false
+      },
       ad_client: process.env.VUE_APP_ADSENSE_PUB,
       ad_slot: process.env.VUE_APP_ADSENSE_HORIZONTAL_SLOT
     }
@@ -393,5 +426,30 @@ table.sectioned thead {
 .left-sticky {
   position: sticky;
   left: 0px;
+}
+
+.add-category-form {
+  /* This bit sets up the horizontal layout */
+  display:flex;
+  flex-direction:row;
+}
+
+.add-category-input {
+  /* Tell the input to use all the available space */
+  flex-grow:2;
+  /* And hide the input's outline, so the form looks like the outline */
+  border:none;
+}
+
+.add-category-input:focus {
+  /* removing the input focus blue box. Put this on the form if you like. */
+  outline: none;
+}
+
+.add-category-button {
+  /* Just a little styling to make it pretty */
+  color:white;
+  padding: 0px 2px;
+  max-height: 24px;
 }
 </style>

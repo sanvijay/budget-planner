@@ -7,7 +7,7 @@
         </p>
         <br><hr>
 
-        <div class="shadow-lg" style="padding: 5px;">
+        <div class="bg-light shadow-lg" style="padding: 5px;">
           <table class="table-sm table-bordered">
             <tr>
               <th>First Name</th>
@@ -30,7 +30,7 @@
               </td>
             </tr>
             <tr>
-              <th>Monthly Income</th>
+              <th>Monthly Income (Optional)</th>
               <td><input class="form-control input-sm" type="text" v-model="user_profile.monthly_income"></td>
             </tr>
             <tr>

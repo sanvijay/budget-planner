@@ -3,11 +3,14 @@
     <div class="row">
       <div class="col-md-8">
         <p class="h5 float-left">
-          Your Goals
+          Your Goals <b-link id="tooltip-target-goal" style="text-decoration: none;">&#128161;</b-link>
+          <b-tooltip target="tooltip-target-goal" triggers="hover">
+            Set your goals. Goals can be anything from your child's MBA to buying an aeroplane. By adding a goal, it will be changing your plans accordingly.
+          </b-tooltip>
         </p>
         <br><hr>
 
-        <div class="shadow-lg" style="padding: 5px;">
+        <div class="shadow-lg bg-light" style="padding: 5px;">
           <table class="table-sm table-bordered table-responsive">
             <thead>
               <th>Description</th>
