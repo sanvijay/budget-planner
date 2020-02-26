@@ -5,7 +5,7 @@
         <p class="h5 float-left">
           Your Goals <b-link id="tooltip-target-goal" style="text-decoration: none;">&#128161;</b-link>
           <b-tooltip target="tooltip-target-goal" triggers="hover">
-            Set your goals. Goals can be anything from your child's MBA to buying an aeroplane. By adding a goal, it will be changing your plans accordingly.
+            Set your goals. Goals can be anything from your child's MBA to buying an aeroplane. By adding a goal, it changes your plans accordingly.
           </b-tooltip>
         </p>
         <br><hr>

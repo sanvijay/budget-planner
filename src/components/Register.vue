@@ -1,5 +1,15 @@
 <template>
   <div class="parent">
+    <div class="LeadImage">
+      <div class="image" style="background-image: url('img/common-backgroud.svg'), url('img/common-backgroud.svg');"></div>
+      <div class="ie-hack-vertical"></div>
+      <div class="ie-hack-horizontal"></div>
+      <div class="triangle">
+        <svg fill="white" preserveAspectRatio="none" viewBox="0 0 25 100" class="jsx-4194311832 Triangle">
+          <polygon points="0,100 25,0 25,100" class="jsx-4194311832"></polygon>
+        </svg>
+      </div>
+    </div>
     <div class="container-fluid">
       <div class="row justify-content-center">
 
@@ -40,7 +50,9 @@
 
             <b-form-group id="input-group-4">
               <b-form-checkbox-group id="checkboxes-4">
-                <b-form-checkbox>I agree to the <a href="#">Terms and Conditions</a></b-form-checkbox>
+                <b-form-checkbox>
+                  I agree to the <router-link :to="{ name: 'terms' }">Terms and Conditions</router-link> and <router-link :to="{ name: 'privacy-policy' }">Privacy Policy</router-link>
+                </b-form-checkbox>
               </b-form-checkbox-group>
             </b-form-group>
 
