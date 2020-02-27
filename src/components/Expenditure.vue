@@ -127,14 +127,12 @@
       <b-modal v-model="showAddExpenseModal" centered hide-footer hide-header>
 
         <p class="h5 float-left">
-          Add Expense
+          Add Income / Expense
         </p>
         <br><hr>
           <b-form @submit="submitExpenseModal" @reset="resetExpenseModal()">
-            <b-form-group id="input-group-1" label="Spent for:" label-for="input-1" inline>
-              <datetime required input-class="form-control input-sm" v-model="addExpenseForm.spent_for" type="date"></datetime>
-            </b-form-group>
-
+            <label for="datepicker">Spent On:</label>
+            <b-form-datepicker required v-model="addExpenseForm.spent_on" class="form-control sm-2"></b-form-datepicker><br>
             <b-form-group id="input-group-2" label="Description:" label-for="input-2">
               <b-form-input
                 id="input-2"
@@ -190,7 +188,7 @@ export default {
     },
     submitExpenseModal: function(e) {
       e.preventDefault();
-      var d = new Date(this.addExpenseForm.spent_for);
+      var d = new Date(this.addExpenseForm.spent_on);
       var month = d.getMonth() + 1;
       var year = d.getFullYear();
       var formattedMonth = ("0" + month).slice(-2);
@@ -286,7 +284,7 @@ export default {
           this.$parent.toast(error);
         });
     },
-    updatePlannedMonthlyBudget: function() {
+    updateMonthlyBudget: function() {
       this.$http.get('users/' + localStorage.getItem('user') + '/monthly_budgets', {
           params: { "financial_year": this.selectedYear }
         })
@@ -364,7 +362,7 @@ export default {
   },
   mounted: function () {
     this.initializeCategories();
-    if (this.selectedYear !== null) { this.updatePlannedMonthlyBudget(); }
+    if (this.selectedYear !== null) { this.updateMonthlyBudget(); }
   },
   props: {
     selectedYear: Number
@@ -372,7 +370,7 @@ export default {
   watch: {
     selectedYear: function() {
       if(this.populatedYears.indexOf(this.selectedYear) == -1) {
-        this.updatePlannedMonthlyBudget();
+        this.updateMonthlyBudget();
       }
     }
   },
@@ -415,7 +413,7 @@ export default {
       categories: {},
       monthlyBudget: {},
       showAddExpenseModal: false,
-      addExpenseForm: { "spent_for": (new Date()).toISOString() },
+      addExpenseForm: { "spent_on": (new Date()).toISOString() },
       ad_client: process.env.VUE_APP_ADSENSE_PUB,
       ad_slot: process.env.VUE_APP_ADSENSE_HORIZONTAL_SLOT
     }

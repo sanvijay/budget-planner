@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import Axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
-import Datetime from 'vue-datetime'
 import Ads from 'vue-google-adsense'
 
 Vue.prototype.$http = Axios;
@@ -17,9 +16,6 @@ Axios.defaults.headers.post['Access-Control-Allow-Origin'] = process.env.VUE_APP
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
-
-import 'vue-datetime/dist/vue-datetime.css'
-Vue.use(Datetime)
 
 Vue.use(require('vue-script2'))
 

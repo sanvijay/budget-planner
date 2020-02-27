@@ -94,6 +94,7 @@ export default {
 
         finalContent = [h('span', {}, content)];
       } else if (error.response.status == 401) {
+        this.logout();
         finalContent = error.response.data;
       } else if (error.response.status == 500) {
         finalContent = "Some error occured"

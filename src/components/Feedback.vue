@@ -16,7 +16,7 @@
       <div class="row" v-html="thanksMessage" style="text-align: center; display: inline-block"></div>
       <div class="row justify-content-center">
 
-        <div class="col-md-6 col-sm-6 col-lg-3 bg-light shadow-lg">
+        <div class="col-md-6 col-sm-6 col-lg-6 bg-light shadow-lg">
           <b-form @submit="handleSubmit" class="form-container">
             <b-form-group
               id="input-group-1"
@@ -38,7 +38,7 @@
       <hr>
       <div class="row justify-content-center">
 
-        <div class="col-md-6 col-sm-6 col-lg-3 bg-light shadow-lg">
+        <div class="col-md-6 col-sm-6 col-lg-6 bg-light shadow-lg">
           <p>Consider supporting us. Please email us to <a href="mailto:team.finsey@gmail.com">team.finsey@gmail.com</a></p>
         </div>
       </div>
