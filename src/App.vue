@@ -11,8 +11,7 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav v-if="loggedIn">
-          <b-nav-item :to="{ name: 'planning' }">Plan Expenses</b-nav-item>
-          <b-nav-item :to="{ name: 'expenditure' }">Track Expenses</b-nav-item>
+          <b-nav-item :to="{ name: 'dashboard' }">Dashboard</b-nav-item>
           <b-nav-item :to="{ name: 'summary' }">Summary</b-nav-item>
           <b-nav-item :to="{ name: 'setting' }">Setting</b-nav-item>
           <b-nav-item :to="{ name: 'feedback' }">Feedback</b-nav-item>
