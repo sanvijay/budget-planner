@@ -14,6 +14,7 @@ import EmailVerified from '@/components/EmailVerified.vue'
 import Feedback from '@/components/Feedback.vue'
 import Terms from '@/components/Terms.vue'
 import PrivacyPolicy from '@/components/PrivacyPolicy.vue'
+import WhatsNext from '@/components/WhatsNext.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,7 @@ let router = new VueRouter({
     { path: "/dashboard",   name: "dashboard",   component: Dashboard,   meta: { requiresAuth: true } },
     { path: "/setting",     name: "setting",     component: Setting,     meta: { requiresAuth: true } },
     { path: "/feedback",    name: "feedback",    component: Feedback,    meta: { requiresAuth: true } },
+    { path: "/whatsnext",   name: "whatsnext",   component: WhatsNext,   meta: { requiresAuth: true } },
     { path: "/privacy-policy",         name: "privacy-policy",         component: PrivacyPolicy,        meta: { guest: true } },
     { path: "/email-verified",         name: "email-verified",         component: EmailVerified,        meta: { guest: true } },
     { path: "/reset-password",         name: "reset-password",         component: ResetPassword,        meta: { guest: true } },
@@ -50,7 +52,7 @@ router.beforeEach((to, from, next) => {
             next()
         }
         else {
-            next({ name: 'planning'})
+            next({ name: 'dashboard'})
         }
     } else {
         next() 

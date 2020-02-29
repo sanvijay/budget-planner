@@ -1,15 +1,5 @@
 <template>
   <div class="container">
-    <div class="LeadImage">
-      <div class="image" style="background-image: url('img/common-backgroud.svg'), url('img/common-backgroud.svg');"></div>
-      <div class="ie-hack-vertical"></div>
-      <div class="ie-hack-horizontal"></div>
-      <div class="triangle">
-        <svg fill="white" preserveAspectRatio="none" viewBox="0 0 25 100" class="jsx-4194311832 Triangle">
-          <polygon points="0,100 25,0 25,100" class="jsx-4194311832"></polygon>
-        </svg>
-      </div>
-    </div>
     <div class="row">
       <div style="min-width: 250px; max-height: 110px">
         <Adsense
@@ -115,7 +105,7 @@
 
         <tr>
           <td class="left-sticky bg-light"> <b>Sub-Total</b> </td>
-          <td v-for="month in monthYear" :key="month[0]" class="truncate">
+          <td v-for="month in monthYear" :key="month[0]" class="truncate" :title="subTotal(category, month[0], month[1]) + ' (' + calculatePercentage(category, month[0], month[1]) + '%)'">
             &#8377; {{ subTotal(category, month[0], month[1]) }} ({{ calculatePercentage(category, month[0], month[1]) }}%)
           </td>
         </tr>
@@ -148,7 +138,45 @@
       </tbody>
     </table>
   </div></div>
-    <div class="right-bottom-fixed">
+
+    <div class="right-bottom-fixed" v-if="view == 'planned'">
+      <b-button class="add-recurring-plan" @click="showRecurringPlanModal = !showRecurringPlanModal">+</b-button>
+      <b-modal v-model="showRecurringPlanModal" centered hide-footer hide-header>
+
+        <p class="h5 float-left">
+          Plan your Income / Expense for a duration
+        </p>
+        <br><hr>
+          <b-form @submit="submitRecurringPlanModal" @reset="resetRecurringPlanModal()">
+
+            <label for="datepicker">Duration:</label>
+            <b-form-datepicker required v-model="addRecurringPlanForm.from" class="form-control sm-2"></b-form-datepicker><br>
+            <b-form-datepicker required v-model="addRecurringPlanForm.to" class="form-control sm-2"></b-form-datepicker><br>
+
+            <b-form-group id="input-group-3" label="Category:" label-for="input-3">
+              <b-form-select class="input-3" v-model="addRecurringPlanForm.category">
+                <b-form-select-option-group v-for="(subCategories, category) in categories" :key="category" :label="category" required>
+                  <b-form-select-option v-for="(subCategory, idx) in subCategories" :key="subCategory.id" :value="{ subCategory: subCategory.id, category: category }">{{ subCategory.title }}</b-form-select-option>
+                </b-form-select-option-group>
+              </b-form-select>
+            </b-form-group>
+
+            <b-form-group id="input-group-4" label="Amount:" label-for="input-4">
+              <b-form-input
+                id="input-4"
+                v-model="addRecurringPlanForm.value"
+                required
+                placeholder="Enter Amount"
+              ></b-form-input>
+            </b-form-group>
+
+            <b-button type="submit" variant="primary" style="margin-right: 5px;">Submit</b-button> 
+            <b-button type="reset" variant="light">Cancel</b-button>
+          </b-form>
+      </b-modal>
+    </div>
+
+    <div class="right-bottom-fixed" v-if="view == 'actual'">
       <b-button class="add-expense" @click="showAddExpenseModal = !showAddExpenseModal">+</b-button>
       <b-modal v-model="showAddExpenseModal" centered hide-footer hide-header>
 
@@ -157,7 +185,7 @@
         </p>
         <br><hr>
           <b-form @submit="submitExpenseModal" @reset="resetExpenseModal()">
-            <label for="datepicker">Spent On:</label>
+            <label for="datepicker">Received / Spent On:</label>
             <b-form-datepicker required v-model="addExpenseForm.spent_on" class="form-control sm-2"></b-form-datepicker><br>
             <b-form-group id="input-group-2" label="Description:" label-for="input-2">
               <b-form-input
@@ -208,8 +236,57 @@ export default {
     plannedTitle: function(plannedValue) {
       return "Planned: " + plannedValue;
     },
+    resetRecurringPlanModal: function() {
+      this.addRecurringPlanForm = { "from": (new Date()).toISOString().slice(0,10) };
+      this.showRecurringPlanModal = !this.showRecurringPlanModal;
+    },
+    submitRecurringPlanModal: function(e) {
+      e.preventDefault();
+
+      this.addRecurringPlanForm.category_id = this.addRecurringPlanForm.category.subCategory;
+      var category = this.addRecurringPlanForm.category.category;
+
+      this.$http.post('users/' + localStorage.getItem('user') + '/monthly_budgets/create_planned_cash_flow_batch', {
+          "cash_flow": this.addRecurringPlanForm
+        })
+        .then(response => {
+          var allMonths = this.allMonthsBetweenRange(this.addRecurringPlanForm.from, this.addRecurringPlanForm.to);
+
+          for (var index in allMonths) {
+            var month = allMonths[index][1];
+            var year = allMonths[index][0];
+
+            if(this.monthlyBudget[category][this.addRecurringPlanForm.category_id][year] != null && this.monthlyBudget[category][this.addRecurringPlanForm.category_id][year][month] != null) {
+              this.monthlyBudget[category][this.addRecurringPlanForm.category_id][year][month].planned = parseFloat(this.addRecurringPlanForm.value);
+            }
+          }
+
+
+          this.resetRecurringPlanModal();
+        })
+        .catch(error => {
+          this.$parent.toast(error);
+        });
+    },
+    allMonthsBetweenRange: function(startDate, endDate) {
+      var start      = startDate.split('-');
+      var end        = endDate.split('-');
+      var startYear  = parseInt(start[0]);
+      var endYear    = parseInt(end[0]);
+      var dates      = [];
+
+      for(var i = startYear; i <= endYear; i++) {
+        var endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
+        var startMon = i === startYear ? parseInt(start[1])-1 : 0;
+        for(var j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j+1) {
+          var month = j+1;
+          dates.push([i, month]);
+        }
+      }
+      return dates;
+    },
     resetExpenseModal: function() {
-      this.addExpenseForm = {};
+      this.addExpenseForm = { "spent_on": (new Date()).toISOString().slice(0,10) };
       this.showAddExpenseModal = !this.showAddExpenseModal;
     },
     submitExpenseModal: function(e) {
@@ -235,8 +312,7 @@ export default {
           temp._id = {};
           temp._id.$oid = Math.random().toString(36);
           this.monthlyBudget[category][this.addExpenseForm.category_id][year][month].logs.push(this.addExpenseForm);
-          this.addExpenseForm = { "spent_on": (new Date()).toISOString().slice(0,10) };
-          this.showAddExpenseModal = !this.showAddExpenseModal;
+          this.resetExpenseModal();
         })
         .catch(error => {
           this.$parent.toast(error);
@@ -488,6 +564,8 @@ export default {
       },
       showAddExpenseModal: false,
       addExpenseForm: { "spent_on": (new Date()).toISOString().slice(0,10) },
+      showRecurringPlanModal: false,
+      addRecurringPlanForm: { "from": (new Date()).toISOString().slice(0,10) },
       ad_client: process.env.VUE_APP_ADSENSE_PUB,
       ad_slot: process.env.VUE_APP_ADSENSE_HORIZONTAL_SLOT
     }
@@ -600,6 +678,15 @@ table.sectioned thead {
 }
 .add-expense {
   background-color : #007bff;
+  color: white;
+  font-size: 25px;
+  padding: 5px 15px;
+  border-radius: 5px 20px 5px;
+  border-color: #46b8da;
+}
+
+.add-recurring-plan {
+  background-color : #46b8da;
   color: white;
   font-size: 25px;
   padding: 5px 15px;

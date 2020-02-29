@@ -1,10 +1,20 @@
 <template>
   <div id="app">
+    <div class="LeadImage">
+      <div class="image" style="background-image: url('img/backgroud.svg'), url('img/backgroud.svg');"></div>
+      <div class="ie-hack-vertical"></div>
+      <div class="ie-hack-horizontal"></div>
+      <div class="triangle">
+        <svg fill="white" preserveAspectRatio="none" viewBox="0 0 25 100" class="jsx-4194311832 Triangle">
+          <polygon points="0,100 25,0 25,100" class="jsx-4194311832"></polygon>
+        </svg>
+      </div>
+    </div>
 
     <b-navbar toggleable="lg" fixed="top" type="light" variant="light" class="shadow-lg" v-if="this.$route.path !== '/'">
       <b-navbar-brand href="#">
-        <img src="./assets/logo.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
-        finsey
+        <!-- <img src="./assets/logo.jpg" width="30" height="30" class="d-inline-block align-top" alt=""> -->
+        finsey<span class="text-primary">.</span>
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -12,9 +22,10 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav v-if="loggedIn">
           <b-nav-item :to="{ name: 'dashboard' }">Dashboard</b-nav-item>
-          <b-nav-item :to="{ name: 'summary' }">Summary</b-nav-item>
+          <b-nav-item :to="{ name: 'summary' }">Profile</b-nav-item>
           <b-nav-item :to="{ name: 'setting' }">Setting</b-nav-item>
           <b-nav-item :to="{ name: 'feedback' }">Feedback</b-nav-item>
+          <b-nav-item :to="{ name: 'whatsnext' }">What's Next</b-nav-item>
           <b-nav-item href="#" @click="logout">Logout</b-nav-item>
         </b-navbar-nav>
 
@@ -93,7 +104,6 @@ export default {
 
         finalContent = [h('span', {}, content)];
       } else if (error.response.status == 401) {
-        this.logout();
         finalContent = error.response.data;
       } else if (error.response.status == 500) {
         finalContent = "Some error occured"
@@ -104,7 +114,11 @@ export default {
         toaster: "b-toaster-bottom-right",
         solid: true,
         appendToast: false
-      })
+      });
+
+      if(finalContent == "Invalid segment encoding" || finalContent == "Signature has expired") {
+        setTimeout(() => { this.logout(); }, 500);
+      }
     },
     setUserProfile: function() {
       if(this.loggedIn) {

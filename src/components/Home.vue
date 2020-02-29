@@ -1,15 +1,13 @@
 <template>
 <div>
 
-  <header class="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
+  <header class="site-navbar py-4 js-sticky-header site-navbar-target top-sticky" role="banner">
     <div class="container">
       <div class="row align-items-center">
         
         <div class="col-6 col-md-3 col-xl-4  d-block">
           <h1 class="mb-0 site-logo"><a href="#" class="text-black h2 mb-0">finsey<span class="text-primary">.</span> </a></h1>
         </div>
-
-        <div class="col-6 col-md-9 d-inline-block d-lg-none ml-md-0" ><a href="#" class="site-menu-toggle js-menu-toggle text-black float-right"><span class="icon-menu h3"></span></a></div>
       </div>
     </div>
   </header>
@@ -34,7 +32,7 @@
                 <h1>Finally Achieve Financial Peace of Mind</h1>
                 <p class="mb-5">When you’re on top of your money, life is good. We help you effortlessly manage your finances in one place.</p>
                 <div>
-                  <a href="#" @click="goToSignInPage" style="margin-right: 20px;">Sign In</a>
+                  <a href="#" @click="goToSignInPage" style="margin-right: 20px;color: white;">Sign In</a>
                   <a href="#" class="btn btn-primary mr-2 mb-2" @click="goToRegisterPage">Create an account</a>
                 </div>
               </div>
@@ -117,7 +115,7 @@
       </div>
     </div> -->
 
-    <div class="site-section bg-light" id="about-section">
+    <div class="site-section" id="about-section">
       <div class="container">
         <div class="row mb-5">
           <div class="col-12 text-center">
@@ -783,7 +781,7 @@ h1, h2, h3, h4, h5,
       .site-blocks-cover h1 {
         font-size: 2rem; } }
   .site-blocks-cover p {
-    color: #6c757d;
+    /*color: #6c757d;*/
     font-size: 1rem;
     font-weight: 300; }
   .site-blocks-cover .intro-text {
@@ -2141,5 +2139,11 @@ h1, h2, h3, h4, h5,
   background-color: #4285f4 !important;
   border-color: #4285f4 !important;
   color: #fff; }
-
+.top-sticky {
+  position: sticky;
+  top: 0px;
+}
+p {
+  color: #000;
+}
 </style>

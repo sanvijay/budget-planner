@@ -3,7 +3,7 @@
     <div class="row">
       <div :class="{ 'col-md-8': showAd, 'col-md-12': !showAd }">
         <p class="h5 float-left">
-          Profile
+          User Profile
         </p>
         <br><hr>
 
@@ -11,24 +11,32 @@
           <table class="table-sm table-bordered">
             <tr>
               <th>First Name</th>
-              <td><input class="form-control input-sm" type="text" v-model="user_profile.first_name"></td>
+              <td><input class="form-control input-sm" type="text" v-model="user_profile.first_name" required></td>
             </tr>
             <tr>
               <th>Last Name</th>
-              <td><input class="form-control input-sm" type="text" v-model="user_profile.last_name"></td>
+              <td><input class="form-control input-sm" type="text" v-model="user_profile.last_name" required></td>
             </tr>
             <tr>
               <th>Date of Birth</th>
-              <td><input class="form-control input-sm" type="date" v-model="user_profile.dob"></td>
+              <td><input class="form-control input-sm" type="date" v-model="user_profile.dob" required></td>
             </tr>
             <tr>
               <th>Gender</th>
               <td>
-                <select class="form-control input-sm" v-model="user_profile.gender">
+                <select class="form-control input-sm" v-model="user_profile.gender" required>
                   <option v-for="gender in genders" :key="gender" :value="gender">{{ gender }}</option>
                 </select>
               </td>
             </tr>
+<!--             <tr>
+              <th>Country</th>
+              <td>
+                <select class="form-control input-sm" v-model="user_profile.country" required>
+                  <option v-for="country in countries" :key="country" :value="country">{{ country }}</option>
+                </select>
+              </td>
+            </tr> -->
             <tr>
               <th>Monthly Income (Optional)</th>
               <td><input class="form-control input-sm" type="text" v-model="user_profile.monthly_income"></td>
@@ -64,6 +72,7 @@ export default {
     return {
       user_profile: {},
       genders: ["Male", "Female", "Androgyny"],
+      countries: ["India"],
       ad_client: process.env.VUE_APP_ADSENSE_PUB,
       ad_slot: process.env.VUE_APP_ADSENSE_SQUARE_SLOT
     }
@@ -88,7 +97,14 @@ export default {
           this.loadUserProfile();
           this.$parent.$parent.toast(error);
         });
-      }
+    },
+    fetchCountriesList: function() {
+      this.$http.get('https://restcountries.eu/rest/v2/all').then(function (res) {
+          self.countries = res.body;
+        }, function(err) {
+          console.log('error');
+        });
+    }
   },
   mounted: function () {
     this.loadUserProfile();
