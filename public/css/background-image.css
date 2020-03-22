@@ -1,6 +1,6 @@
 .image {
     background-size: cover;
-    background-blend-mode: color-burn;
+    background-blend-mode: lighten;
     background-position: center top;
     background-repeat: no-repeat;
     background-attachment: fixed;

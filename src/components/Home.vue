@@ -1,7 +1,7 @@
 <template>
 <div>
 
-  <header class="site-navbar py-4 js-sticky-header site-navbar-target top-sticky" role="banner">
+  <header class="site-navbar py-3 js-sticky-header site-navbar-target top-sticky" role="banner">
     <div class="container">
       <div class="row align-items-center">
         
@@ -66,54 +66,55 @@
       </div>
     </div>
 
-    <!-- <div class="site-section" id="features-section">
+    <div class="site-section overlay" id="contact-section">
       <div class="container">
-        <div class="row mb-5 justify-content-center text-center"  data-aos="fade-up">
-          <div class="col-7 text-center  mb-5">
-            <h2 class="section-title">Pricing</h2>
-            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga quos quaerat sapiente nam, id vero.</p>
+        <div class="row mb-5">
+          <div class="col-12 text-center">
+            <h2 class="section-title mb-3">Are you a personal financial advisor?</h2>
           </div>
         </div>
-        <div class="row align-items-stretch">
-          <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up">
-            
-            <div class="unit-4 d-block">
-              <div class="unit-4-icon mb-3">
-                <span class="icon-wrap"><span>Free</span></span>
-              </div>
-              <div>
-                <h3>Marketing Consulting</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis quis molestiae vitae eligendi at.</p>
-              </div>
-            </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-7 mb-5">
+            <form action="#" class="p-5 bg-white">
+              <div v-if="submit_request_message">Thanks for your request. We will get back to you soon.<br></div>
 
-          </div>
-          <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up" data-aos-delay="100">
+              <h2 class="h4 text-black mb-5">Contact Form</h2> 
 
-            <div class="unit-4 d-block">
-              <div class="unit-4-icon mb-3">
-                <span class="icon-wrap"><span>&#8377;99</span></span>
+              <div class="row form-group">
+                <div class="col-md-6 mb-3 mb-md-0">
+                  <label class="text-black" for="fname">First Name</label>
+                  <input type="text" id="fname" class="form-control rounded-0" required="" v-model="newPersonalAdvisory.first_name">
+                </div>
+                <div class="col-md-6">
+                  <label class="text-black" for="lname">Last Name</label>
+                  <input type="text" id="lname" class="form-control rounded-0" required="" v-model="newPersonalAdvisory.last_name">
+                </div>
               </div>
-              <div>
-                <h3>Market Analysis</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis quis molestiae vitae eligendi at.</p>
+
+              <div class="row form-group">                
+                <div class="col-md-12">
+                  <label class="text-black" for="email">Email</label> 
+                  <input type="email" id="email" class="form-control rounded-0" required="" v-model="newPersonalAdvisory.email">
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up"  data-aos-delay="200">
-            <div class="unit-4 d-block">
-              <div class="unit-4-icon mb-3">
-                <span class="icon-wrap"><span>&#8377;999</span></span>
+
+              <div class="row form-group">                
+                <div class="col-md-12">
+                  <label class="text-black" for="email">Mobile number</label>
+                  <input type="text" pattern="[789][0-9]{9}" class="form-control rounded-0" required="" v-model="newPersonalAdvisory.phone_number">
+                </div>
               </div>
-              <div>
-                <h3>Easy Purchase</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis quis molestiae vitae eligendi at.</p>
+
+              <div class="row form-group">
+                <div class="col-md-12">
+                  <input type="submit" value="Send Message" class="btn btn-primary mr-2 mb-2" @click="saveNewPersonalAdvisory()">
+                </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
 
     <div class="site-section" id="about-section">
       <div class="container">
@@ -129,12 +130,6 @@
           <div class="col-lg-5 ml-auto pl-lg-5">
             <h2 class="text-black mb-4 h3 font-weight-bold"></h2>
             <p class="mb-4">Mail us at <a href="mailto:team.finsey@gmail.com">team.finsey@gmail.com</a></p>
-            <!-- <ul class="ul-check mb-5 list-unstyled success">
-              <li>Laborum enim quasi at modi</li>
-              <li>Ad at tempore</li>
-              <li>Labore quaerat esse</li>
-            </ul> -->
-            <!-- <p><a href="#" class="btn btn-primary">Learn More</a></p> -->
           </div>
         </div>
       </div>
@@ -147,12 +142,34 @@
 <script>
 export default {
   name: 'Home',
+  data: function() {
+    return {
+      newPersonalAdvisory: {
+        first_name: null,
+        last_name: null,
+        email: null,
+        phone_number: null
+      },
+      submit_request_message: false
+    }
+  },
   methods: {
     goToRegisterPage: function() {
       this.$router.push({path: 'register', name: 'register'})
     },
     goToSignInPage: function() {
       this.$router.push({path: 'login', name: 'login'})
+    },
+    saveNewPersonalAdvisory: function() {
+      this.$http.post('/personal_advisor_request', {
+          personal_advisor: this.newPersonalAdvisory
+        })
+        .then(response => {
+          this.submit_request_message = true;
+        })
+        .catch(error => {
+          this.$parent.toast(error);
+        });
     },
   }
 }

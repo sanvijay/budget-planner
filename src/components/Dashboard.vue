@@ -34,12 +34,12 @@
     <hr>
 
     <div class="row shadow-lg bg-light"><div class="col">
-    <table class="table-sm table-bordered table-hover table-responsive sectioned">
+    <table class="table-sm table-bordered table-hover table-responsive sectioned" style="height: 75vh; overflow: auto;">
       <thead class="bg-light">
         <tr>
-          <th></th>
-          <th class="left-sticky bg-light"></th>
-          <th v-for="month in monthYear" :key="month[0]"><b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b></th>
+          <th class="bg-light"></th>
+          <th class="bg-light top-sticky left-sticky" style="z-index: 1"></th>
+          <th v-for="month in monthYear" :key="month[0]" class="bg-light top-sticky"><b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b></th>
         </tr>
       </thead>
       <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
@@ -197,8 +197,8 @@
             </b-form-group>
 
             <b-form-group id="input-group-3" label="Category:" label-for="input-3">
-              <b-form-select class="input-3" v-model="addExpenseForm.category">
-                <b-form-select-option-group v-for="(subCategories, category) in categories" :key="category" :label="category" required>
+              <b-form-select class="input-3" v-model="addExpenseForm.category" required>
+                <b-form-select-option-group v-for="(subCategories, category) in categories" :key="category" :label="category">
                   <b-form-select-option v-for="(subCategory, idx) in subCategories" :key="subCategory.id" :value="{ subCategory: subCategory.id, category: category }">{{ subCategory.title }}</b-form-select-option>
                 </b-form-select-option-group>
               </b-form-select>
@@ -218,6 +218,39 @@
           </b-form>
       </b-modal>
     </div>
+
+    <div class="right-bottom-fixed-2" v-if="view == 'actual'">
+      <b-button class="view-logs" @click="viewLogsModal = !viewLogsModal">&#9737;</b-button>
+      <b-modal v-model="viewLogsModal" centered hide-footer scrollable title="Your Savings and Expenses logs">
+        <div v-for="month in monthYear" :key="month[0]">
+          <b-link
+            :class="monthlyLogsCollapse[month[0]] ? null : 'collapsed'"
+            :aria-expanded="monthlyLogsCollapse[month[0]] ? 'true' : 'false'"
+            :aria-controls="'collapse-' + month[0]"
+            @click="monthlyLogsCollapse[month[0]] = !monthlyLogsCollapse[month[0]]"
+            style="padding-right: 10px"
+            class="link-as-text font-weight-bold"
+          >
+            {{ monthFromInt(month[0] - 1) }} / {{ month[1] }}
+            <span class="float-right">{{ monthlyLogsCollapse[month[0]] ? '-' : '+' }}</span>
+          </b-link>
+
+          <b-collapse v-if="monthlyLogs[month[1]] != null && monthlyLogs[month[1]][month[0]] != null" :id="'collapse-' + month[0]" v-model="monthlyLogsCollapse[month[0]]" class="mt-2">
+
+            <table style="width: 100%">
+              <tr v-for="log in monthlyLogs[month[1]][month[0]]" :key="log._id.$oid" style="border-bottom:1pt solid #dadada;">
+                <td class="small">{{ getDateFromTime(log.spent_on) }}: &#8377;{{ log.value }} for '{{ log.description }}' under {{ findCategoryById(log.category_id.$oid)[0] }} ({{ findCategoryById(log.category_id.$oid)[1] }})</td>
+                <td @click="deleteActualCashFlowLogs(log, month[1], month[0])" style="width: 25px; cursor: pointer;" title="delete">&#128465;</td>
+              </tr>
+            </table>
+
+            <div v-if="!(monthlyLogs[month[1]] && monthlyLogs[month[1]][month[0]] && monthlyLogs[month[1]][month[0]].length != 0)" class="small">None.</div>
+            <br v-if="!monthlyLogsCollapse[month[0]]">
+          </b-collapse>
+          <hr>
+        </div>
+      </b-modal>
+    </div>
   </div>
 </template>
 
@@ -235,6 +268,13 @@ export default {
   methods: {
     plannedTitle: function(plannedValue) {
       return "Planned: " + plannedValue;
+    },
+    getDateFromTime: function(time) {
+      var d = (new Date(time)).toString();
+      var date = d.substring(4, 10);
+      var day = d.substring(0, 3);
+
+      return day + ", " + date;
     },
     resetRecurringPlanModal: function() {
       this.addRecurringPlanForm = { "from": (new Date()).toISOString().slice(0,10) };
@@ -310,8 +350,17 @@ export default {
           this.monthlyBudget[category][this.addExpenseForm.category_id][year][month].actual += parseFloat(this.addExpenseForm.value);
           var temp = this.addExpenseForm;
           temp._id = {};
-          temp._id.$oid = Math.random().toString(36);
+          temp._id.$oid = response.data._id.$oid;
           this.monthlyBudget[category][this.addExpenseForm.category_id][year][month].logs.push(this.addExpenseForm);
+
+          var temp_cat_id = temp.category_id;
+          temp.category_id = {};
+          temp.category_id.$oid = temp_cat_id;
+
+          if(this.monthlyLogs[year] == null) { this.$set(this.monthlyLogs, year, {}) }
+          if(this.monthlyLogs[year][month] == null) { this.monthlyLogs[year][month] = [] }
+          this.monthlyLogs[year][month].push(this.addExpenseForm)
+
           this.resetExpenseModal();
         })
         .catch(error => {
@@ -381,6 +430,24 @@ export default {
         .then(response => {
           for (var category in response.data) {
             this.$set(this.categories, category, response.data[category])
+          }
+        })
+        .catch(error => {
+          this.$parent.toast(error);
+        });
+    },
+    loadActualCashFlowLogs: function() {
+      this.$http.get('users/' + localStorage.getItem('user') + '/monthly_budgets/index_actual_cash_flow_logs_batch', {
+          params: { "financial_year": this.selectedYear }
+        })
+        .then(response => {
+          var monthYear = this.monthYear;
+          for(var i = 0; i < monthYear.length; i++) {
+            var month = monthYear[i];
+            if(this.monthlyLogs[month[1]] == null) { this.$set(this.monthlyLogs, month[1], {}) }
+
+            if(response.data[month[1]] == null || response.data[month[1]][month[0]] == null) { this.monthlyLogs[month[1]][month[0]] = [] }
+            else if(this.monthlyLogs[month[1]][month[0]] == null) { this.$set(this.monthlyLogs[month[1]], month[0], response.data[month[1]][month[0]]) }
           }
         })
         .catch(error => {
@@ -503,13 +570,42 @@ export default {
           this.newCategoryShowButton[category] = false;
         });
     },
+    findCategoryById: function(id) {
+      for(var superCategory in this.categories) {
+        for(var category in this.categories[superCategory]) {
+          var tmp = this.categories[superCategory][category];
+          if(tmp.id == id) { return [tmp.title, tmp.type]; }
+        }
+      }
+    },
+    deleteActualCashFlowLogs: function(log, year, month) {
+      var temp_cat = this.findCategoryById(log.category_id.$oid);
+      var formattedMonth = ("0" + month).slice(-2);
+
+      // /users/:user_id/monthly_budgets/:monthly_budget_id/actual_cash_flow_logs/:id
+      this.$http.delete('users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year +'/actual_cash_flow_logs/' + log._id.$oid)
+        .then(response => {
+          var deleteFromArray = this.monthlyLogs[year][month];
+          this.monthlyLogs[year][month] = deleteFromArray.filter(function(value, index, arr) { return value._id.$oid != log._id.$oid; });
+
+          var deleteFromArray2 = this.monthlyBudget[temp_cat[1]][log.category_id.$oid][year][month].logs;
+          this.monthlyBudget[temp_cat[1]][log.category_id.$oid][year][month].actual -= parseFloat(log.value);
+          this.monthlyBudget[temp_cat[1]][log.category_id.$oid][year][month].logs = deleteFromArray2.filter(function(value, index, arr) { return value._id.$oid != log._id.$oid; });
+        })
+        .catch(error => {
+          this.$parent.toast(error);
+        });
+    }
   },
   props: {
     selectedYear: Number
   },
   mounted: function () {
     this.initializeCategories();
-    if (this.selectedYear !== null) { this.updateMonthlyBudget(); }
+    if (this.selectedYear !== null) {
+      this.updateMonthlyBudget();
+      this.loadActualCashFlowLogs();
+    }
   },
   computed: {
     monthYear: function() {
@@ -533,6 +629,7 @@ export default {
     selectedYear: function() {
       if(this.populatedYears.indexOf(this.selectedYear) == -1) {
         this.updateMonthlyBudget();
+        this.loadActualCashFlowLogs();
       }
     }
   },
@@ -540,8 +637,8 @@ export default {
     return {
       view: 'planned',
       viewOptions: [
-        { value: 'planned', text: 'Planning view' },
-        { value: 'actual', text: 'Tracking view' },
+        { value: 'planned', text: 'Budget planning' },
+        { value: 'actual', text: 'Accounting worksheet' },
         { value: 'monthly', text: 'Monthly view', disabled: true },
       ],
       populatedYears: [],
@@ -566,6 +663,9 @@ export default {
       addExpenseForm: { "spent_on": (new Date()).toISOString().slice(0,10) },
       showRecurringPlanModal: false,
       addRecurringPlanForm: { "from": (new Date()).toISOString().slice(0,10) },
+      viewLogsModal: false,
+      monthlyLogsCollapse: {},
+      monthlyLogs: {},
       ad_client: process.env.VUE_APP_ADSENSE_PUB,
       ad_slot: process.env.VUE_APP_ADSENSE_HORIZONTAL_SLOT
     }
@@ -644,6 +744,11 @@ table.sectioned thead {
   left: 0px;
 }
 
+.top-sticky {
+  position: sticky;
+  top: 0px;
+}
+
 .add-category-form {
   /* This bit sets up the horizontal layout */
   display:flex;
@@ -694,9 +799,24 @@ table.sectioned thead {
   border-color: #46b8da;
 }
 
+.view-logs {
+  background-color : #007bff;
+  color: white;
+  font-size: 25px;
+  padding: 5px 11px;
+  border-radius: 5px 20px 5px;
+  border-color: #46b8da;
+}
+
 .right-bottom-fixed {
   position: fixed;
   bottom: 50px;
+  right: 10px;
+}
+
+.right-bottom-fixed-2 {
+  position: fixed;
+  bottom: 110px;
   right: 10px;
 }
 
@@ -704,5 +824,4 @@ table.sectioned thead {
   color: black;
   text-decoration: none !important
 }
-
 </style>

@@ -17,6 +17,7 @@
             <li>Cool graphs to visualize your activities.</li>
             <li>Reminders and notifications for any of your recurring events.</li>
             <li>Add multiple accounts and track all in one place.</li>
+            <li>Score based on your expenses and savings. From which you can improve your financial life.</li>
             <li>Android and IOS app</li>
           </ul>
 
