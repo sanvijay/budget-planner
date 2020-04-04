@@ -37,7 +37,7 @@
     <table class="table-sm table-bordered table-hover table-responsive sectioned" style="height: 75vh; overflow: auto;">
       <thead class="bg-light">
         <tr>
-          <th class="bg-light"></th>
+          <th class="bg-light top-sticky" style="z-index: 1"></th>
           <th class="bg-light top-sticky left-sticky" style="z-index: 1"></th>
           <th v-for="month in monthYear" :key="month[0]" class="bg-light top-sticky"><b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b></th>
         </tr>
@@ -359,8 +359,20 @@ export default {
 
           if(this.monthlyLogs[year] == null) { this.$set(this.monthlyLogs, year, {}) }
           if(this.monthlyLogs[year][month] == null) { this.monthlyLogs[year][month] = [] }
-          this.monthlyLogs[year][month].push(this.addExpenseForm)
 
+
+          var idx = 0;
+
+          for(var log_idx in this.monthlyLogs[year][month]) {
+            var tmp_spent_on = this.monthlyLogs[year][month][log_idx].spent_on;
+            var cmp_spent_on = this.addExpenseForm.spent_on;
+
+            var d1 = new Date(tmp_spent_on);
+            var d2 = new Date(cmp_spent_on);
+
+            if (d2 >= d1) { idx = log_idx; break; }
+          }
+          this.monthlyLogs[year][month].splice(idx, 0, this.addExpenseForm);
           this.resetExpenseModal();
         })
         .catch(error => {
@@ -543,6 +555,8 @@ export default {
       this.newCategory[category] = '';
     },
     addSubCategory: function(category) {
+      if(this.newCategory[category].trim() == '') { return; }
+
       this.$http.post('users/' + localStorage.getItem('user') + '/categories', {
           "category": {
             "title": this.newCategory[category],
