@@ -24,6 +24,13 @@
             You can add expenses by clicking <b>+</b>.
           </b-tooltip>
         </p>
+        <p class="h5 float-left" v-if="view == 'monthly'">
+          Monthly Summary <b-link id="tooltip-target-monthly" style="text-decoration: none;">&#128161;</b-link>
+          <b-tooltip target="tooltip-target-monthly" triggers="hover">
+            Compare your planned and actual cashflows.
+          </b-tooltip>
+
+        </p>
       </div>
       <div class="col-lg-4 col-md-3"></div>
 
@@ -34,109 +41,155 @@
     <hr>
 
     <div class="row shadow-lg bg-light"><div class="col">
-    <table class="table-sm table-bordered table-hover table-responsive sectioned" style="height: 75vh; overflow: auto;">
-      <thead class="bg-light">
-        <tr>
-          <th class="bg-light top-sticky" style="z-index: 1"></th>
-          <th class="bg-light top-sticky left-sticky" style="z-index: 1"></th>
-          <th v-for="month in monthYear" :key="month[0]" class="bg-light top-sticky"><b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b></th>
-        </tr>
-      </thead>
-      <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
-        <tr v-if="subCategories.length == 0">
-          <td rowspan="3" style="border: 2px solid Gray;" class="bg-light">
-            <b>{{ category }}</b>
-          </td>
-          <td class="left-sticky bg-light"> - </td>
-          <td v-for="empty in monthYear" :key="empty[0]">
-            &#8377; 0
-          </td>
-        </tr>
-        <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id">
-          <td :rowspan="subCategories.length + 2" v-if="idx == 0" style="border: 2px solid Gray;" class="bg-light">
-            <b>{{ category }}</b>
-          </td>
-          <td class="truncate bg-light left-sticky">
-            {{ subCategory.title }}
-          </td>
+      <div v-if="view == 'monthly'">
+        <div class="row">
+          <div v-for="month in monthYear" :key="month[0]" class="col-lg-6 col-md-12">
+            <b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b>
+            <table class="table-sm table-bordered table-hover table-responsive sectioned">
+              <thead class="bg-light">
+                <tr>
+                  <th class="bg-light"></th>
+                  <th>Category</th>
+                  <th>Planned</th>
+                  <th>Actual</th>
+                </tr>
+              </thead>
+              <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
+                <tr v-if="subCategories.length == 0">
+                  <td rowspan="2" style="border: 2px solid Gray;" class="bg-light">
+                    <b>{{ category }}</b>
+                  </td>
+                  <td class="bg-light"> - </td>
+                  <td> - </td>
+                  <td> - </td>
+                </tr>
+                <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id" v-if="monthlyBudget[category] != null && monthlyBudget[category][subCategory.id][selectedYear] != null && monthlyBudget[category][subCategory.id][selectedYear + 1] != null">
+                  <td :rowspan="subCategories.length + 2" v-if="idx == 0" style="border: 2px solid Gray;" class="bg-light">
+                    <b>{{ category }}</b>
+                  </td>
+                  <td class="truncate bg-light">
+                    {{ subCategory.title }}
+                  </td>
 
-          <td class="truncate" v-if="view == 'planned' && monthlyBudget[category] != null && monthlyBudget[category][subCategory.id][selectedYear] != null && monthlyBudget[category][subCategory.id][selectedYear + 1] != null" v-for="month in monthYear" :key="month[0]" @click="toggleEditingMoney(monthlyBudget[category][subCategory.id][month[1]][month[0]])" :class="{ 'error-cell': erroredCell(monthlyBudget[category][subCategory.id][month[1]][month[0]]) }">
-            <div v-if="!editingCell(monthlyBudget[category][subCategory.id][month[1]][month[0]])">
-              <div v-if="monthlyBudget[category][subCategory.id][month[1]][month[0]]">&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned }}</div>
-            </div>
-            <div v-if="editingCell(monthlyBudget[category][subCategory.id][month[1]][month[0]])">
-              <input v-if="monthlyBudget[category][subCategory.id][month[1]][month[0]]" class="form-control input-sm" @keyup.esc="cancelEditingMoney(monthlyBudget[category][subCategory.id][month[1]][month[0]])" @keyup.enter="$event.target.blur()" @blur="doneEditingMoney(monthlyBudget[category][subCategory.id][month[1]][month[0]], month[0], month[1], subCategory.id)" v-focus type="text" v-model="monthlyBudget[category][subCategory.id][month[1]][month[0]].planned" />
-            </div>
-          </td>
+                  <td>{{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned }}</td>
+                  <td>{{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</td>
+                </tr>
+                <tr>
+                  <td class="bg-light"> <b>Sub-Total</b> </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <hr>
+          </div>
+        </div>
+      </div>
+      <div v-else>
+        <table class="table-sm table-bordered table-hover table-responsive sectioned" style="height: 75vh; overflow: auto;">
+          <thead class="bg-light">
+            <tr>
+              <th class="bg-light top-sticky" style="z-index: 1"></th>
+              <th class="bg-light top-sticky left-sticky" style="z-index: 1"></th>
+              <th v-for="month in monthYear" :key="month[0]" class="bg-light top-sticky"><b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b></th>
+            </tr>
+          </thead>
+          <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
+            <tr v-if="subCategories.length == 0">
+              <td rowspan="3" style="border: 2px solid Gray;" class="bg-light">
+                <b>{{ category }}</b>
+              </td>
+              <td class="left-sticky bg-light"> - </td>
+              <td v-for="empty in monthYear" :key="empty[0]">
+                &#8377; 0
+              </td>
+            </tr>
+            <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id">
+              <td :rowspan="subCategories.length + 2" v-if="idx == 0" style="border: 2px solid Gray;" class="bg-light">
+                <b>{{ category }}</b>
+              </td>
+              <td class="truncate bg-light left-sticky">
+                {{ subCategory.title }}
+              </td>
 
-          <td v-if="view == 'actual' && monthlyBudget[category] != null && monthlyBudget[category][subCategory.id][selectedYear] != null && monthlyBudget[category][subCategory.id][selectedYear + 1] != null" v-for="month in monthYear" :key="month[0]">
+              <td class="truncate" v-if="view == 'planned' && monthlyBudget[category] != null && monthlyBudget[category][subCategory.id][selectedYear] != null && monthlyBudget[category][subCategory.id][selectedYear + 1] != null" v-for="month in monthYear" :key="month[0]" @click="toggleEditingMoney(monthlyBudget[category][subCategory.id][month[1]][month[0]])" :class="{ 'error-cell': erroredCell(monthlyBudget[category][subCategory.id][month[1]][month[0]]) }">
+                <div v-if="!editingCell(monthlyBudget[category][subCategory.id][month[1]][month[0]])">
+                  <div v-if="monthlyBudget[category][subCategory.id][month[1]][month[0]]">&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned }}</div>
+                </div>
+                <div v-if="editingCell(monthlyBudget[category][subCategory.id][month[1]][month[0]])">
+                  <input v-if="monthlyBudget[category][subCategory.id][month[1]][month[0]]" class="form-control input-sm" @keyup.esc="cancelEditingMoney(monthlyBudget[category][subCategory.id][month[1]][month[0]])" @keyup.enter="$event.target.blur()" @blur="doneEditingMoney(monthlyBudget[category][subCategory.id][month[1]][month[0]], month[0], month[1], subCategory.id)" v-focus type="text" v-model="monthlyBudget[category][subCategory.id][month[1]][month[0]].planned" />
+                </div>
+              </td>
 
-            <div v-if="monthlyBudget[category][subCategory.id][month[1]][month[0]].logs.length > 0">
-              <b-link class="link-as-text" :id="monthlyBudget[category][subCategory.id][month[1]][month[0]].id">
-                &#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}
-              </b-link>
+              <td v-if="view == 'actual' && monthlyBudget[category] != null && monthlyBudget[category][subCategory.id][selectedYear] != null && monthlyBudget[category][subCategory.id][selectedYear + 1] != null" v-for="month in monthYear" :key="month[0]">
 
-              <b-popover variant="dark" triggers="focus" :target="monthlyBudget[category][subCategory.id][month[1]][month[0]].id" :title="plannedTitle(monthlyBudget[category][subCategory.id][month[1]][month[0]].planned)">
-                <table border="2">
-                  <tr>
-                    <th>Description</th>
-                    <th>Value</th>
-                  </tr>
-                  <tr v-for="log in monthlyBudget[category][subCategory.id][month[1]][month[0]].logs" :key="log._id.$oid">
-                    <td>{{ log.description }}</td>
-                    <td>{{ log.value }}</td>
-                  </tr>
-                </table>
-              </b-popover>
-            </div>
-            <div v-else>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</div>
-          </td>
-        </tr>
+                <div v-if="monthlyBudget[category][subCategory.id][month[1]][month[0]].logs.length > 0">
+                  <b-link class="link-as-text" :id="monthlyBudget[category][subCategory.id][month[1]][month[0]].id">
+                    &#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}
+                  </b-link>
 
-        <tr>
-          <td class="truncate left-sticky bg-light">
-            <form class="add-category-form">
-              <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
-              <button class="add-category-button btn btn-primary" @click="addSubCategory(category)" v-if="newCategoryShowButton[category]">+</button>
-            </form>
-          </td>
-          <td v-for="empty in monthYear" :key="empty[0]"></td>
-        </tr>
+                  <b-popover variant="dark" triggers="focus" :target="monthlyBudget[category][subCategory.id][month[1]][month[0]].id" :title="plannedTitle(monthlyBudget[category][subCategory.id][month[1]][month[0]].planned)">
+                    <table border="2">
+                      <tr>
+                        <th>Description</th>
+                        <th>Value</th>
+                      </tr>
+                      <tr v-for="log in monthlyBudget[category][subCategory.id][month[1]][month[0]].logs" :key="log._id.$oid">
+                        <td>{{ log.description }}</td>
+                        <td>{{ log.value }}</td>
+                      </tr>
+                    </table>
+                  </b-popover>
+                </div>
+                <div v-else>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</div>
+              </td>
+            </tr>
 
-        <tr>
-          <td class="left-sticky bg-light"> <b>Sub-Total</b> </td>
-          <td v-for="month in monthYear" :key="month[0]" class="truncate" :title="subTotal(category, month[0], month[1]) + ' (' + calculatePercentage(category, month[0], month[1]) + '%)'">
-            &#8377; {{ subTotal(category, month[0], month[1]) }} ({{ calculatePercentage(category, month[0], month[1]) }}%)
-          </td>
-        </tr>
+            <tr>
+              <td class="truncate left-sticky bg-light">
+                <form class="add-category-form">
+                  <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
+                  <button class="add-category-button btn btn-primary" @click="addSubCategory(category)" v-if="newCategoryShowButton[category]">+</button>
+                </form>
+              </td>
+              <td v-for="empty in monthYear" :key="empty[0]"></td>
+            </tr>
 
-      </tbody>
-      <tbody>
-        <tr>
-          <td></td>
-          <td class="bg-light left-sticky"><b>Total Inflow</b></td>
-          <td v-for="month in monthYear" :key="month[0]" class="truncate">
-            &#8377; {{ totalInflow(month[0], month[1]) }}
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td class="bg-light left-sticky"><b>Total Outflow</b></td>
-          <td v-for="month in monthYear" :key="month[0]" class="truncate">
-            &#8377; {{ totalOutflow(month[0], month[1]) }}
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td class="bg-light left-sticky"><b>Total Balance</b></td>
-          <td v-for="month in monthYear" :key="month[0]" class="truncate" :class="{red: totalBalance(month[0], month[1]) < 0, green: totalBalance(month[0], month[1]) >= 0}">
-            <div>
-              &#8377; {{ totalBalance(month[0], month[1]) }}
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <tr>
+              <td class="left-sticky bg-light"> <b>Sub-Total</b> </td>
+              <td v-for="month in monthYear" :key="month[0]" class="truncate" :title="subTotal(category, month[0], month[1]) + ' (' + calculatePercentage(category, month[0], month[1]) + '%)'">
+                &#8377; {{ subTotal(category, month[0], month[1]) }} ({{ calculatePercentage(category, month[0], month[1]) }}%)
+              </td>
+            </tr>
+
+          </tbody>
+          <tbody>
+            <tr>
+              <td></td>
+              <td class="bg-light left-sticky"><b>Total Inflow</b></td>
+              <td v-for="month in monthYear" :key="month[0]" class="truncate">
+                &#8377; {{ totalInflow(month[0], month[1]) }}
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td class="bg-light left-sticky"><b>Total Outflow</b></td>
+              <td v-for="month in monthYear" :key="month[0]" class="truncate">
+                &#8377; {{ totalOutflow(month[0], month[1]) }}
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td class="bg-light left-sticky"><b>Total Balance</b></td>
+              <td v-for="month in monthYear" :key="month[0]" class="truncate" :class="{red: totalBalance(month[0], month[1]) < 0, green: totalBalance(month[0], month[1]) >= 0}">
+                <div>
+                  &#8377; {{ totalBalance(month[0], month[1]) }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
   </div></div>
 
     <div class="right-bottom-fixed" v-if="view == 'planned'">
@@ -653,7 +706,7 @@ export default {
       viewOptions: [
         { value: 'planned', text: 'Budget planning' },
         { value: 'actual', text: 'Accounting worksheet' },
-        { value: 'monthly', text: 'Monthly view', disabled: true },
+        { value: 'monthly', text: 'Monthly Summary' },
       ],
       populatedYears: [],
       cachedMoney: 0,
