@@ -52,6 +52,7 @@
                   <th>Category</th>
                   <th>Planned</th>
                   <th>Actual</th>
+                  <th>Difference</th>
                 </tr>
               </thead>
               <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
@@ -60,6 +61,7 @@
                     <b>{{ category }}</b>
                   </td>
                   <td class="bg-light"> - </td>
+                  <td> - </td>
                   <td> - </td>
                   <td> - </td>
                 </tr>
@@ -71,13 +73,15 @@
                     {{ subCategory.title }}
                   </td>
 
-                  <td>{{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned }}</td>
-                  <td>{{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</td>
+                  <td>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned }}</td>
+                  <td>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</td>
+                  <td>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned - monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</td>
                 </tr>
                 <tr>
                   <td class="bg-light"> <b>Sub-Total</b> </td>
-                  <td></td>
-                  <td></td>
+                  <td>&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) }}</td>
+                  <td>&#8377; {{ subTotalByType(category, 'actual', month[0], month[1]) }}</td>
+                  <td>&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) - subTotalByType(category, 'actual', month[0], month[1]) }}</td>
                 </tr>
               </tbody>
             </table>
@@ -469,6 +473,22 @@ export default {
       for(var subCategory in this.monthlyBudget[category]) {
         if(this.monthlyBudget[category][subCategory][year] != null && this.monthlyBudget[category][subCategory][year][month] != null) {
           if(this.view == 'planned') {
+            total += parseFloat(this.monthlyBudget[category][subCategory][year][month].planned);
+          } else {
+            total += parseFloat(this.monthlyBudget[category][subCategory][year][month].actual);
+          }
+        }
+      }
+
+      if(isNaN(total)) { return 0; }
+      else { return parseFloat(total.toFixed(2)); }
+    },
+    subTotalByType: function(category, view, month, year) {
+      var total = 0;
+
+      for(var subCategory in this.monthlyBudget[category]) {
+        if(this.monthlyBudget[category][subCategory][year] != null && this.monthlyBudget[category][subCategory][year][month] != null) {
+          if(view == 'planned') {
             total += parseFloat(this.monthlyBudget[category][subCategory][year][month].planned);
           } else {
             total += parseFloat(this.monthlyBudget[category][subCategory][year][month].actual);

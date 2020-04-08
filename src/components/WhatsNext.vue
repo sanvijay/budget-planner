@@ -13,7 +13,6 @@
           </p>
 
           <ul>
-            <li>Compare your planned expenses and actual expenses.</li>
             <li>Cool graphs to visualize your activities.</li>
             <li>Reminders and notifications for any of your recurring events.</li>
             <li>Add multiple accounts and track all in one place.</li>
