@@ -29,12 +29,14 @@
           <b-tooltip target="tooltip-target-monthly" triggers="hover">
             Compare your planned and actual cashflows.
           </b-tooltip>
-
+        </p>
+        <p class="h5 float-left" v-if="view == 'graph'">
+          Graph View
         </p>
       </div>
-      <div class="col-lg-4 col-md-3"></div>
+      <div class="col-lg-3 col-md-2"></div>
 
-      <div class="col-lg-2 col-md-3 col-sm-4 float-right">
+      <div class="col-lg-3 col-md-4 col-sm-12 float-right">
         <b-form-select v-model="view" :options="viewOptions"></b-form-select>
       </div>
     </div>
@@ -89,7 +91,52 @@
           </div>
         </div>
       </div>
-      <div v-else>
+      <div v-if="view == 'graph'">
+        <br>
+        <div class="row">
+          <div class="col-lg-3 col-md-4 col-sm-12">
+            <b-form-select v-model="graphView" :options="graphOptions"></b-form-select>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-12" v-if="graphView == 'plannedVsActual'">
+            <b-form-select class="input-3" v-model="graphYearlyCategory" required>
+              <b-form-select-option-group v-for="(subCategories, category) in categories" :key="category" :label="category">
+                <b-form-select-option v-for="(subCategory, idx) in subCategories" :key="subCategory.id" :value="{ subCategory: subCategory.id, category: category }">{{ subCategory.title }}</b-form-select-option>
+              </b-form-select-option-group>
+            </b-form-select>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-12" v-if="graphView == 'percentageSplit'">
+
+
+            <b-form-select v-model="percentageSplitMonth" class="input-3">
+              <b-form-select-option :value="null" disabled selected>Please select a month</b-form-select-option>
+
+              <b-form-select-option v-for="month in monthYear" :key="month[0]" :value="month">{{ monthFromInt(month[0]) }} / {{ month[1] }}</b-form-select-option>
+            </b-form-select>
+
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-12" v-if="graphView == 'percentageSplit'">
+            <b-form-select v-model="percentageSplitCategory" :options="percentageSplitCategoryOptions"></b-form-select>
+          </div>
+        </div>
+        <hr>
+        <div v-if="graphView == 'percentageSplit'">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 col-sm-12">
+              <h4>Planned</h4>
+              <Doughnut :chartData="doughnutPlannedValues"></Doughnut><hr>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12">
+              <h4>Actual</h4>
+              <Doughnut :chartData="doughnutActualValues"></Doughnut><hr>
+            </div>
+          </div>
+        </div>
+        <div v-if="graphView == 'plannedVsActual'">
+          <LineChart :chartData="linechartValues"></LineChart><hr>
+        </div>
+        <br>
+      </div>
+      <div v-if="view == 'planned' || view == 'actual'">
         <table class="table-sm table-bordered table-hover table-responsive sectioned" style="height: 75vh; overflow: auto;">
           <thead class="bg-light">
             <tr>
@@ -194,7 +241,7 @@
           </tbody>
         </table>
       </div>
-  </div></div>
+    </div></div>
 
     <div class="right-bottom-fixed" v-if="view == 'planned'">
       <b-button class="add-recurring-plan" @click="showRecurringPlanModal = !showRecurringPlanModal">+</b-button>
@@ -312,8 +359,15 @@
 </template>
 
 <script>
+import Doughnut from './graph/Doughnut.vue'
+import LineChart from './graph/LineChart.vue'
+
 export default {
   name: 'Dashboard',
+  components: {
+    Doughnut,
+    LineChart
+  },
   directives: {
     focus: {
       // directive definition
@@ -682,7 +736,64 @@ export default {
         .catch(error => {
           this.$parent.toast(error);
         });
-    }
+    },
+    updateDoughnutGraph: function() {
+      var allLabels = [];
+      var allPlannedData = [];
+      var allActualData = [];
+
+      var allBackgroundColor = [];
+      var allBorderColor = [];
+
+      var categories = [];
+
+      if(this.monthlyBudget == null) { return; }
+
+      if(this.percentageSplitCategory == "All Expenses") {
+        categories = ['Expense', 'EMI', 'EquityInvestment', 'DebtInvestment'];
+      }
+      else {
+        categories = [this.percentageSplitCategory];
+      }
+
+      for(var category of categories) {
+        for(var subCategory of this.categories[category]) {
+          allLabels.push(subCategory.title);
+          allPlannedData.push(this.monthlyBudget[subCategory.type][subCategory.id][this.percentageSplitMonth[1]][this.percentageSplitMonth[0]].planned);
+          allActualData.push(this.monthlyBudget[subCategory.type][subCategory.id][this.percentageSplitMonth[1]][this.percentageSplitMonth[0]].actual);
+
+          var color = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];
+          allBackgroundColor.push('rgba(' + color[0] + ', ' + color[1] + ', ' + color[2] + ', 0.2)');
+          allBorderColor.push('rgba(' + color[0] + ', ' + color[1] + ', ' + color[2] + ', 1)');
+        }
+      }
+
+      if(this.doughnutPlannedValues.datasets[0].backgroundColor.length >= allBackgroundColor.length) {
+        allBackgroundColor = this.doughnutPlannedValues.datasets[0].backgroundColor;
+        allBorderColor = this.doughnutPlannedValues.datasets[0].borderColor;
+      }
+
+      this.doughnutPlannedValues = {
+        labels: allLabels,
+        datasets: [
+          {
+            backgroundColor: allBackgroundColor,
+            borderColor: allBorderColor,
+            data: allPlannedData,
+          }
+        ]
+      };
+      this.doughnutActualValues = {
+        labels: allLabels,
+        datasets: [
+          {
+            backgroundColor: allBackgroundColor,
+            borderColor: allBorderColor,
+            data: allActualData,
+          }
+        ]
+      };
+    },
   },
   props: {
     selectedYear: Number
@@ -692,6 +803,8 @@ export default {
     if (this.selectedYear !== null) {
       this.updateMonthlyBudget();
       this.loadActualCashFlowLogs();
+      this.percentageSplitMonth = [4, this.selectedYear];
+      this.updateDoughnutGraph();
     }
   },
   computed: {
@@ -710,7 +823,23 @@ export default {
         [2, this.selectedYear + 1],
         [3, this.selectedYear + 1]
       ];
-    }
+    },
+    plannedYearlyValue: function() {
+      if(this.graphYearlyCategory == null || this.monthlyBudget == null || this.monthlyBudget == {}) { return []; }
+      var arr = [];
+      for(var month of this.monthYear) {
+        arr.push(this.monthlyBudget[this.graphYearlyCategory.category][this.graphYearlyCategory.subCategory][month[1]][month[0]].planned);
+      }
+      return arr;
+    },
+    actualYearlyValue: function() {
+      if(this.graphYearlyCategory == null || this.monthlyBudget == null || this.monthlyBudget == {}) { return []; }
+      var arr = [];
+      for(var month of this.monthYear) {
+        arr.push(this.monthlyBudget[this.graphYearlyCategory.category][this.graphYearlyCategory.subCategory][month[1]][month[0]].actual);
+      }
+      return arr;
+    },
   },
   watch: {
     selectedYear: function() {
@@ -718,16 +847,87 @@ export default {
         this.updateMonthlyBudget();
         this.loadActualCashFlowLogs();
       }
-    }
+    },
+    graphYearlyCategory: function() {
+      this.linechartValues = {
+        labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+        datasets: [
+          {
+            label: "Planned",
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            data: this.plannedYearlyValue,
+          },
+          {
+            label: "Actual",
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            data: this.actualYearlyValue,
+          },
+        ]
+      }
+    },
+    percentageSplitCategory: function() { this.updateDoughnutGraph(); },
+    percentageSplitMonth: function() { this.updateDoughnutGraph(); },
+    view: function() { if( this.view == 'graph' ) { this.updateDoughnutGraph(); } }
   },
   data: function() {
     return {
-      view: 'planned',
+      doughnutPlannedValues: {
+        labels: [],
+        datasets: [
+          {
+            backgroundColor: [],
+            borderColor: [],
+            data: [],
+          }
+        ]
+      },
+      doughnutActualValues: {
+        labels: [],
+        datasets: [
+          {
+            backgroundColor: [],
+            borderColor: [],
+            data: [],
+          }
+        ]
+      },
+      linechartValues: {
+        labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+        datasets: [
+          {
+            label: "Planned",
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            data: [],
+          },
+          {
+            label: "Actual",
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            data: [],
+          },
+        ]
+      },
+      view: 'graph',
       viewOptions: [
         { value: 'planned', text: 'Budget planning' },
         { value: 'actual', text: 'Accounting worksheet' },
         { value: 'monthly', text: 'Monthly Summary' },
+        { value: 'graph', text: 'Graph View' },
       ],
+      graphView: 'plannedVsActual',
+      graphOptions: [
+        { value: 'plannedVsActual', text: 'Planned Vs Actual' },
+        { value: 'percentageSplit', text: 'Percentage Split' }
+      ],
+      graphYearlyCategory: null,
+      percentageSplitMonth: [],
+      percentageSplitCategoryOptions: [
+        'Income', 'All Expenses', 'Expense', 'EMI', 'EquityInvestment', 'DebtInvestment'
+      ],
+      percentageSplitCategory: "All Expenses",
       populatedYears: [],
       cachedMoney: 0,
       newCategory: {
