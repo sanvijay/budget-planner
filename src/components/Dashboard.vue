@@ -910,7 +910,7 @@ export default {
           },
         ]
       },
-      view: 'graph',
+      view: 'planned',
       viewOptions: [
         { value: 'planned', text: 'Budget planning' },
         { value: 'actual', text: 'Accounting worksheet' },
