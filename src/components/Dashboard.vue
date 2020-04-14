@@ -80,9 +80,9 @@
                   <td>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned - monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</td>
                 </tr>
                 <tr>
-                  <td class="bg-light"> <b>Sub-Total</b> </td>
-                  <td>&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) }}</td>
-                  <td>&#8377; {{ subTotalByType(category, 'actual', month[0], month[1]) }}</td>
+                  <td class="bg-light truncate"> <b>Sub-Total</b> </td>
+                  <td><span v-if="category != 'Income' && !incomePercentWithinLimit(category, 'planned', month[0], month[1])">&#10071;</span>&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) }}</td>
+                  <td><span v-if="category != 'Income' && !incomePercentWithinLimit(category, 'actual', month[0], month[1])">&#10071;</span>&#8377; {{ subTotalByType(category, 'actual', month[0], month[1]) }}</td>
                   <td>&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) - subTotalByType(category, 'actual', month[0], month[1]) }}</td>
                 </tr>
               </tbody>
@@ -105,14 +105,9 @@
             </b-form-select>
           </div>
           <div class="col-lg-3 col-md-4 col-sm-12" v-if="graphView == 'percentageSplit'">
-
-
             <b-form-select v-model="percentageSplitMonth" class="input-3">
-              <b-form-select-option :value="null" disabled selected>Please select a month</b-form-select-option>
-
-              <b-form-select-option v-for="month in monthYear" :key="month[0]" :value="month">{{ monthFromInt(month[0]) }} / {{ month[1] }}</b-form-select-option>
+              <b-form-select-option v-for="month in monthYear" :key="month[0]" :value="month">{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b-form-select-option>
             </b-form-select>
-
           </div>
           <div class="col-lg-3 col-md-4 col-sm-12" v-if="graphView == 'percentageSplit'">
             <b-form-select v-model="percentageSplitCategory" :options="percentageSplitCategoryOptions"></b-form-select>
@@ -377,6 +372,15 @@ export default {
     }
   },
   methods: {
+    setUserProfile: function() {
+      this.$http.get('users/' + localStorage.getItem('user') + '/user_profile')
+        .then(response => {
+          this.userProfile = response.data;
+        })
+        .catch(error => {
+          this.toast(error);
+        });
+    },
     plannedTitle: function(plannedValue) {
       return "Planned: " + plannedValue;
     },
@@ -536,6 +540,22 @@ export default {
 
       if(isNaN(total)) { return 0; }
       else { return parseFloat(total.toFixed(2)); }
+    },
+    incomePercentWithinLimit: function(category, view, month, year) {
+      var snake_case_category = this.camelToSnake(category);
+
+      var percentOfCategory = "";
+      if(category == "EMI") {
+        percentOfCategory = this.userProfile.expense_ratio['emi'];
+      } else {
+        percentOfCategory = this.userProfile.expense_ratio[snake_case_category];
+      }
+      var percentFromIncome = this.subTotalByType('Income', view, month, year) * (percentOfCategory / 100);
+
+      return (this.subTotalByType(category, view, month, year) <= percentFromIncome);
+    },
+    camelToSnake: function(string) {
+      return string.replace(/[\w]([A-Z])/g, function(m) { return m[0] + "_" + m[1]; }).toLowerCase();
     },
     subTotalByType: function(category, view, month, year) {
       var total = 0;
@@ -747,7 +767,7 @@ export default {
 
       var categories = [];
 
-      if(this.monthlyBudget == null) { return; }
+      if(this.monthlyBudget == null || this.percentageSplitMonth.length == 0) { return; }
 
       if(this.percentageSplitCategory == "All Expenses") {
         categories = ['Expense', 'EMI', 'EquityInvestment', 'DebtInvestment'];
@@ -806,6 +826,7 @@ export default {
       this.percentageSplitMonth = [4, this.selectedYear];
       this.updateDoughnutGraph();
     }
+    this.setUserProfile();
   },
   computed: {
     monthYear: function() {
@@ -910,10 +931,10 @@ export default {
           },
         ]
       },
-      view: 'planned',
+      view: 'actual',
       viewOptions: [
+        { value: 'actual', text: 'Expense Tracker' },
         { value: 'planned', text: 'Budget planning' },
-        { value: 'actual', text: 'Accounting worksheet' },
         { value: 'monthly', text: 'Monthly Summary' },
         { value: 'graph', text: 'Graph View' },
       ],
@@ -953,6 +974,7 @@ export default {
       viewLogsModal: false,
       monthlyLogsCollapse: {},
       monthlyLogs: {},
+      userProfile: {expense_ratio: {}},
       ad_client: process.env.VUE_APP_ADSENSE_PUB,
       ad_slot: process.env.VUE_APP_ADSENSE_HORIZONTAL_SLOT
     }

@@ -6,7 +6,6 @@
           User Profile
         </p>
         <br><hr>
-
         <div class="bg-light shadow-lg" style="padding: 5px;">
           <table class="table-sm table-bordered">
             <tr>
@@ -27,6 +26,33 @@
                 <select class="form-control input-sm" v-model="user_profile.gender" required>
                   <option v-for="gender in genders" :key="gender" :value="gender">{{ gender }}</option>
                 </select>
+              </td>
+            </tr>
+            <tr>
+              <th>Suggested Expense Ratio</th>
+              <td>
+                <div class="row">
+                  <div class="col-3">{{ "30" }}</div>
+                  <div class="col-3">{{ "40" }}</div>
+                  <div class="col-3">{{ (30 * age) / 100 }}</div>
+                  <div class="col-3">{{ (30 - ((30 * age) / 100)).toFixed(1) }}</div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                Expense Ratio <b-link id="tooltip-target-plan" style="text-decoration: none;">&#128161;</b-link>
+                <b-tooltip target="tooltip-target-plan" triggers="hover">
+                  This is the ratio you planned to spend your income. Understand the budgeting thumb rule and set the ratio. The inputs are in the order Expense, EMI, EquityInvestment, DebtInvestment
+                </b-tooltip>
+              </th>
+              <td>
+                <div class="row">
+                  <div class="col-3" style="padding-right: 0px"><input class="form-control input-sm" type="text" v-model="user_profile.expense_ratio.expense" required></div>
+                  <div class="col-3" style="padding-left: 5px; padding-right: 3px"><input class="form-control input-sm" type="text" v-model="user_profile.expense_ratio.emi" required></div>
+                  <div class="col-3" style="padding-left: 5px; padding-right: 3px"><input class="form-control input-sm" type="text" v-model="user_profile.expense_ratio.equity_investment" required></div>
+                  <div class="col-3" style="padding-left: 0px"><input class="form-control input-sm" type="text" v-model="user_profile.expense_ratio.debt_investment" required></div>
+                </div>
               </td>
             </tr>
 <!--             <tr>
@@ -70,7 +96,7 @@ export default {
   },
   data: function() {
     return {
-      user_profile: {},
+      user_profile: {expense_ratio: {}},
       genders: ["Male", "Female", "Androgyny"],
       countries: ["India"],
       ad_client: process.env.VUE_APP_ADSENSE_PUB,
@@ -106,9 +132,24 @@ export default {
         });
     }
   },
+  computed: {
+    age: function() {
+      if(this.user_profile.dob == null) { return 0; }
+
+      var dob = new Date(this.user_profile.dob);
+      var ageDifMs = Date.now() - dob.getTime();
+      var ageDate = new Date(ageDifMs);
+      return Math.abs(ageDate.getUTCFullYear() - 1970);
+    }
+  },
   mounted: function () {
     this.loadUserProfile();
   },
+  watch: {
+    user_profile: function() {
+      this.user_profile.equity_investment = (30 * this.age) / 100;
+    },
+  }
 }
 </script>
 

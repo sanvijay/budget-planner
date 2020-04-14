@@ -168,7 +168,7 @@ export default {
   },
   data: function() {
     return {
-      userProfile: {},
+      userProfile: {expense_ratio: {}},
       selectedFinancialYear: null,
       allFinancialYear: []
     }
