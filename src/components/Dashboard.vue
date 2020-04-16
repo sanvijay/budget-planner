@@ -52,9 +52,9 @@
                 <tr>
                   <th class="bg-light"></th>
                   <th>Category</th>
-                  <th>Planned</th>
-                  <th>Actual</th>
-                  <th>Difference</th>
+                  <th style="min-width: 120px">Planned</th>
+                  <th style="min-width: 120px">Actual</th>
+                  <th style="min-width: 120px">Difference</th>
                 </tr>
               </thead>
               <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
@@ -77,13 +77,31 @@
 
                   <td>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned }}</td>
                   <td>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</td>
-                  <td>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned - monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</td>
+                  <td>&#8377; {{ (monthlyBudget[category][subCategory.id][month[1]][month[0]].planned - monthlyBudget[category][subCategory.id][month[1]][month[0]].actual).toFixed(2) }}</td>
                 </tr>
                 <tr>
                   <td class="bg-light truncate"> <b>Sub-Total</b> </td>
-                  <td><span v-if="category != 'Income' && !incomePercentWithinLimit(category, 'planned', month[0], month[1])">&#10071;</span>&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) }}</td>
-                  <td><span v-if="category != 'Income' && !incomePercentWithinLimit(category, 'actual', month[0], month[1])">&#10071;</span>&#8377; {{ subTotalByType(category, 'actual', month[0], month[1]) }}</td>
-                  <td>&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) - subTotalByType(category, 'actual', month[0], month[1]) }}</td>
+                  <td>
+                    <div v-if="category != 'Income'">
+                      <span v-if="!incomePercentWithinLimit(category, 'planned', month[0], month[1])">&#10071;</span>
+                      <b-link :id="'planned' + category + month[0].toString()" class="link-as-text">&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) }}</b-link>
+                      <b-tooltip :target="'planned' + category + month[0].toString()" triggers="hover">
+                        Expected ({{ percentOfCategory(category) }}% of Income): &#8377; {{ percentValueFromIncome(category, 'planned', month[0], month[1]) }}<br>
+                      </b-tooltip>
+                    </div>
+                    <div v-else>&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) }}</div>
+                  </td>
+                  <td>
+                    <div v-if="category != 'Income'">
+                      <span v-if="!incomePercentWithinLimit(category, 'actual', month[0], month[1])">&#10071;</span>
+                      <b-link :id="'actual' + category + month[0].toString()" class="link-as-text">&#8377; {{ subTotalByType(category, 'actual', month[0], month[1]) }}</b-link>
+                      <b-tooltip :target="'actual' + category + month[0].toString()" triggers="hover">
+                        Expected ({{ percentOfCategory(category) }}% of Income): &#8377; {{ percentValueFromIncome(category, 'actual', month[0], month[1]) }}<br>
+                      </b-tooltip>
+                    </div>
+                    <div v-else>&#8377; {{ subTotalByType(category, 'actual', month[0], month[1]) }}</div>
+                  </td>
+                  <td>&#8377; {{ (subTotalByType(category, 'planned', month[0], month[1]) - subTotalByType(category, 'actual', month[0], month[1])).toFixed(2) }}</td>
                 </tr>
               </tbody>
             </table>
@@ -203,8 +221,18 @@
 
             <tr>
               <td class="left-sticky bg-light"> <b>Sub-Total</b> </td>
-              <td v-for="month in monthYear" :key="month[0]" class="truncate" :title="subTotal(category, month[0], month[1]) + ' (' + calculatePercentage(category, month[0], month[1]) + '%)'">
-                &#8377; {{ subTotal(category, month[0], month[1]) }} ({{ calculatePercentage(category, month[0], month[1]) }}%)
+              <td v-for="month in monthYear" :key="month[0]" class="truncate">
+                <div v-if="category == 'Income'">
+                  &#8377; {{ subTotal(category, month[0], month[1]) }}
+                </div>
+                <div v-else>
+                  <b-link :id="category + month[0].toString()" class="link-as-text">&#8377; {{ subTotal(category, month[0], month[1]) }}</b-link>
+                  <b-tooltip :target="category + month[0].toString()" triggers="hover">
+                    Sub-Total: &#8377; {{ subTotal(category, month[0], month[1]) }}<br>
+                    Expected ({{ percentOfCategory(category) }}% of Income): &#8377; {{ percentValueFromIncome(category, view, month[0], month[1]) }}<br>
+                    Percentage Split of Outflow: {{ calculatePercentage(category, month[0], month[1]) }}%<br>
+                  </b-tooltip>
+                </div>
               </td>
             </tr>
 
@@ -542,17 +570,25 @@ export default {
       else { return parseFloat(total.toFixed(2)); }
     },
     incomePercentWithinLimit: function(category, view, month, year) {
-      var snake_case_category = this.camelToSnake(category);
-
-      var percentOfCategory = "";
-      if(category == "EMI") {
-        percentOfCategory = this.userProfile.expense_ratio['emi'];
-      } else {
-        percentOfCategory = this.userProfile.expense_ratio[snake_case_category];
-      }
-      var percentFromIncome = this.subTotalByType('Income', view, month, year) * (percentOfCategory / 100);
+      var percentFromIncome = this.percentValueFromIncome(category, view, month, year);
 
       return (this.subTotalByType(category, view, month, year) <= percentFromIncome);
+    },
+    percentValueFromIncome: function(category, view, month, year) {
+      var incomeSubTotal = this.subTotalByType('Income', view, month, year);
+      if(incomeSubTotal == 0) { return 0; }
+
+      var percentFromIncome = incomeSubTotal * (this.percentOfCategory(category) / 100);
+      return percentFromIncome;
+    },
+    percentOfCategory: function(category) {
+      var snake_case_category = this.camelToSnake(category);
+
+      if(category == "EMI") {
+        return this.userProfile.expense_ratio['emi'];
+      } else {
+        return this.userProfile.expense_ratio[snake_case_category];
+      }
     },
     camelToSnake: function(string) {
       return string.replace(/[\w]([A-Z])/g, function(m) { return m[0] + "_" + m[1]; }).toLowerCase();
@@ -777,7 +813,10 @@ export default {
       }
 
       for(var category of categories) {
+        if(this.categories[category] == null) { continue; }
         for(var subCategory of this.categories[category]) {
+          if(this.monthlyBudget[subCategory.type][subCategory.id][this.percentageSplitMonth[1]] == null) { continue; }
+
           allLabels.push(subCategory.title);
           allPlannedData.push(this.monthlyBudget[subCategory.type][subCategory.id][this.percentageSplitMonth[1]][this.percentageSplitMonth[0]].planned);
           allActualData.push(this.monthlyBudget[subCategory.type][subCategory.id][this.percentageSplitMonth[1]][this.percentageSplitMonth[0]].actual);
@@ -944,7 +983,7 @@ export default {
         { value: 'percentageSplit', text: 'Percentage Split' }
       ],
       graphYearlyCategory: null,
-      percentageSplitMonth: [],
+      percentageSplitMonth: [4, this.selectedYear],
       percentageSplitCategoryOptions: [
         'Income', 'All Expenses', 'Expense', 'EMI', 'EquityInvestment', 'DebtInvestment'
       ],
