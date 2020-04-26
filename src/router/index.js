@@ -15,6 +15,7 @@ import Feedback from '@/components/Feedback.vue'
 import Terms from '@/components/Terms.vue'
 import PrivacyPolicy from '@/components/PrivacyPolicy.vue'
 import WhatsNext from '@/components/WhatsNext.vue'
+import Quiz from '@/components/Quiz.vue'
 
 Vue.use(VueRouter)
 
@@ -24,11 +25,14 @@ let router = new VueRouter({
     { path: "/login",       name: "login",       component: Login,       meta: { guest: true } },
     { path: "/register",    name: "register",    component: Register,    meta: { guest: true } },
     { path: "/terms",       name: "terms",       component: Terms,       meta: { guest: true } },
+    { path: "/Quiz",        name: "quiz",        component: Quiz,        meta: { guest: true } },
+
     { path: "/summary",     name: "summary",     component: Summary,     meta: { requiresAuth: true } },
     { path: "/dashboard",   name: "dashboard",   component: Dashboard,   meta: { requiresAuth: true } },
     { path: "/setting",     name: "setting",     component: Setting,     meta: { requiresAuth: true } },
     { path: "/feedback",    name: "feedback",    component: Feedback,    meta: { requiresAuth: true } },
     { path: "/whatsnext",   name: "whatsnext",   component: WhatsNext,   meta: { requiresAuth: true } },
+
     { path: "/privacy-policy",         name: "privacy-policy",         component: PrivacyPolicy,        meta: { guest: true } },
     { path: "/email-verified",         name: "email-verified",         component: EmailVerified,        meta: { guest: true } },
     { path: "/reset-password",         name: "reset-password",         component: ResetPassword,        meta: { guest: true } },

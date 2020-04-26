@@ -41,8 +41,8 @@
             </tr>
             <tr>
               <th>
-                Expense Ratio <b-link id="tooltip-target-plan" style="text-decoration: none;">&#128161;</b-link>
-                <b-tooltip target="tooltip-target-plan" triggers="hover">
+                Expense Ratio <b-link id="tooltip-expense-ratio" style="text-decoration: none;">&#128161;</b-link>
+                <b-tooltip target="tooltip-expense-ratio" triggers="hover">
                   This is the ratio you planned to spend your income. Understand the budgeting thumb rule and set the ratio. The inputs are in the order Expense, EMI, EquityInvestment, DebtInvestment
                 </b-tooltip>
               </th>
@@ -66,6 +66,15 @@
             <tr>
               <th>Monthly Income (Optional)</th>
               <td><input class="form-control input-sm" type="text" v-model="user_profile.monthly_income"></td>
+            </tr>
+            <tr>
+              <th>
+                Emergency Corpus (Optional) <b-link id="tooltip-emergency-corpus" style="text-decoration: none;">&#128161;</b-link>
+                <b-tooltip target="tooltip-emergency-corpus" triggers="hover">
+                  Having an emergency corpus helps to financially manage a job loss, illness, accidents and so on. The corpus should help you survive the contingency. So the corpus size can be 3 months to 18 months of the monthly expenses, which one needs at minimum to survive.
+                </b-tooltip>
+              </th>
+              <td><input class="form-control input-sm" type="text" v-model="user_profile.emergency_corpus"></td>
             </tr>
             <tr>
               <td></td>

@@ -14,7 +14,7 @@
     <b-navbar toggleable="lg" fixed="top" type="light" variant="light" class="shadow-lg" v-if="this.$route.path !== '/'">
       <b-navbar-brand href="#">
         <!-- <img src="./assets/logo.jpg" width="30" height="30" class="d-inline-block align-top" alt=""> -->
-        finsey<span class="text-primary">.</span>
+        <span class="logo">finsey<span class="text-primary">.</span></span>
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>

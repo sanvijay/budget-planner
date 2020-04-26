@@ -5,6 +5,14 @@ import Axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 import Ads from 'vue-google-adsense'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faFacebook, faWhatsapp } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+ 
+library.add(faFacebook, faWhatsapp)
+ 
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
 Vue.prototype.$http = Axios;
 Axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 if(localStorage.getItem('jwt') != null) {
