@@ -13,18 +13,18 @@
             <q><b><span class="logo">finsey<span class="text-primary">.</span></span></b> <span style="font-style: italic;">is the budget planner project designed during quarantine period. Planning your budget will make sure to pass any critical stages and have a peaceful future.</span></q><br><br>
 
             <p style="text-align: left !important">Enter your name to continue.</p>
-            <input class="form-control input-sm" type="text" v-model="quizName">
+            <input class="form-control input-sm" type="text" v-model="quiz.name">
             <br>
             <button class="btn btn-primary" @click="moveToIntro">Continue</button>
           </div>
 
           <div v-if="quizStage == 'intro'">
             <div>
-              <p>Hi {{ quizName }}! Do you plan the budget on your personal life?</p>
+              <p>Hi {{ quiz.name }}! Do you plan the budget on your personal life?</p>
 
               <b-form-group :disabled="showMessageOnPlanBudget != ''">
-                <b-form-radio v-model="planBudget" name="currentQuestion" id="trueAnswer" value="t" inline>Yes</b-form-radio>
-                <b-form-radio v-model="planBudget" name="currentQuestion" id="falseAnswer" value="f" inline>No</b-form-radio>
+                <b-form-radio v-model="quiz.planned_before" name="currentQuestion" id="trueAnswer" value="t" inline>Yes</b-form-radio>
+                <b-form-radio v-model="quiz.planned_before" name="currentQuestion" id="falseAnswer" value="f" inline>No</b-form-radio>
               </b-form-group>
             </div>
 
@@ -51,7 +51,7 @@
 
           <div v-if="quizStage == 'result'">
             <p>Thanks for taking up the quiz.</p>
-            <p>You have scored {{ correct * 10 }}.</p>
+            <p>You have scored {{ quiz.score * 10 }}.</p>
 
             <p>Share your score on Whatsapp / Facebook and help your friends to know their score.</p>
           </div>
@@ -91,9 +91,13 @@ export default {
   name: 'Quiz',
   data: function() {
     return {
-      quizName: '',
+      quiz: {
+        id: null,
+        name: null,
+        planned_before: null,
+        score: 0
+      },
       quizStage: '',
-      planBudget: '',
       showMessageOnPlanBudget: '',
       questions: [
         {
@@ -205,12 +209,11 @@ export default {
         }
       ],
       currentQuestion: 0,
-      answers: [],
-      correct: 0
+      answers: []
     }
   },
   created: function() {
-    if(localStorage.getItem('quizStage') == null || localStorage.getItem('quizName') == null) {
+    if(localStorage.getItem('quizStage') == null || localStorage.getItem('quizName') == null || localStorage.getItem('quizID') == null) {
       localStorage.setItem('quizStage', 'collectInfo');
       localStorage.removeItem('quizResult');
     }
@@ -218,49 +221,72 @@ export default {
       localStorage.setItem('quizStage', 'collectInfo');
     }
     else if(localStorage.getItem('quizStage') == 'result') {
-      this.correct = localStorage.getItem('quizResult');
+      this.quiz.score = localStorage.getItem('quizResult');
     }
 
-    this.quizName = localStorage.getItem('quizName');
+    this.quiz.id = localStorage.getItem('quizID');
+    this.quiz.name = localStorage.getItem('quizName');
     this.quizStage = localStorage.getItem('quizStage');
   },
   methods: {
     moveToIntro() {
-      if(this.quizName.toString().trim() == '') { return; }
+      if(this.quiz.name.toString().trim() == '') { return; }
 
-      localStorage.setItem('quizStage', 'intro');
-      localStorage.setItem('quizName', this.quizName);
-      this.quizStage = 'intro';
+      this.$http.post('quizs', { quiz: this.quiz })
+        .then(response => {
+          this.quiz.id = response.data._id.$oid;
+          localStorage.setItem('quizStage', 'intro');
+          localStorage.setItem('quizName', this.quiz.name);
+          localStorage.setItem('quizID', this.quiz.id);
+          this.quizStage = 'intro';
+        })
+        .catch(error => {
+          // TODO: Refactor this with a feature.
+          this.$parent.toast(error);
+          return;
+        });
     },
     startQuiz() {
-      localStorage.setItem('quizStage', 'question');
-      this.quizStage = 'question';
+      this.$http.put('quizs/' + this.quiz.id, { quiz: { planned_before: this.quiz.planned_before } })
+        .then(response => {
+          localStorage.setItem('quizStage', 'question');
+          this.quizStage = 'question';
+        })
+        .catch(error => {
+          // TODO: Refactor this with a feature.
+          this.$parent.toast(error);
+          return;
+        });
     },
     handleAnswer(e) {
       this.answers[this.currentQuestion] = e.answer;
 
       if((this.currentQuestion + 1) === this.questions.length) {
         this.handleResults();
-        localStorage.setItem('quizStage', 'result');
-        localStorage.setItem('quizResult', this.correct);
-        this.quizStage = 'result';
       } else {
         this.currentQuestion++;
       }
     },
     handleResults() {
       this.questions.forEach((a, index) => {
-        if(this.answers[index] === a.answer) this.correct++;        
+        if(this.answers[index] === a.answer) this.quiz.score++;        
       });
+
+      this.$http.put('quizs/' + this.quiz.id, { quiz: { score: this.quiz.score } })
+        .then(response => {
+          localStorage.setItem('quizStage', 'result');
+          localStorage.setItem('quizResult', this.quiz.score);
+          this.quizStage = 'result';
+        })
+        .catch(error => {
+          // TODO: Refactor this with a feature.
+          this.$parent.toast(error);
+          return;
+        });
     },
     showQuizOption() {
-      this.showMessageOnPlanBudget = this.planBudget;
+      this.showMessageOnPlanBudget = this.quiz.planned_before;
     }
-  },
-  computed: {
-    percentage: function() {
-      return ((this.correct / this.questions.length) * 100).toFixed(2);
-    },
   },
   components: {
     Question
