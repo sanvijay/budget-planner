@@ -305,10 +305,10 @@ export default {
       return "https://wa.me/?text=I+have+scored+" + (this.quiz.score * 10) + "%25+in+finsey+quiz.+Do+you+want+to+know+yours%3F+Click+http%3A%2F%2Ffinsey.in%2F%23%2Fquiz%0D%0A%0D%0Afinsey.+is+the+budget+planner+project+of+the+ideal+mind+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
     },
     whatsappText() {
-      return "https://wa.me/?text=finsey+is+the+budget+planner+project+by+an+ideal+mind+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.%0D%0A%0D%0AStart+planning+your+budget+%F0%9F%92%B0by+clicking+below+link%0D%0Ahttp%3A%2F%finsey.in%2F%0D%0A%0D%0A%0D%0AKindly+support+us+by+sharing+it+with+your+friends.";
+      return "https://wa.me/?text=finsey+is+the+budget+planner+project+by+an+ideal+mind+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.%0D%0A%0D%0AStart+planning+your+budget+%F0%9F%92%B0by+clicking+below+link%0D%0Ahttp%3A%2F%2Ffinsey.in%2F%0D%0A%0D%0A%0D%0AKindly+support+us+by+sharing+it+with+your+friends.";
     },
     fbScoreText() {
-      return "https://www.facebook.com/sharer/sharer.php?u=I+have+scored+" + (this.quiz.score * 10) + "%25+in+finsey+quiz.+Do+you+want+to+know+yours%3F+Click+http%3A%2F%finsey.in%2F%23%2Fquiz%0D%0A%0D%0Afinsey.+is+the+budget+planner+project+of+an+ideal+mind+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
+      return "https://www.facebook.com/sharer/sharer.php?u=I+have+scored+" + (this.quiz.score * 10) + "+in+finsey+quiz.+Do+you+want+to+know+yours%3F+Click+http%3A%2F%2Ffinsey.in%2F%23%2Fquiz%0D%0A%0D%0Afinsey.+is+the+budget+planner+project+of+an+ideal+mind+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
     }
   },
   components: {
