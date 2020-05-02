@@ -27,10 +27,8 @@ Vue.use(BootstrapVue)
 
 Vue.use(require('vue-script2'))
 
-Vue.use(Ads.AutoAdsense, { adClient: 'YOUR_GOOGLE_AD_CLIENT' })
+Vue.use(Ads.AutoAdsense, { adClient: process.env.VUE_APP_ADSENSE_PUB })
 Vue.use(Ads.Adsense)
-Vue.use(Ads.InArticleAdsense)
-Vue.use(Ads.InFeedAdsense)
 
 import Adsense from 'vue-google-adsense/dist/Adsense.min.js'
 

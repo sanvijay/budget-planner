@@ -48,13 +48,7 @@
               ></b-form-input>
             </b-form-group>
 
-            <b-form-group id="input-group-4">
-              <b-form-checkbox-group id="checkboxes-4">
-                <b-form-checkbox>
-                  I agree to the <router-link :to="{ name: 'terms' }">Terms and Conditions</router-link> and <router-link :to="{ name: 'privacy-policy' }">Privacy Policy</router-link>
-                </b-form-checkbox>
-              </b-form-checkbox-group>
-            </b-form-group>
+            <div><small>By clicking Register, you agree to our <router-link :to="{ name: 'terms' }">Terms and Conditions</router-link> and that you have read our <router-link :to="{ name: 'privacy-policy' }">Privacy Policy</router-link></small></div><br>
 
             <b-button type="submit" variant="primary" class="btn-block">Register</b-button>
           </b-form>

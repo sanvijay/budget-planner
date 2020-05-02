@@ -2,6 +2,15 @@
   <div>
     <div class="container">
       <div class="row">
+        <div style="min-width: 250px; max-height: 110px">
+          <Adsense
+            :data-ad-client="ad_client"
+            :data-ad-slot="ad_slot"
+          >
+          </Adsense>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-md-3 col-lg-3"></div>
         <div class="col-sm-12 col-md-6 col-lg-6 bg-light shadow-lg">
           <br>
@@ -51,9 +60,11 @@
 
           <div v-if="quizStage == 'result'">
             <p>Thanks for taking up the quiz.</p>
-            <p>You have scored {{ quiz.score * 10 }}.</p>
+            <p>You have scored {{ quiz.score * 10 }}%.</p>
 
             <p>Share your score on Whatsapp / Facebook and help your friends to know their score.</p>
+            <a :href="whatsappScoreText" data-action="share/whatsapp/share" class="btn btn-success whatsapp-font"><b><font-awesome-icon :icon="['fab', 'whatsapp']" />&nbsp; Share your score on Whatsapp</b></a><br><br>
+            <a :href="fbScoreText" data-action="share/whatsapp/share" class="btn btn-primary whatsapp-font"><b><font-awesome-icon :icon="['fab', 'facebook']" />&nbsp; Share your score on Facebook</b></a>
           </div>
 
           <br>
@@ -69,10 +80,10 @@
           <div class="row">
             <div class="col-lg-3"></div>
             <div class="col-lg-3 col-sm-6" style="padding-top: 10px">
-              <div class="fb-share-button" data-href="https://www.facebook.com/Finsey-101336774850608/?__tn__=kC-R&amp;eid=ARC8ahdrFsmhIqNZ97cAmX6mS6m5AC2-RcbN8j5uzRgFp2CvZhwQWV9IvfSHZJ3CgZAMc-m3qtWnpv_1&amp;hc_ref=ARSK7c5a8gvX5S-JVOnmW8VT_KQIOWkLaPB93oNas3icWO2bm5NvTWaFTBefg6Gat5g&amp;ref=nf_target&amp;__xts__%5B0%5D=68.ARCdpSkXjpY84i-iXjly-RJOP7jwB_t6ywEIzYGVrOocLdU-3lB8CPXnZaE_2l02Bx9uKNz0cVkTEupXQcj383eARucVSeRLmZQZuKJER19oeyyaWWxMu-0qcqq96qM89_QeEeUC_ymz-dqfEjyDNDpyM--fhjOBn8D18-dkSzvPD5FHPcx5xjySI3SxqoAEMKbF1VIbMAO3oFEF8EztVEqCi9G7F_K200VsNPeZOxyZAsnezLM8F2y_FYTzlrLOhUC5MivvYX-e5Gn8enNSz7CBW1SEFMe3jHyYBZfjm0ZczfwQeBbIkxV3Rfw" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2FFinsey-101336774850608%2F%3F__tn__%3DkC-R%26eid%3DARC8ahdrFsmhIqNZ97cAmX6mS6m5AC2-RcbN8j5uzRgFp2CvZhwQWV9IvfSHZJ3CgZAMc-m3qtWnpv_1%26hc_ref%3DARSK7c5a8gvX5S-JVOnmW8VT_KQIOWkLaPB93oNas3icWO2bm5NvTWaFTBefg6Gat5g%26ref%3Dnf_target%26__xts__%255B0%255D%3D68.ARCdpSkXjpY84i-iXjly-RJOP7jwB_t6ywEIzYGVrOocLdU-3lB8CPXnZaE_2l02Bx9uKNz0cVkTEupXQcj383eARucVSeRLmZQZuKJER19oeyyaWWxMu-0qcqq96qM89_QeEeUC_ymz-dqfEjyDNDpyM--fhjOBn8D18-dkSzvPD5FHPcx5xjySI3SxqoAEMKbF1VIbMAO3oFEF8EztVEqCi9G7F_K200VsNPeZOxyZAsnezLM8F2y_FYTzlrLOhUC5MivvYX-e5Gn8enNSz7CBW1SEFMe3jHyYBZfjm0ZczfwQeBbIkxV3Rfw&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+              <div class="fb-share-button" data-href="https://www.facebook.com/Finsey-101336774850608/?__tn__=kC-R&amp;eid=ARC8ahdrFsmhIqNZ97cAmX6mS6m5AC2-RcbN8j5uzRgFp2CvZhwQWV9IvfSHZJ3CgZAMc-m3qtWnpv_1&amp;hc_ref=ARSK7c5a8gvX5S-JVOnmW8VT_KQIOWkLaPB93oNas3icWO2bm5NvTWaFTBefg6Gat5g&amp;ref=nf_target&amp;__xts__%5B0%5D=68.ARCdpSkXjpY84i-iXjly-RJOP7jwB_t6ywEIzYGVrOocLdU-3lB8CPXnZaE_2l02Bx9uKNz0cVkTEupXQcj383eARucVSeRLmZQZuKJER19oeyyaWWxMu-0qcqq96qM89_QeEeUC_ymz-dqfEjyDNDpyM--fhjOBn8D18-dkSzvPD5FHPcx5xjySI3SxqoAEMKbF1VIbMAO3oFEF8EztVEqCi9G7F_K200VsNPeZOxyZAsnezLM8F2y_FYTzlrLOhUC5MivvYX-e5Gn8enNSz7CBW1SEFMe3jHyYBZfjm0ZczfwQeBbIkxV3Rfw" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2FFinsey-101336774850608%2F%3F__tn__%3DkC-R%26eid%3DARC8ahdrFsmhIqNZ97cAmX6mS6m5AC2-RcbN8j5uzRgFp2CvZhwQWV9IvfSHZJ3CgZAMc-m3qtWnpv_1%26hc_ref%3DARSK7c5a8gvX5S-JVOnmW8VT_KQIOWkLaPB93oNas3icWO2bm5NvTWaFTBefg6Gat5g%26ref%3Dnf_target%26__xts__%255B0%255D%3D68.ARCdpSkXjpY84i-iXjly-RJOP7jwB_t6ywEIzYGVrOocLdU-3lB8CPXnZaE_2l02Bx9uKNz0cVkTEupXQcj383eARucVSeRLmZQZuKJER19oeyyaWWxMu-0qcqq96qM89_QeEeUC_ymz-dqfEjyDNDpyM--fhjOBn8D18-dkSzvPD5FHPcx5xjySI3SxqoAEMKbF1VIbMAO3oFEF8EztVEqCi9G7F_K200VsNPeZOxyZAsnezLM8F2y_FYTzlrLOhUC5MivvYX-e5Gn8enNSz7CBW1SEFMe3jHyYBZfjm0ZczfwQeBbIkxV3Rfw&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share on Facebook</a></div>
             </div>
             <div class="col-lg-3 col-sm-6" style="padding-top: 10px">
-              <a href="whatsapp://send?text=http://new-budget-planner.herokuapp.com/" data-action="share/whatsapp/share" class="btn btn-success whatsapp-font"><b><font-awesome-icon :icon="['fab', 'whatsapp']" />&nbsp; Share</b></a>
+              <a :href="whatsappText" data-action="share/whatsapp/share" class="btn btn-success whatsapp-font"><b><font-awesome-icon :icon="['fab', 'whatsapp']" />&nbsp; Share on Whatsapp</b></a>
             </div>
             <div class="col-lg-3"></div>
           </div>
@@ -123,7 +134,7 @@ export default {
           "answer": "All of the above."
         },
         {
-          "text": "Based on the 50/30/20 rule for allocating resources, which of the following percentages should be devoted to savings?",
+          "text": "Based on the 50/30/20 rule for allocating resources, which of the following percentages of after salary income should be devoted to savings?",
           "type": "mc",
           "answers": [
             "50",
@@ -134,15 +145,14 @@ export default {
           "answer": "20"
         },
         {
-          "text": "By budgeting you can ......",
+          "text": "I feel like my monthly after tax income is too low. I have too many loans to pay. What am I doing wrong?",
           "type": "mc",
           "answers": [
-            "Buy your essentials",
-            "Have a retirement plan",
-            "Saving for a family vacation",
-            "All of the above"
+            "I should start earning more",
+            "I should do a better budget planning",
+            "Continue spending all the income on loans"
           ],
-          "answer": "All of the above"
+          "answer": "I should do a better budget planning"
         },
         {
           "text": "Which of the following is NOT classified as a spending need?",
@@ -209,7 +219,9 @@ export default {
         }
       ],
       currentQuestion: 0,
-      answers: []
+      answers: [],
+      ad_client: process.env.VUE_APP_ADSENSE_PUB,
+      ad_slot: process.env.VUE_APP_ADSENSE_HORIZONTAL_SLOT
     }
   },
   created: function() {
@@ -286,6 +298,17 @@ export default {
     },
     showQuizOption() {
       this.showMessageOnPlanBudget = this.quiz.planned_before;
+    }
+  },
+  computed: {
+    whatsappScoreText() {
+      return "https://wa.me/?text=I+have+scored+" + (this.quiz.score * 10) + "%25+in+finsey+quiz.+Do+you+want+to+know+yours%3F+Click+http%3A%2F%2Ffinsey.in%2F%23%2Fquiz%0D%0A%0D%0Afinsey.+is+the+budget+planner+project+of+the+ideal+mind+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
+    },
+    whatsappText() {
+      return "https://wa.me/?text=finsey+is+the+budget+planner+project+by+an+ideal+mind+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.%0D%0A%0D%0AStart+planning+your+budget+%F0%9F%92%B0by+clicking+below+link%0D%0Ahttp%3A%2F%finsey.in%2F%0D%0A%0D%0A%0D%0AKindly+support+us+by+sharing+it+with+your+friends.";
+    },
+    fbScoreText() {
+      return "https://www.facebook.com/sharer/sharer.php?u=I+have+scored+" + (this.quiz.score * 10) + "%25+in+finsey+quiz.+Do+you+want+to+know+yours%3F+Click+http%3A%2F%finsey.in%2F%23%2Fquiz%0D%0A%0D%0Afinsey.+is+the+budget+planner+project+of+an+ideal+mind+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
     }
   },
   components: {

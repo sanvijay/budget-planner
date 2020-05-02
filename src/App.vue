@@ -33,6 +33,7 @@
           <b-nav-item :to="{ name: 'home' }">Home</b-nav-item>
           <b-nav-item :to="{ name: 'register' }">Sign Up</b-nav-item>
           <b-nav-item :to="{ name: 'login' }">Login</b-nav-item>
+          <b-nav-item :to="{ name: 'quiz' }">Quiz<span class="badge badge-primary" style="overflow: auto;">check this</span></b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
