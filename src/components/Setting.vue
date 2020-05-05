@@ -12,6 +12,7 @@
             :data-ad-client="ad_client"
             :data-ad-slot="ad_slot"
             data-ad-format="auto"
+            data-full-width-responsive="true"
           >
           </Adsense>
         </div>
