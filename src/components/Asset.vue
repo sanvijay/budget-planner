@@ -62,7 +62,7 @@
             :data-ad-client="ad_client"
             :data-ad-slot="ad_slot"
             data-ad-format="rectangle"
-            data-full-width-responsive="true"
+            :data-full-width-responsive="true"
           >
           </Adsense>
         </div>

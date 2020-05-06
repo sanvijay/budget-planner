@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="LeadImage">
-      <div class="image" style="background-image: url('img/backgroud.svg'), url('img/backgroud.svg');"></div>
+      <div class="image" style="background-image: url('img/background-old.svg'), url('img/background-white.svg');"></div>
       <div class="ie-hack-vertical"></div>
       <div class="ie-hack-horizontal"></div>
       <div class="triangle">
