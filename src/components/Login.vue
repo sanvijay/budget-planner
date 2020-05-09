@@ -33,6 +33,14 @@
               <b-button type="submit" variant="primary" class="btn-block">Login</b-button>
             </b-form>
 
+            <div class="or-text">
+              <span>OR</span>
+            </div>
+
+            <GoogleSignIn></GoogleSignIn>
+            <br><br>
+            <hr>
+
             <div class="form-group text-center">
               New User: <a href="#" @click="goToRegisterPage">Sign Up</a>
             </div>
@@ -47,6 +55,8 @@
 </template>
 
 <script>
+import GoogleSignIn from './login/GoogleSignIn.vue'
+
 export default {
   name: 'Login',
   data: function() {
@@ -91,6 +101,9 @@ export default {
     goToForgotPasswordPage: function() {
       this.$router.push({path: 'forgot-password', name: 'forgot-password'})
     },
+  },
+  components: {
+    GoogleSignIn
   }
 }
 </script>
@@ -102,5 +115,17 @@ export default {
 }
 .form-container {
   padding: 30px;
+}
+.or-text {
+   width: 100%; 
+   text-align: center; 
+   border-bottom: 1px solid #D3D3D3; 
+   line-height: 0.05em;
+   margin: 10px 0 20px; 
+} 
+
+.or-text span { 
+    background:#f8f9fa; 
+    padding:0 10px; 
 }
 </style>

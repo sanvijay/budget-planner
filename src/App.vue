@@ -76,13 +76,14 @@ export default {
   methods: {
     logout: function() {
       this.$http.delete('logout')
-        .catch(error => {
-          this.toast(error);
-        });
-
-      localStorage.removeItem('jwt');
-      localStorage.removeItem('user');
-      window.location.href = "/";
+      .then(response => {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('user');
+        window.location.href = "/";
+      })
+      .catch(error => {
+        this.toast(error);
+      });
     },
     toast: function(error) {
       var finalContent = null;

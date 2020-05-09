@@ -30,7 +30,7 @@ export default {
       answer: null
     }
   },
-  props:['question','question-number'],
+  props: ['question', 'question-number'],
   methods:{
     submitAnswer:function() {
       if(this.answer == null) { return; }
