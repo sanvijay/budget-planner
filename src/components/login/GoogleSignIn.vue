@@ -40,7 +40,7 @@ export default {
             }
           })
           .catch(error => {
-            this.$parent.toast(error);
+            this.$parent.$parent.toast(error);
           });
       } else {
         // There was an error.
