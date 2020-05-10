@@ -4,6 +4,9 @@
       <div class="row justify-content-center">
 
         <div class="col-md-3 col-sm-6 col-12 bg-light shadow-lg">
+          <div class="alert alert-primary" role="alert" v-if="showSuccessMessage">
+            Password Reset Successfully. Click <router-link :to="{ name: 'login' }">Sign in</router-link> and continue.
+          </div>
           <b-form @submit="handleSubmit" class="form-container">
             <b-form-group id="input-group-2">
               <b-form-input
@@ -29,7 +32,7 @@
           </b-form>
 
           <div class="form-group text-center">
-            Try <a href="#" @click="goToSignInPage">Sign In</a>
+            Try <router-link :to="{ name: 'login' }">Sign In</router-link>
           </div>
         </div>
       </div>
@@ -45,13 +48,11 @@
       return {
         reset_password_token : this.$route.query.reset_password_token,
         password : "",
-        password_confirmation : ""
+        password_confirmation : "",
+        showSuccessMessage: false
       }
     },
     methods: {
-      goToSignInPage: function() {
-        this.$router.push({path: 'login', name: 'login'})
-      },
       handleSubmit: function(e) {
         e.preventDefault()
 
@@ -60,7 +61,7 @@
             user: { reset_password_token: this.reset_password_token, password: this.password }
           })
           .then(response => {
-            this.$router.push('/login')
+            this.showSuccessMessage = true;
           })
           .catch(error => {
             this.$parent.toast(error);

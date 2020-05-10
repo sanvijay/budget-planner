@@ -12,6 +12,17 @@
           </Adsense>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-3 col-lg-3"></div>
+        <div class="col-sm-12 col-md-6 col-lg-6 bg-light shadow-lg">
+          Get your <router-link :to="{ name: 'register' }">finsey account</router-link> now for free.<br>
+          <br>
+        </div>
+        <div class="col-md-3 col-lg-3"></div>
+      </div>
+      <br>
+
       <div class="row">
         <div class="col-md-3 col-lg-3"></div>
         <div class="col-sm-12 col-md-6 col-lg-6 bg-light shadow-lg">
@@ -299,6 +310,7 @@ export default {
         });
     },
     showQuizOption() {
+      if(this.quiz.planned_before == null) { return; }
       this.showMessageOnPlanBudget = this.quiz.planned_before;
     }
   },

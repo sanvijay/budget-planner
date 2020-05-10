@@ -53,7 +53,7 @@
           <hr>
 
           <div class="form-group text-center">
-            Already a User: <a href="#" @click="goToSignInPage">Sign In</a>
+            Already a User: <router-link :to="{ name: 'login' }">Sign In</router-link>
           </div>
         </div>
       </div>
@@ -74,9 +74,6 @@ export default {
     }
   },
   methods: {
-    goToSignInPage: function() {
-      this.$router.push({path: 'login', name: 'login'})
-    },
     handleSubmit: function(e) {
       e.preventDefault();
 

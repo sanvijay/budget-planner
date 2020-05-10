@@ -26,18 +26,16 @@
     <meta property="og:image:height" content="620">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-165336463-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= process.env.VUE_APP_GOOGLE_ANALYTICS_KEY %>"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'UA-165336463-1');
+      gtag('config', '<%= process.env.VUE_APP_GOOGLE_ANALYTICS_KEY %>');
     </script>
   </head>
   <body>
-    <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v6.0&appId=562246027442389&autoLogAppEvents=1"></script>
     <noscript>
       <strong>We're sorry but finsey doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>

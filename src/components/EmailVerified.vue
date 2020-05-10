@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      Your email address has been successfully verified. Please login to access your account.
+      Your email address has been successfully verified. Please <router-link :to="{ name: 'login' }">login</router-link> to access your account.
     </p>
   </div>
 </template>
