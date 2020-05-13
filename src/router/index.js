@@ -22,13 +22,13 @@ Vue.use(VueRouter)
 let router = new VueRouter({
   routes: [
     { path: '/',            name: "home",        component: Home,        meta: { guest: true } },
-    { path: "/login",       name: "login",       component: Login,       meta: { guest: true } },
-    { path: "/register",    name: "register",    component: Register,    meta: { guest: true } },
+    { path: "/login",       name: "login",       component: Login,       meta: { guest: true, title: 'Login' } },
+    { path: "/register",    name: "register",    component: Register,    meta: { guest: true, title: 'Create your account' } },
+    { path: "/Quiz",        name: "quiz",        component: Quiz,        meta: { guest: true, title: 'Take up the challenge' } },
     { path: "/terms",       name: "terms",       component: Terms,       meta: { guest: true } },
-    { path: "/Quiz",        name: "quiz",        component: Quiz,        meta: { guest: true } },
 
     { path: "/summary",     name: "summary",     component: Summary,     meta: { requiresAuth: true } },
-    { path: "/dashboard",   name: "dashboard",   component: Dashboard,   meta: { requiresAuth: true } },
+    { path: "/dashboard",   name: "dashboard",   component: Dashboard,   meta: { requiresAuth: true, title: 'Dashboard' } },
     { path: "/setting",     name: "setting",     component: Setting,     meta: { requiresAuth: true } },
     { path: "/feedback",    name: "feedback",    component: Feedback,    meta: { requiresAuth: true } },
     { path: "/whatsnext",   name: "whatsnext",   component: WhatsNext,   meta: { requiresAuth: true } },
@@ -42,6 +42,9 @@ let router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+    if(to.meta.title == null) { document.title = "finsey. A Budget Planning Application" }
+    else { document.title = "finsey. " + to.meta.title; }
+
     if(to.matched.some(record => record.meta.requiresAuth)) {
         if (localStorage.getItem('jwt') == null) {
             next({
