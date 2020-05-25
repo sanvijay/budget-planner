@@ -43,7 +43,7 @@ export default {
             this.$parent.$parent.toast(error);
           });
       } else {
-        // There was an error.
+        this.$parent.$parent.toast("Login failed!");
       }
     },
   },
