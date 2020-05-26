@@ -21,8 +21,8 @@
             <img src="img/undraw_investing_7u74.svg" alt="Image" class="img-fluid img-absolute">
             <div class="row mb-4">
               <div class="col-lg-6 mr-auto">
-                <h1>Finally Achieve Financial Peace of Mind</h1>
-                <p class="mb-5">When you’re on top of your money, life is good. We help you effortlessly manage your finances in one place.</p>
+                <h1>A full stop to financial worries</h1>
+                <p class="mb-5">When you are looking for an expense manager, you actually need a budget planner. Managing without a plan will make the life harder. Finsey helps you to solve this problem seemlessly.</p>
                 <div>
                   <a href="#" @click="goToSignInPage" style="margin-right: 20px;color: white;">Sign In</a>
                   <a href="#" class="btn btn-primary mr-2 mb-2" @click="goToRegisterPage">Create an account</a>

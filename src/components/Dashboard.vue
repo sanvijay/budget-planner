@@ -972,10 +972,10 @@ export default {
           },
         ]
       },
-      view: 'actual',
+      view: 'planned',
       viewOptions: [
-        { value: 'actual', text: 'Expense Tracker' },
         { value: 'planned', text: 'Budget planning' },
+        { value: 'actual', text: 'Expense Tracker' },
         { value: 'monthly', text: 'Monthly Summary' },
         { value: 'graph', text: 'Graph View' },
       ],
