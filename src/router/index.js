@@ -25,7 +25,7 @@ let router = new VueRouter({
     { path: "/login",       name: "login",       component: Login,       meta: { guest: true, title: 'Login' } },
     { path: "/register",    name: "register",    component: Register,    meta: { guest: true, title: 'Create your account' } },
     { path: "/Quiz",        name: "quiz",        component: Quiz,        meta: { guest: true, title: 'Take up the challenge' } },
-    { path: "/terms",       name: "terms",       component: Terms,       meta: { guest: true } },
+    { path: "/terms",       name: "terms",       component: Terms,       meta: { guest: true, title: 'Terms and Condition' } },
 
     { path: "/summary",     name: "summary",     component: Summary,     meta: { requiresAuth: true } },
     { path: "/dashboard",   name: "dashboard",   component: Dashboard,   meta: { requiresAuth: true, title: 'Dashboard' } },
@@ -33,11 +33,11 @@ let router = new VueRouter({
     { path: "/feedback",    name: "feedback",    component: Feedback,    meta: { requiresAuth: true } },
     { path: "/whatsnext",   name: "whatsnext",   component: WhatsNext,   meta: { requiresAuth: true } },
 
-    { path: "/privacy-policy",         name: "privacy-policy",         component: PrivacyPolicy,        meta: { guest: true } },
-    { path: "/email-verified",         name: "email-verified",         component: EmailVerified,        meta: { guest: true } },
-    { path: "/reset-password",         name: "reset-password",         component: ResetPassword,        meta: { guest: true } },
-    { path: "/forgot-password",        name: "forgot-password",        component: ForgotPassword,       meta: { guest: true } },
-    { path: "/registeration-complete", name: "registeration-complete", component: RegistrationComplete, meta: { guest: true } },
+    { path: "/privacy-policy",         name: "privacy-policy",         component: PrivacyPolicy,        meta: { guest: true, title: 'Privacy Policy' } },
+    { path: "/email-verified",         name: "email-verified",         component: EmailVerified,        meta: { guest: true, title: 'Email Verified' } },
+    { path: "/reset-password",         name: "reset-password",         component: ResetPassword,        meta: { guest: true, title: 'Reset Your Password' } },
+    { path: "/forgot-password",        name: "forgot-password",        component: ForgotPassword,       meta: { guest: true, title: 'Forgot Password' } },
+    { path: "/registeration-complete", name: "registeration-complete", component: RegistrationComplete, meta: { guest: true, title: 'Registration Complete' } },
   ]
 })
 

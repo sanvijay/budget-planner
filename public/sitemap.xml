@@ -9,15 +9,19 @@
 
 <url>
   <loc>http://finsey.in/</loc>
-  <lastmod>2020-05-02T08:10:26+00:00</lastmod>
+  <lastmod>2020-05-28T08:10:26+00:00</lastmod>
 </url>
 <url>
-  <loc>http://finsey.in/#/quiz</loc>
-  <lastmod>2020-05-02T08:10:26+00:00</lastmod>
+  <loc>http://finsey.in/#/login</loc>
+  <lastmod>2020-05-28T08:10:26+00:00</lastmod>
 </url>
 <url>
   <loc>http://finsey.in/#/register</loc>
-  <lastmod>2020-05-02T08:10:26+00:00</lastmod>
+  <lastmod>2020-05-28T08:10:26+00:00</lastmod>
+</url>
+<url>
+  <loc>http://finsey.in/#/quiz</loc>
+  <lastmod>2020-05-28T08:10:26+00:00</lastmod>
 </url>
 
 </urlset>
