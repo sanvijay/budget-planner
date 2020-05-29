@@ -6,13 +6,13 @@ import BootstrapVue from 'bootstrap-vue'
 import Ads from 'vue-google-adsense'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faFacebook, faWhatsapp } from '@fortawesome/free-brands-svg-icons'
+import { faFacebook, faWhatsapp, faGooglePlay } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import LoadScript from 'vue-plugin-load-script';
  
 Vue.use(LoadScript);
 
-library.add(faFacebook, faWhatsapp)
+library.add(faFacebook, faWhatsapp, faGooglePlay)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

@@ -22,7 +22,7 @@
             <div class="row mb-4">
               <div class="col-lg-6 mr-auto">
                 <h1>A full stop to financial worries</h1>
-                <p class="mb-5">When you are looking for an expense manager, you actually need a budget planner. Managing without a plan will make the life harder. Finsey helps you to solve this problem seemlessly.</p>
+                <p class="mb-5">When you are looking for an expense manager, you actually need a budget planner. Managing without a plan will make life harder. Finsey helps you to solve this problem seamlessly.</p>
                 <div>
                   <a href="#" @click="goToSignInPage" style="margin-right: 20px;color: white;">Sign In</a>
                   <a href="#" class="btn btn-primary mr-2 mb-2" @click="goToRegisterPage">Create an account</a>
@@ -58,7 +58,29 @@
       </div>
     </div>
 
-    <div class="site-section overlay" id="contact-section">
+    <div class="site-section overlay">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-12 text-center">
+            <h2 class="section-title mb-3">Download our mobile app</h2>
+            <p class="mb-4">We want to make sure that you are served well. We are trying to build our app across platforms. Click to download our alpha version.</p>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-7 mb-5">
+            <div class="row form-group">
+              <div class="col-md-12">
+                <a class="btn btn-primary mr-2 mb-2" style="border-radius: 3px" href="https://play.google.com/store/apps/details?id=com.fireflies.finsey" target="blank">
+                  <font-awesome-icon :icon="['fab', 'google-play']" /> Download
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section overlay">
       <div class="container">
         <div class="row mb-5">
           <div class="col-12 text-center">
@@ -108,7 +130,7 @@
       </div>
     </div>
 
-    <div class="site-section" id="about-section">
+    <div class="site-section">
       <div class="container">
         <div class="row mb-5">
           <div class="col-12 text-center">
