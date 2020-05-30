@@ -214,8 +214,8 @@
             <tr>
               <td class="truncate left-sticky bg-light">
                 <form class="add-category-form">
-                  <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
-                  <button class="add-category-button btn btn-primary" @click="addSubCategory(category)" v-if="newCategoryShowButton[category]">+</button>
+                  <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter.prevent="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
+                  <button class="add-category-button btn btn-primary" @click.prevent="addSubCategory(category)" v-if="newCategoryShowButton[category]">+</button>
                 </form>
               </td>
               <td v-for="empty in monthYear" :key="empty[0]"></td>
