@@ -164,13 +164,7 @@
               <th v-for="month in monthYear" :key="month[0]" class="bg-light top-sticky"><b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b></th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td style="border: 2px solid Gray;" class="bg-light"></td>
-              <td class="truncate bg-light left-sticky" title="Prev. Month Bal.">Prev. Month Bal.</td>
-              <td v-for="empty in monthYear" :key="empty[0]">&#8377; {{ "0" }}</td>
-            </tr>
-          </tbody>
+
           <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
             <tr v-if="subCategories.length == 0">
               <td rowspan="3" style="border: 2px solid Gray;" class="bg-light">
@@ -264,6 +258,20 @@
           <tbody>
             <tr>
               <td></td>
+              <td class="truncate bg-light left-sticky" title="Prev. Month Bal."><b>Prev. Month Bal.</b></td>
+              <td
+                v-if="monthlyBudget[selectedYear + 1] != null && monthlyBudget[selectedYear + 1][3] != null"
+                class="truncate"
+                v-for="month in monthYear"
+                :key="month[0]"
+                @click="clickPrevBalUpdateModal(month[1], month[0])"
+              >
+                <div v-if="view == 'planned'">&#8377; {{ monthlyBudget[month[1]][month[0]].prev_month_bal_planned }}</div>
+                <div v-if="view == 'actual'">&#8377; {{ monthlyBudget[month[1]][month[0]].prev_month_bal_actual }}</div>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
               <td class="bg-light left-sticky"><b>Total Inflow</b></td>
               <td v-for="month in monthYear" :key="month[0]" class="truncate">
                 &#8377; {{ totalInflow(month[0], month[1]) }}
@@ -289,6 +297,37 @@
         </table>
       </div>
     </div></div>
+
+    <b-modal v-model="showPrevBalUpdateModal" centered hide-footer hide-header>
+      <p class="h5 float-left">
+        Update Balance of Previous month of {{ monthFromInt(addPrevBalUpdateForm.month - 1) }} / {{ addPrevBalUpdateForm.year }}
+      </p>
+      <br><hr>
+
+      <b-form @submit="submitPrevMonthBalModal" @reset="resetPrevMonthBalModal()">
+
+        <b-form-group id="input-group-4" label="Amount:" label-for="input-4" v-if="view == 'planned'">
+          <b-form-input
+            id="input-4"
+            v-model="addPrevBalUpdateForm.prev_month_bal_planned"
+            required
+            placeholder="Enter Amount"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group id="input-group-4" label="Amount:" label-for="input-4" v-if="view == 'actual'">
+          <b-form-input
+            id="input-4"
+            v-model="addPrevBalUpdateForm.prev_month_bal_actual"
+            required
+            placeholder="Enter Amount"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-button type="submit" variant="primary" style="margin-right: 5px;">Submit</b-button> 
+        <b-button type="reset" variant="light">Cancel</b-button>
+      </b-form>
+    </b-modal>
 
     <div class="right-bottom-fixed" v-if="view == 'planned'">
       <b-button class="add-recurring-plan" @click="showRecurringPlanModal = !showRecurringPlanModal">+</b-button>
@@ -472,6 +511,35 @@ export default {
           }
 
           this.resetRecurringPlanModal();
+        })
+        .catch(error => {
+          this.$parent.toast(error);
+        });
+    },
+    clickPrevBalUpdateModal: function(year, month) {
+      this.addPrevBalUpdateForm = {"year": year, "month": month};
+      this.showPrevBalUpdateModal = !this.showPrevBalUpdateModal;
+    },
+    resetPrevMonthBalModal: function() {
+      this.addPrevBalUpdateForm = {};
+      this.showPrevBalUpdateModal = !this.showPrevBalUpdateModal;
+    },
+    submitPrevMonthBalModal: function(e) {
+      e.preventDefault();
+      if(this.addPrevBalUpdateForm.prev_month_bal_planned == null && this.addPrevBalUpdateForm.prev_month_bal_actual == null) { return; }
+      if(this.addPrevBalUpdateForm.prev_month_bal_planned != null && this.addPrevBalUpdateForm.prev_month_bal_actual != null) { return; }
+
+      var month = this.addPrevBalUpdateForm.month;
+      var year = this.addPrevBalUpdateForm.year;
+      var formattedMonth = ("0" + month).slice(-2);
+
+      this.$http.put('users/' + localStorage.getItem('user') + '/monthly_budgets/' + formattedMonth + year, {
+          "monthly_budget": this.addPrevBalUpdateForm
+        })
+        .then(response => {
+          if(this.addPrevBalUpdateForm.prev_month_bal_planned != null) { this.monthlyBudget[year][month].prev_month_bal_planned = this.addPrevBalUpdateForm.prev_month_bal_planned; }
+          if(this.addPrevBalUpdateForm.prev_month_bal_actual != null) { this.monthlyBudget[year][month].prev_month_bal_actual = this.addPrevBalUpdateForm.prev_month_bal_actual; }
+          this.resetPrevMonthBalModal();
         })
         .catch(error => {
           this.$parent.toast(error);
@@ -697,6 +765,9 @@ export default {
 
             if (this.monthlyBudget[month[1]][month[0]] == null) { this.$set(this.monthlyBudget[month[1]], month[0], {}) }
             if (monthlyBudget[month[1]][month[0]] == null) { monthlyBudget[month[1]][month[0]] = {} }
+
+            this.monthlyBudget[month[1]][month[0]]["prev_month_bal_actual"] = monthlyBudget[month[1]][month[0]].prev_month_bal_actual;
+            this.monthlyBudget[month[1]][month[0]]["prev_month_bal_planned"] = monthlyBudget[month[1]][month[0]].prev_month_bal_planned;
 
             for (var category in this.categories) {
               if(this.monthlyBudget[month[1]][month[0]][category] == null) { this.$set(this.monthlyBudget[month[1]][month[0]], category, {}) }
@@ -1041,6 +1112,8 @@ export default {
       },
       showAddExpenseModal: false,
       addExpenseForm: { "spent_on": (new Date()).toISOString().slice(0,10) },
+      showPrevBalUpdateModal: false,
+      addPrevBalUpdateForm: {},
       showRecurringPlanModal: false,
       addRecurringPlanForm: { "from": (new Date()).toISOString().slice(0,10) },
       viewLogsModal: false,
