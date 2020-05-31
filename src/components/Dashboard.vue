@@ -214,7 +214,7 @@
             <tr>
               <td class="truncate left-sticky bg-light">
                 <form class="add-category-form">
-                  <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter.prevent="addSubCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
+                  <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter.prevent="showAddCategoryButton(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
                   <button class="add-category-button btn btn-primary" @click.prevent="addSubCategory(category)" v-if="newCategoryShowButton[category]">+</button>
                 </form>
               </td>
@@ -581,7 +581,7 @@ export default {
       if(incomeSubTotal == 0) { return 0; }
 
       var percentFromIncome = incomeSubTotal * (this.percentOfCategory(category) / 100);
-      return percentFromIncome;
+      return percentFromIncome.toFixed(2);
     },
     percentOfCategory: function(category) {
       var snake_case_category = this.camelToSnake(category);
@@ -766,7 +766,6 @@ export default {
         })
         .catch(error => {
           this.$parent.toast(error);
-          this.newCategoryShowButton[category] = false;
         });
     },
     findCategoryById: function(id) {

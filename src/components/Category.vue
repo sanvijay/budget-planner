@@ -69,7 +69,7 @@
               <tr>
                 <td class="truncate left-sticky bg-light">
                   <form class="add-category-form">
-                    <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter="addCategory(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
+                    <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter.prevent="showAddCategoryButton(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
                     <button class="add-category-button btn btn-primary" @click="addCategory(category)" v-if="newCategoryShowButton[category]">+</button>
                   </form>
                 </td>
