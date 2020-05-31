@@ -69,7 +69,11 @@
                   <td> - </td>
                   <td> - </td>
                 </tr>
-                <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id" v-if="monthlyBudget[category] != null && monthlyBudget[category][subCategory.id][selectedYear] != null && monthlyBudget[category][subCategory.id][selectedYear + 1] != null">
+                <tr
+                  v-for="(subCategory, idx) in subCategories"
+                  :key="subCategory.id"
+                  v-if="monthlyBudget[selectedYear + 1] != null && monthlyBudget[selectedYear + 1][3] != null && monthlyBudget[selectedYear + 1][3][category] != null && monthlyBudget[selectedYear + 1][3][category][subCategory.id] != null"
+                >
                   <td :rowspan="subCategories.length + 2" v-if="idx == 0" style="border: 2px solid Gray;" class="bg-light">
                     <b>{{ category }}</b>
                   </td>
@@ -77,9 +81,9 @@
                     {{ subCategory.title }}
                   </td>
 
-                  <td>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned }}</td>
-                  <td>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</td>
-                  <td>&#8377; {{ (monthlyBudget[category][subCategory.id][month[1]][month[0]].planned - monthlyBudget[category][subCategory.id][month[1]][month[0]].actual).toFixed(2) }}</td>
+                  <td>&#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].planned }}</td>
+                  <td>&#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].actual }}</td>
+                  <td>&#8377; {{ (monthlyBudget[month[1]][month[0]][category][subCategory.id].planned - monthlyBudget[month[1]][month[0]][category][subCategory.id].actual).toFixed(2) }}</td>
                 </tr>
                 <tr>
                   <td class="bg-light truncate"> <b>Sub-Total</b> </td>
@@ -160,6 +164,13 @@
               <th v-for="month in monthYear" :key="month[0]" class="bg-light top-sticky"><b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b></th>
             </tr>
           </thead>
+          <tbody>
+            <tr>
+              <td style="border: 2px solid Gray;" class="bg-light"></td>
+              <td class="truncate bg-light left-sticky" title="Prev. Month Bal.">Prev. Month Bal.</td>
+              <td v-for="empty in monthYear" :key="empty[0]">&#8377; {{ "0" }}</td>
+            </tr>
+          </tbody>
           <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
             <tr v-if="subCategories.length == 0">
               <td rowspan="3" style="border: 2px solid Gray;" class="bg-light">
@@ -178,36 +189,47 @@
                 {{ subCategory.title }}
               </td>
 
-              <td class="truncate" v-if="view == 'planned' && monthlyBudget[category] != null && monthlyBudget[category][subCategory.id][selectedYear] != null && monthlyBudget[category][subCategory.id][selectedYear + 1] != null" v-for="month in monthYear" :key="month[0]" @click="toggleEditingMoney(monthlyBudget[category][subCategory.id][month[1]][month[0]])" :class="{ 'error-cell': erroredCell(monthlyBudget[category][subCategory.id][month[1]][month[0]]) }">
-                <div v-if="!editingCell(monthlyBudget[category][subCategory.id][month[1]][month[0]])">
-                  <div v-if="monthlyBudget[category][subCategory.id][month[1]][month[0]]">&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].planned }}</div>
+              <td
+                class="truncate"
+                v-if="view == 'planned' && monthlyBudget[selectedYear + 1] != null && monthlyBudget[selectedYear + 1][3] != null && monthlyBudget[selectedYear + 1][3][category] != null && monthlyBudget[selectedYear + 1][3][category][subCategory.id] != null"
+                v-for="month in monthYear"
+                :key="month[0]"
+                @click="toggleEditingMoney(monthlyBudget[month[1]][month[0]][category][subCategory.id])"
+                :class="{ 'error-cell': erroredCell(monthlyBudget[month[1]][month[0]][category][subCategory.id]) }"
+              >
+                <div v-if="!editingCell(monthlyBudget[month[1]][month[0]][category][subCategory.id])">
+                  <div v-if="monthlyBudget[month[1]][month[0]][category][subCategory.id]">&#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].planned }}</div>
                 </div>
-                <div v-if="editingCell(monthlyBudget[category][subCategory.id][month[1]][month[0]])">
-                  <input v-if="monthlyBudget[category][subCategory.id][month[1]][month[0]]" class="form-control input-sm" @keyup.esc="cancelEditingMoney(monthlyBudget[category][subCategory.id][month[1]][month[0]])" @keyup.enter="$event.target.blur()" @blur="doneEditingMoney(monthlyBudget[category][subCategory.id][month[1]][month[0]], month[0], month[1], subCategory.id)" v-focus type="text" v-model="monthlyBudget[category][subCategory.id][month[1]][month[0]].planned" />
+                <div v-if="editingCell(monthlyBudget[month[1]][month[0]][category][subCategory.id])">
+                  <input v-if="monthlyBudget[month[1]][month[0]][category][subCategory.id]" class="form-control input-sm" @keyup.esc="cancelEditingMoney(monthlyBudget[month[1]][month[0]][category][subCategory.id])" @keyup.enter="$event.target.blur()" @blur="doneEditingMoney(monthlyBudget[month[1]][month[0]][category][subCategory.id], month[0], month[1], subCategory.id)" v-focus type="text" v-model="monthlyBudget[month[1]][month[0]][category][subCategory.id].planned" />
                 </div>
               </td>
 
-              <td v-if="view == 'actual' && monthlyBudget[category] != null && monthlyBudget[category][subCategory.id][selectedYear] != null && monthlyBudget[category][subCategory.id][selectedYear + 1] != null" v-for="month in monthYear" :key="month[0]">
+              <td
+                v-if="view == 'actual' && monthlyBudget[selectedYear + 1] != null && monthlyBudget[selectedYear + 1][3] != null && monthlyBudget[selectedYear + 1][3][category] != null && monthlyBudget[selectedYear + 1][3][category][subCategory.id] != null"
+                v-for="month in monthYear"
+                :key="month[0]"
+              >
 
-                <div v-if="monthlyBudget[category][subCategory.id][month[1]][month[0]].logs.length > 0">
-                  <b-link class="link-as-text" :id="monthlyBudget[category][subCategory.id][month[1]][month[0]].id">
-                    &#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}
+                <div v-if="monthlyBudget[month[1]][month[0]][category][subCategory.id].logs.length > 0">
+                  <b-link class="link-as-text" :id="monthlyBudget[month[1]][month[0]][category][subCategory.id].id">
+                    &#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].actual }}
                   </b-link>
 
-                  <b-popover variant="dark" triggers="focus" :target="monthlyBudget[category][subCategory.id][month[1]][month[0]].id" :title="plannedTitle(monthlyBudget[category][subCategory.id][month[1]][month[0]].planned)">
+                  <b-popover variant="dark" triggers="focus" :target="monthlyBudget[month[1]][month[0]][category][subCategory.id].id" :title="plannedTitle(monthlyBudget[month[1]][month[0]][category][subCategory.id].planned)">
                     <table border="2">
                       <tr>
                         <th>Description</th>
                         <th>Value</th>
                       </tr>
-                      <tr v-for="log in monthlyBudget[category][subCategory.id][month[1]][month[0]].logs" :key="log._id.$oid">
+                      <tr v-for="log in monthlyBudget[month[1]][month[0]][category][subCategory.id].logs" :key="log._id.$oid">
                         <td>{{ log.description }}</td>
                         <td>{{ log.value }}</td>
                       </tr>
                     </table>
                   </b-popover>
                 </div>
-                <div v-else>&#8377; {{ monthlyBudget[category][subCategory.id][month[1]][month[0]].actual }}</div>
+                <div v-else>&#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].actual }}</div>
               </td>
             </tr>
 
@@ -441,11 +463,13 @@ export default {
             var month = allMonths[index][1];
             var year = allMonths[index][0];
 
-            if(this.monthlyBudget[category][this.addRecurringPlanForm.category_id][year] != null && this.monthlyBudget[category][this.addRecurringPlanForm.category_id][year][month] != null) {
-              this.monthlyBudget[category][this.addRecurringPlanForm.category_id][year][month].planned = parseFloat(this.addRecurringPlanForm.value);
-            }
-          }
+            if(this.monthlyBudget[year] == null) { this.$set(this.monthlyBudget, year, {}) }
+            if(this.monthlyBudget[year][month] == null) { this.$set(this.monthlyBudget[year], month, {}) }
+            if(this.monthlyBudget[year][month][category] == null) { this.$set(this.monthlyBudget[year][month], category, {}) }
 
+            this.$set(this.monthlyBudget[year][month][category], this.addRecurringPlanForm.category_id, {});
+            this.monthlyBudget[year][month][category][this.addRecurringPlanForm.category_id].planned = parseFloat(this.addRecurringPlanForm.value);
+          }
 
           this.resetRecurringPlanModal();
         })
@@ -488,15 +512,15 @@ export default {
           "actual_cash_flow_log": this.addExpenseForm
         })
         .then(response => {
-          if(this.monthlyBudget[category][this.addExpenseForm.category_id][year] == null || this.monthlyBudget[category][this.addExpenseForm.category_id][year][month] == null) {
+          if(this.monthlyBudget[year] == null || this.monthlyBudget[year][month] == null || this.monthlyBudget[year][month][category] == null || this.monthlyBudget[year][month][category][this.addExpenseForm.category_id] == null) {
             this.showAddExpenseModal = !this.showAddExpenseModal;
             return;
           }
-          this.monthlyBudget[category][this.addExpenseForm.category_id][year][month].actual += parseFloat(this.addExpenseForm.value);
+          this.monthlyBudget[year][month][category][this.addExpenseForm.category_id].actual += parseFloat(this.addExpenseForm.value);
           var temp = this.addExpenseForm;
           temp._id = {};
           temp._id.$oid = response.data._id.$oid;
-          this.monthlyBudget[category][this.addExpenseForm.category_id][year][month].logs.push(this.addExpenseForm);
+          this.monthlyBudget[year][month][category][this.addExpenseForm.category_id].logs.push(this.addExpenseForm);
 
           var temp_cat_id = temp.category_id;
           temp.category_id = {};
@@ -504,7 +528,6 @@ export default {
 
           if(this.monthlyLogs[year] == null) { this.$set(this.monthlyLogs, year, {}) }
           if(this.monthlyLogs[year][month] == null) { this.monthlyLogs[year][month] = [] }
-
 
           var idx = 0;
 
@@ -558,12 +581,12 @@ export default {
     subTotal: function(category, month, year) {
       var total = 0;
 
-      for(var subCategory in this.monthlyBudget[category]) {
-        if(this.monthlyBudget[category][subCategory][year] != null && this.monthlyBudget[category][subCategory][year][month] != null) {
+      if(this.monthlyBudget[year] != null && this.monthlyBudget[year][month] != null && this.monthlyBudget[year][month][category] != null) {
+        for(var subCategory in this.monthlyBudget[year][month][category]) {
           if(this.view == 'planned') {
-            total += parseFloat(this.monthlyBudget[category][subCategory][year][month].planned);
+            total += parseFloat(this.monthlyBudget[year][month][category][subCategory].planned);
           } else {
-            total += parseFloat(this.monthlyBudget[category][subCategory][year][month].actual);
+            total += parseFloat(this.monthlyBudget[year][month][category][subCategory].actual);
           }
         }
       }
@@ -598,12 +621,12 @@ export default {
     subTotalByType: function(category, view, month, year) {
       var total = 0;
 
-      for(var subCategory in this.monthlyBudget[category]) {
-        if(this.monthlyBudget[category][subCategory][year] != null && this.monthlyBudget[category][subCategory][year][month] != null) {
+      if(this.monthlyBudget[year] != null && this.monthlyBudget[year][month] != null && this.monthlyBudget[year][month][category] != null) {
+        for(var subCategory in this.monthlyBudget[year][month][category]) {
           if(view == 'planned') {
-            total += parseFloat(this.monthlyBudget[category][subCategory][year][month].planned);
+            total += parseFloat(this.monthlyBudget[year][month][category][subCategory].planned);
           } else {
-            total += parseFloat(this.monthlyBudget[category][subCategory][year][month].actual);
+            total += parseFloat(this.monthlyBudget[year][month][category][subCategory].actual);
           }
         }
       }
@@ -665,27 +688,29 @@ export default {
           var monthlyBudget = response.data;
           var selectedYear = this.selectedYear;
 
-          for (var category in this.categories) {
-            if(this.monthlyBudget[category] == null) { this.$set(this.monthlyBudget, category, {}) }
-            if(monthlyBudget[category] == null) { monthlyBudget[category] = {} }
+          var monthYear = this.monthYear;
+          for (var i = 0; i < monthYear.length; i++) {
+            var month = monthYear[i];
 
-            for (var subCategory of this.categories[category]) {
-              if(this.monthlyBudget[category][subCategory.id] == null) { this.$set(this.monthlyBudget[category], subCategory.id, {}) }
-              if(monthlyBudget[category][subCategory.id] == null) { monthlyBudget[category][subCategory.id] = {} }
+            if (this.monthlyBudget[month[1]] == null) { this.$set(this.monthlyBudget, month[1], {}) }
+            if (monthlyBudget[month[1]] == null) { monthlyBudget[month[1]] = {} }
 
-              var monthYear = this.monthYear;
-              for(var i = 0; i < monthYear.length; i++) {
-                var month = monthYear[i];
+            if (this.monthlyBudget[month[1]][month[0]] == null) { this.$set(this.monthlyBudget[month[1]], month[0], {}) }
+            if (monthlyBudget[month[1]][month[0]] == null) { monthlyBudget[month[1]][month[0]] = {} }
 
-                if(this.monthlyBudget[category][subCategory.id][month[1]] == null) { this.$set(this.monthlyBudget[category][subCategory.id], month[1], {}) }
-                if(monthlyBudget[category][subCategory.id][month[1]] == null) { monthlyBudget[category][subCategory.id][month[1]] = {} }
+            for (var category in this.categories) {
+              if(this.monthlyBudget[month[1]][month[0]][category] == null) { this.$set(this.monthlyBudget[month[1]][month[0]], category, {}) }
+              if(monthlyBudget[month[1]][month[0]][category] == null) { monthlyBudget[month[1]][month[0]][category] = {} }
 
-                if(monthlyBudget[category][subCategory.id][month[1]][month[0]] == null) {
-                  this.$set(this.monthlyBudget[category][subCategory.id][month[1]], month[0], { "planned": 0, "editing": false, "error": false, "actual": 0, "id": Math.random().toString(36), "logs": [] })
+              for (var subCategory of this.categories[category]) {
+                if (monthlyBudget[month[1]][month[0]][category][subCategory.id] == null) {
+
+                  this.$set(this.monthlyBudget[month[1]][month[0]][category], subCategory.id, { "planned": 0, "editing": false, "error": false, "actual": 0, "id": Math.random().toString(36), "logs": [] })
+
                 } else {
-                  monthlyBudget[category][subCategory.id][month[1]][month[0]]["editing"] = false
-                  monthlyBudget[category][subCategory.id][month[1]][month[0]]["error"] = false
-                  this.$set(this.monthlyBudget[category][subCategory.id][month[1]], month[0], monthlyBudget[category][subCategory.id][month[1]][month[0]])
+                  monthlyBudget[month[1]][month[0]][category][subCategory.id]["editing"] = false;
+                  monthlyBudget[month[1]][month[0]][category][subCategory.id]["error"] = false;
+                  this.$set(this.monthlyBudget[month[1]][month[0]][category], subCategory.id, monthlyBudget[month[1]][month[0]][category][subCategory.id]);
                 }
               }
             }
@@ -754,11 +779,12 @@ export default {
           var monthYear = this.monthYear;
           for(var i = 0; i < monthYear.length; i++) {
             var month = monthYear[i];
-            if(temp[month[1].toString()] == null) { temp[month[1].toString()] = {} }
-            temp[month[1].toString()][month[0].toString()] = { "planned": 0, "editing": false, "actual": 0, "logs": [], "id": Math.random().toString(36) }
-          }
 
-          this.$set(this.monthlyBudget[category], response.data.id, temp);
+            if (this.monthlyBudget[month[1]] == null) { this.$set(this.monthlyBudget, month[1], {}) }
+            if (this.monthlyBudget[month[1]][month[0]] == null) { this.$set(this.monthlyBudget[month[1]], month[0], {}) }
+            if (this.monthlyBudget[month[1]][month[0]][category] == null) { this.$set(this.monthlyBudget[month[1]][month[0]], category, {}) }
+            this.$set(this.monthlyBudget[month[1]][month[0]][category], response.data.id, { "planned": 0, "editing": false, "actual": 0, "logs": [], "id": Math.random().toString(36) });
+          }
 
           this.categories[category].push(response.data);
           this.newCategory[category] = '';
@@ -786,9 +812,9 @@ export default {
           var deleteFromArray = this.monthlyLogs[year][month];
           this.monthlyLogs[year][month] = deleteFromArray.filter(function(value, index, arr) { return value._id.$oid != log._id.$oid; });
 
-          var deleteFromArray2 = this.monthlyBudget[temp_cat[1]][log.category_id.$oid][year][month].logs;
-          this.monthlyBudget[temp_cat[1]][log.category_id.$oid][year][month].actual -= parseFloat(log.value);
-          this.monthlyBudget[temp_cat[1]][log.category_id.$oid][year][month].logs = deleteFromArray2.filter(function(value, index, arr) { return value._id.$oid != log._id.$oid; });
+          var deleteFromArray2 = this.monthlyBudget[year][month][temp_cat[1]][log.category_id.$oid].logs;
+          this.monthlyBudget[year][month][temp_cat[1]][log.category_id.$oid].actual -= parseFloat(log.value);
+          this.monthlyBudget[year][month][temp_cat[1]][log.category_id.$oid].logs = deleteFromArray2.filter(function(value, index, arr) { return value._id.$oid != log._id.$oid; });
         })
         .catch(error => {
           this.$parent.toast(error);
@@ -816,11 +842,17 @@ export default {
       for(var category of categories) {
         if(this.categories[category] == null) { continue; }
         for(var subCategory of this.categories[category]) {
-          if(this.monthlyBudget[subCategory.type][subCategory.id][this.percentageSplitMonth[1]] == null) { continue; }
+          if(
+            this.monthlyBudget[this.percentageSplitMonth[1]] == null ||
+            this.monthlyBudget[this.percentageSplitMonth[1]][this.percentageSplitMonth[0]] == null ||
+            this.monthlyBudget[this.percentageSplitMonth[1]][this.percentageSplitMonth[0]][subCategory.type] == null ||
+            this.monthlyBudget[this.percentageSplitMonth[1]][this.percentageSplitMonth[0]][subCategory.type][subCategory.id] == null) {
+            continue;
+          }
 
           allLabels.push(subCategory.title);
-          allPlannedData.push(this.monthlyBudget[subCategory.type][subCategory.id][this.percentageSplitMonth[1]][this.percentageSplitMonth[0]].planned);
-          allActualData.push(this.monthlyBudget[subCategory.type][subCategory.id][this.percentageSplitMonth[1]][this.percentageSplitMonth[0]].actual);
+          allPlannedData.push(this.monthlyBudget[this.percentageSplitMonth[1]][this.percentageSplitMonth[0]][subCategory.type][subCategory.id].planned);
+          allActualData.push(this.monthlyBudget[this.percentageSplitMonth[1]][this.percentageSplitMonth[0]][subCategory.type][subCategory.id].actual);
 
           var color = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];
           allBackgroundColor.push('rgba(' + color[0] + ', ' + color[1] + ', ' + color[2] + ', 0.2)');
@@ -889,7 +921,7 @@ export default {
       if(this.graphYearlyCategory == null || this.monthlyBudget == null || this.monthlyBudget == {}) { return []; }
       var arr = [];
       for(var month of this.monthYear) {
-        arr.push(this.monthlyBudget[this.graphYearlyCategory.category][this.graphYearlyCategory.subCategory][month[1]][month[0]].planned);
+        arr.push(this.monthlyBudget[month[1]][month[0]][this.graphYearlyCategory.category][this.graphYearlyCategory.subCategory].planned);
       }
       return arr;
     },
@@ -897,7 +929,7 @@ export default {
       if(this.graphYearlyCategory == null || this.monthlyBudget == null || this.monthlyBudget == {}) { return []; }
       var arr = [];
       for(var month of this.monthYear) {
-        arr.push(this.monthlyBudget[this.graphYearlyCategory.category][this.graphYearlyCategory.subCategory][month[1]][month[0]].actual);
+        arr.push(this.monthlyBudget[month[1]][month[0]][this.graphYearlyCategory.category][this.graphYearlyCategory.subCategory].actual);
       }
       return arr;
     },
