@@ -284,7 +284,7 @@
                 &#8377; {{ totalOutflow(month[0], month[1]) }}
               </td>
             </tr>
-            <tr>
+            <tr v-if="monthlyBudget[selectedYear + 1] != null && monthlyBudget[selectedYear + 1][3] != null">
               <td></td>
               <td class="bg-light left-sticky"><b>Total Balance</b></td>
               <td v-for="month in monthYear" :key="month[0]" class="truncate" :class="{red: totalBalance(month[0], month[1]) < 0, green: totalBalance(month[0], month[1]) >= 0}">
@@ -643,8 +643,17 @@ export default {
         this.subTotal("EquityInvestment", month, year)
       ).toFixed(2);
     },
-    totalBalance: function(month, year){
-      return (this.totalInflow(month, year) - this.totalOutflow(month, year)).toFixed(2);
+    prevMonthBal: function(month, year) {
+      if(this.view == 'planned') {
+        return parseFloat(this.monthlyBudget[year][month].prev_month_bal_planned);
+      } else {
+        return parseFloat(this.monthlyBudget[year][month].prev_month_bal_actual);
+      }
+    },
+    totalBalance: function(month, year) {
+      var difference = this.totalInflow(month, year) - this.totalOutflow(month, year);
+      var prevMonthBal = this.prevMonthBal(month, year);
+      return (prevMonthBal + difference);
     },
     subTotal: function(category, month, year) {
       var total = 0;
