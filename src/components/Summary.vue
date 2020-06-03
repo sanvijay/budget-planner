@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
-          <Profile :showAd="true" />
+          <Profile :completeSetup="true" />
           <br>
           <Goal />
           <br>

@@ -518,6 +518,12 @@ export default {
     },
     clickPrevBalUpdateModal: function(year, month) {
       this.addPrevBalUpdateForm = {"year": year, "month": month};
+      if(this.view == 'planned') {
+        this.addPrevBalUpdateForm.prev_month_bal_planned = this.monthlyBudget[year][month].prev_month_bal_planned;
+      } else if (this.view == 'actual') {
+        this.addPrevBalUpdateForm.prev_month_bal_actual = this.monthlyBudget[year][month].prev_month_bal_actual;
+      }
+
       this.showPrevBalUpdateModal = !this.showPrevBalUpdateModal;
     },
     resetPrevMonthBalModal: function() {

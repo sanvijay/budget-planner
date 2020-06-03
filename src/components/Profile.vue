@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <div :class="{ 'col-md-8': showAd, 'col-md-12': !showAd }">
+      <div :class="{ 'col-md-8': completeSetup, 'col-md-12': !completeSetup }">
         <p class="h5 float-left">
           User Profile
         </p>
@@ -76,6 +76,10 @@
               </th>
               <td><input class="form-control input-sm" type="text" v-model="user_profile.emergency_corpus"></td>
             </tr>
+            <tr v-if="completeSetup">
+              <th>Send Reminder Email</th>
+              <td><b-form-checkbox v-model="user_profile.month_end_reminder" value="true" unchecked-value="false" /></td>
+            </tr>
             <tr>
               <td></td>
               <td><button class="btn btn-primary form-control" @click="saveProfile">Save</button></td>
@@ -83,7 +87,7 @@
           </table>
         </div>
       </div>
-      <div :class="{ 'col-md-4': showAd }">
+      <div :class="{ 'col-md-4': completeSetup }">
         <div style="min-width: 250px">
           <Adsense
             :data-ad-client="ad_client"
@@ -102,7 +106,7 @@
 export default {
   name: 'Profile',
   props: {
-    showAd: { type: Boolean, default: false }
+    completeSetup: { type: Boolean, default: false }
   },
   data: function() {
     return {

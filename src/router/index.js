@@ -27,11 +27,11 @@ let router = new VueRouter({
     { path: "/Quiz",        name: "quiz",        component: Quiz,        meta: { guest: true, title: 'Take up the challenge' } },
     { path: "/terms",       name: "terms",       component: Terms,       meta: { guest: true, title: 'Terms and Condition' } },
 
-    { path: "/summary",     name: "summary",     component: Summary,     meta: { requiresAuth: true } },
+    { path: "/summary",     name: "summary",     component: Summary,     meta: { requiresAuth: true, title: 'Summary' } },
     { path: "/dashboard",   name: "dashboard",   component: Dashboard,   meta: { requiresAuth: true, title: 'Dashboard' } },
-    { path: "/setting",     name: "setting",     component: Setting,     meta: { requiresAuth: true } },
-    { path: "/feedback",    name: "feedback",    component: Feedback,    meta: { requiresAuth: true } },
-    { path: "/whatsnext",   name: "whatsnext",   component: WhatsNext,   meta: { requiresAuth: true } },
+    { path: "/setting",     name: "setting",     component: Setting,     meta: { requiresAuth: true, title: 'Setting' } },
+    { path: "/feedback",    name: "feedback",    component: Feedback,    meta: { requiresAuth: true, title: 'Feedback' } },
+    { path: "/whatsnext",   name: "whatsnext",   component: WhatsNext,   meta: { requiresAuth: true, title: 'WhatsNext' } },
 
     { path: "/privacy-policy",         name: "privacy-policy",         component: PrivacyPolicy,        meta: { guest: true, title: 'Privacy Policy' } },
     { path: "/email-verified",         name: "email-verified",         component: EmailVerified,        meta: { guest: true, title: 'Email Verified' } },
@@ -42,7 +42,7 @@ let router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if(to.meta.title == null) { document.title = "finsey. A Budget Planning Application" }
+    if (to.meta.title == null) { document.title = "finsey. - Budget Planner & Expense Manager" }
     else { document.title = "finsey. " + to.meta.title; }
 
     if(to.matched.some(record => record.meta.requiresAuth)) {
