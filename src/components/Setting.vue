@@ -3,6 +3,8 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-12">
+          <Account />
+          <br>
           <Benefit :selectedYear="selectedYear" />
           <br>
           <Category />
@@ -22,6 +24,7 @@
 </template>
 
 <script>
+import Account from './Account.vue'
 import Benefit from './Benefit.vue'
 import Category from './Category.vue'
 
@@ -37,6 +40,7 @@ export default {
     selectedYear: Number
   },
   components: {
+    Account,
     Benefit,
     Category
   }

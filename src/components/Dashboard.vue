@@ -266,8 +266,8 @@
                 :key="month[0]"
                 @click="clickPrevBalUpdateModal(month[1], month[0])"
               >
-                <div v-if="view == 'planned'">&#8377; {{ monthlyBudget[month[1]][month[0]].prev_month_bal_planned }}</div>
-                <div v-if="view == 'actual'">&#8377; {{ monthlyBudget[month[1]][month[0]].prev_month_bal_actual }}</div>
+                <div v-if="view == 'planned'">&#8377; {{ prevMonthBal(month[0], month[1]) }}</div>
+                <div v-if="view == 'actual'">&#8377; {{ prevMonthBal(month[0], month[1]) }}</div>
               </td>
             </tr>
             <tr>
@@ -306,22 +306,25 @@
 
       <b-form @submit="submitPrevMonthBalModal" @reset="resetPrevMonthBalModal()">
 
-        <b-form-group id="input-group-4" label="Amount:" label-for="input-4" v-if="view == 'planned'">
+        <b-form-group label="Amount:" label-for="input-prev-month-bal-planned" v-if="view == 'planned'">
           <b-form-input
-            id="input-4"
+            id="input-prev-month-bal-planned"
             v-model="addPrevBalUpdateForm.prev_month_bal_planned"
             required
             placeholder="Enter Amount"
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="input-group-4" label="Amount:" label-for="input-4" v-if="view == 'actual'">
-          <b-form-input
-            id="input-4"
-            v-model="addPrevBalUpdateForm.prev_month_bal_actual"
-            required
-            placeholder="Enter Amount"
-          ></b-form-input>
+        <b-form-group v-if="view == 'actual'">
+          <div class="row" v-for="option in accountOptions" :key="option.value">
+            <div class="col-4">{{ option.text }}</div>
+            <div class="col-8">
+              <b-form-input
+                v-model.number="addPrevBalUpdateForm.prev_month_bal_actuals[option.value]"
+                placeholder="Enter Amount"
+              ></b-form-input>
+            </div>
+          </div>
         </b-form-group>
 
         <b-button type="submit" variant="primary" style="margin-right: 5px;">Submit</b-button> 
@@ -343,17 +346,17 @@
             <b-form-datepicker required v-model="addRecurringPlanForm.from" class="form-control sm-2"></b-form-datepicker><br>
             <b-form-datepicker required v-model="addRecurringPlanForm.to" class="form-control sm-2"></b-form-datepicker><br>
 
-            <b-form-group id="input-group-3" label="Category:" label-for="input-3">
-              <b-form-select class="input-3" v-model="addRecurringPlanForm.category">
+            <b-form-group id="input-group-cat" label="Category:" label-for="input-cat">
+              <b-form-select class="input-cat" v-model="addRecurringPlanForm.category">
                 <b-form-select-option-group v-for="(subCategories, category) in categories" :key="category" :label="category" required>
                   <b-form-select-option v-for="(subCategory, idx) in subCategories" :key="subCategory.id" :value="{ subCategory: subCategory.id, category: category }">{{ subCategory.title }}</b-form-select-option>
                 </b-form-select-option-group>
               </b-form-select>
             </b-form-group>
 
-            <b-form-group id="input-group-4" label="Amount:" label-for="input-4">
+            <b-form-group label="Amount:" label-for="input-recurring-plan-value">
               <b-form-input
-                id="input-4"
+                id="input-recurring-plan-value"
                 v-model="addRecurringPlanForm.value"
                 required
                 placeholder="Enter Amount"
@@ -394,9 +397,13 @@
               </b-form-select>
             </b-form-group>
 
-            <b-form-group id="input-group-4" label="Amount:" label-for="input-4">
+            <b-form-group id="input-group-acc" label="Account:" label-for="input-acc">
+              <b-form-select v-model="addExpenseForm.account_id" :options="accountOptions" required></b-form-select>
+            </b-form-group>
+
+            <b-form-group label="Amount:" label-for="input-expense-value">
               <b-form-input
-                id="input-4"
+                id="input-expense-value"
                 v-model="addExpenseForm.value"
                 required
                 placeholder="Enter Amount"
@@ -429,7 +436,7 @@
 
             <table style="width: 100%">
               <tr v-for="log in monthlyLogs[month[1]][month[0]]" :key="log._id.$oid" style="border-bottom:1pt solid #dadada;">
-                <td class="small">{{ getDateFromTime(log.spent_on) }}: &#8377;{{ log.value }} for '{{ log.description }}' under {{ findCategoryById(log.category_id.$oid)[0] }} ({{ findCategoryById(log.category_id.$oid)[1] }})</td>
+                <td class="small">{{ getDateFromTime(log.spent_on) }}: &#8377;{{ log.value }} for '{{ log.description }}' under {{ findCategoryById(log.category_id.$oid)[0] }} ({{ findCategoryById(log.category_id.$oid)[1] }}) in {{ accounts[log.account_id.$oid] }}</td>
                 <td @click="deleteActualCashFlowLogs(log, month[1], month[0])" style="width: 25px; cursor: pointer;" title="delete">&#128465;</td>
               </tr>
             </table>
@@ -439,6 +446,19 @@
           </b-collapse>
           <hr>
         </div>
+      </b-modal>
+    </div>
+
+    <div class="right-bottom-fixed-3" v-if="view == 'dontshownow'">
+      <b-button class="view-logs" @click="viewAccountModal = !viewAccountModal">&#9737;</b-button>
+      <b-modal v-model="viewAccountModal" centered hide-footer scrollable title="Accounts">
+        <b-form-group label="Selecting accounts change the entire dashboard view.">
+          <b-form-checkbox-group
+            v-model="selectedAccount"
+            :options="accountOptions"
+            stacked
+          ></b-form-checkbox-group>
+        </b-form-group>
       </b-modal>
     </div>
   </div>
@@ -521,19 +541,19 @@ export default {
       if(this.view == 'planned') {
         this.addPrevBalUpdateForm.prev_month_bal_planned = this.monthlyBudget[year][month].prev_month_bal_planned;
       } else if (this.view == 'actual') {
-        this.addPrevBalUpdateForm.prev_month_bal_actual = this.monthlyBudget[year][month].prev_month_bal_actual;
+        this.addPrevBalUpdateForm.prev_month_bal_actuals = this.monthlyBudget[year][month].prev_month_bal_actuals;
       }
 
       this.showPrevBalUpdateModal = !this.showPrevBalUpdateModal;
     },
     resetPrevMonthBalModal: function() {
-      this.addPrevBalUpdateForm = {};
+      this.addPrevBalUpdateForm = { prev_month_bal_actuals: {} };
       this.showPrevBalUpdateModal = !this.showPrevBalUpdateModal;
     },
     submitPrevMonthBalModal: function(e) {
       e.preventDefault();
-      if(this.addPrevBalUpdateForm.prev_month_bal_planned == null && this.addPrevBalUpdateForm.prev_month_bal_actual == null) { return; }
-      if(this.addPrevBalUpdateForm.prev_month_bal_planned != null && this.addPrevBalUpdateForm.prev_month_bal_actual != null) { return; }
+      if(this.addPrevBalUpdateForm.prev_month_bal_planned == null && this.addPrevBalUpdateForm.prev_month_bal_actuals == null) { return; }
+      if(this.addPrevBalUpdateForm.prev_month_bal_planned != null && this.addPrevBalUpdateForm.prev_month_bal_actuals != null) { return; }
 
       var month = this.addPrevBalUpdateForm.month;
       var year = this.addPrevBalUpdateForm.year;
@@ -544,7 +564,7 @@ export default {
         })
         .then(response => {
           if(this.addPrevBalUpdateForm.prev_month_bal_planned != null) { this.monthlyBudget[year][month].prev_month_bal_planned = this.addPrevBalUpdateForm.prev_month_bal_planned; }
-          if(this.addPrevBalUpdateForm.prev_month_bal_actual != null) { this.monthlyBudget[year][month].prev_month_bal_actual = this.addPrevBalUpdateForm.prev_month_bal_actual; }
+          if(this.addPrevBalUpdateForm.prev_month_bal_actuals != null) { this.monthlyBudget[year][month].prev_month_bal_actuals = this.addPrevBalUpdateForm.prev_month_bal_actuals; }
           this.resetPrevMonthBalModal();
         })
         .catch(error => {
@@ -653,7 +673,7 @@ export default {
       if(this.view == 'planned') {
         return parseFloat(this.monthlyBudget[year][month].prev_month_bal_planned);
       } else {
-        return parseFloat(this.monthlyBudget[year][month].prev_month_bal_actual);
+        return Object.values(this.monthlyBudget[year][month].prev_month_bal_actuals).reduce((t, n) => parseFloat(t) + parseFloat(n));
       }
     },
     totalBalance: function(month, year) {
@@ -739,6 +759,18 @@ export default {
           this.$parent.toast(error);
         });
     },
+    loadAccounts: function() {
+      this.$http.get('users/' + localStorage.getItem('user') + '/accounts')
+        .then(response => {
+          for(var account of response.data) {
+            this.accounts[account._id.$oid] = account.name;
+          }
+          this.accountOptions = response.data.map(function(acc) { return { text: acc.name, value: acc._id.$oid }; });
+        })
+        .catch(error => {
+          this.$parent.toast(error);
+        });
+    },
     loadActualCashFlowLogs: function() {
       this.$http.get('users/' + localStorage.getItem('user') + '/monthly_budgets/index_actual_cash_flow_logs_batch', {
           params: { "financial_year": this.selectedYear }
@@ -781,7 +813,7 @@ export default {
             if (this.monthlyBudget[month[1]][month[0]] == null) { this.$set(this.monthlyBudget[month[1]], month[0], {}) }
             if (monthlyBudget[month[1]][month[0]] == null) { monthlyBudget[month[1]][month[0]] = {} }
 
-            this.monthlyBudget[month[1]][month[0]]["prev_month_bal_actual"] = monthlyBudget[month[1]][month[0]].prev_month_bal_actual;
+            this.monthlyBudget[month[1]][month[0]]["prev_month_bal_actuals"] = monthlyBudget[month[1]][month[0]].prev_month_bal_actuals;
             this.monthlyBudget[month[1]][month[0]]["prev_month_bal_planned"] = monthlyBudget[month[1]][month[0]].prev_month_bal_planned;
 
             for (var category in this.categories) {
@@ -978,6 +1010,7 @@ export default {
   },
   mounted: function () {
     this.initializeCategories();
+    this.loadAccounts();
     if (this.selectedYear !== null) {
       this.updateMonthlyBudget();
       this.loadActualCashFlowLogs();
@@ -1018,7 +1051,7 @@ export default {
         arr.push(this.monthlyBudget[month[1]][month[0]][this.graphYearlyCategory.category][this.graphYearlyCategory.subCategory].actual);
       }
       return arr;
-    },
+    }
   },
   watch: {
     selectedYear: function() {
@@ -1128,12 +1161,16 @@ export default {
       showAddExpenseModal: false,
       addExpenseForm: { "spent_on": (new Date()).toISOString().slice(0,10) },
       showPrevBalUpdateModal: false,
-      addPrevBalUpdateForm: {},
+      addPrevBalUpdateForm: { prev_month_bal_actuals: {} },
       showRecurringPlanModal: false,
       addRecurringPlanForm: { "from": (new Date()).toISOString().slice(0,10) },
       viewLogsModal: false,
       monthlyLogsCollapse: {},
       monthlyLogs: {},
+      viewAccountModal: false,
+      accounts: {},
+      accountOptions: [],
+      selectedAccount: null,
       userProfile: {expense_ratio: {}},
       ad_client: process.env.VUE_APP_ADSENSE_PUB,
       ad_slot: process.env.VUE_APP_ADSENSE_HORIZONTAL_SLOT
@@ -1286,6 +1323,12 @@ table.sectioned thead {
 .right-bottom-fixed-2 {
   position: fixed;
   bottom: 110px;
+  right: 10px;
+}
+
+.right-bottom-fixed-3 {
+  position: fixed;
+  bottom: 170px;
   right: 10px;
 }
 

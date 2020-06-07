@@ -77,7 +77,7 @@
               <td><input class="form-control input-sm" type="text" v-model="user_profile.emergency_corpus"></td>
             </tr>
             <tr v-if="completeSetup">
-              <th>Send Reminder Email</th>
+              <th>Send Reminder Emails</th>
               <td><b-form-checkbox v-model="user_profile.month_end_reminder" value="true" unchecked-value="false" /></td>
             </tr>
             <tr>
