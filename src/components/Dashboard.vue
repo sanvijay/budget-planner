@@ -673,7 +673,7 @@ export default {
       if(this.view == 'planned') {
         return parseFloat(this.monthlyBudget[year][month].prev_month_bal_planned);
       } else {
-        return Object.values(this.monthlyBudget[year][month].prev_month_bal_actuals).reduce((t, n) => parseFloat(t) + parseFloat(n), 0);
+        return Object.values(this.monthlyBudget[year][month].prev_month_bal_actuals || {}).reduce((t, n) => parseFloat(t) + parseFloat(n), 0);
       }
     },
     totalBalance: function(month, year) {
@@ -813,8 +813,8 @@ export default {
             if (this.monthlyBudget[month[1]][month[0]] == null) { this.$set(this.monthlyBudget[month[1]], month[0], {}) }
             if (monthlyBudget[month[1]][month[0]] == null) { monthlyBudget[month[1]][month[0]] = {} }
 
-            this.monthlyBudget[month[1]][month[0]]["prev_month_bal_actuals"] = monthlyBudget[month[1]][month[0]].prev_month_bal_actuals;
-            this.monthlyBudget[month[1]][month[0]]["prev_month_bal_planned"] = monthlyBudget[month[1]][month[0]].prev_month_bal_planned;
+            this.monthlyBudget[month[1]][month[0]]["prev_month_bal_actuals"] = monthlyBudget[month[1]][month[0]].prev_month_bal_actuals || {};
+            this.monthlyBudget[month[1]][month[0]]["prev_month_bal_planned"] = monthlyBudget[month[1]][month[0]].prev_month_bal_planned || 0;
 
             for (var category in this.categories) {
               if(this.monthlyBudget[month[1]][month[0]][category] == null) { this.$set(this.monthlyBudget[month[1]][month[0]], category, {}) }
