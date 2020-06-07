@@ -673,7 +673,7 @@ export default {
       if(this.view == 'planned') {
         return parseFloat(this.monthlyBudget[year][month].prev_month_bal_planned);
       } else {
-        return Object.values(this.monthlyBudget[year][month].prev_month_bal_actuals).reduce((t, n) => parseFloat(t) + parseFloat(n));
+        return Object.values(this.monthlyBudget[year][month].prev_month_bal_actuals).reduce((t, n) => parseFloat(t) + parseFloat(n), 0);
       }
     },
     totalBalance: function(month, year) {
