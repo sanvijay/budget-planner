@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="LeadImage">
-      <div class="image" style="background-image: url('img/background-old.svg'), url('img/background-white.svg');"></div>
+      <div class="image" :style="backgroundImage"></div>
       <div class="ie-hack-vertical"></div>
       <div class="ie-hack-horizontal"></div>
       <div class="triangle">
@@ -26,7 +26,6 @@
           <b-nav-item :to="{ name: 'setting' }">Settings</b-nav-item>
           <b-nav-item :to="{ name: 'feedback' }">Feedback</b-nav-item>
           <b-nav-item :to="{ name: 'whatsnext' }">What's Next</b-nav-item>
-          <b-nav-item href="#" @click="logout">Logout</b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav v-if="!loggedIn">
@@ -38,11 +37,18 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto" v-if="loggedIn">
+          <b-nav-item-dropdown :class="selectedBGColor" class="caret-off bgColorSelector">
+            <b-dropdown-item v-for="color in backgroundColors" :key="color" @click="changeBGColor(color)">
+              <span :class="color" class="bgColorSelector"></span>
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+
           <b-nav-item-dropdown :text="selectedFinancialYearText">
             <b-dropdown-item v-for="financialYear in allFinancialYear" :key="financialYear" @click="selectFinancialYear(financialYear)">{{ financialYear }} - {{ financialYear + 1 }}</b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item href="#" v-if="userProfile.first_name">Hi {{ userProfile.first_name }}!</b-nav-item>
+          <b-nav-item href="#" @click="logout">Logout</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -68,12 +74,19 @@ export default {
     },
     selectedFinancialYearText: function() {
       return this.selectedFinancialYear + " - " + (this.selectedFinancialYear + 1);
+    },
+    backgroundImage: function() {
+      return "background-image: url('img/background-" + this.selectedBGColor + ".svg'), url('img/background-white.svg');"
     }
   },
   components: {
     Profile
   },
   methods: {
+    changeBGColor: function(color) {
+      localStorage.setItem('BGColor', color);
+      this.selectedBGColor = color;
+    },
     logout: function() {
       this.$http.delete('logout')
       .then(response => {
@@ -172,10 +185,29 @@ export default {
     return {
       userProfile: {expense_ratio: {}},
       selectedFinancialYear: null,
-      allFinancialYear: []
+      allFinancialYear: [],
+      // write class for each color
+      backgroundColors: [
+        'bright-red',
+        'green',
+        'pink',
+        'purple',
+        'red',
+        'cyan'
+      ],
+      selectedBGColor: ""
     }
   },
   mounted: function () {
+    var bgColor = localStorage.getItem('BGColor');
+    if(bgColor == null || bgColor.toString().trim() == '') {
+      this.selectedBGColor = "red";
+    } else if(!this.backgroundColors.includes(bgColor)) {
+      this.selectedBGColor = "bright-red";
+    } else {
+      this.selectedBGColor = bgColor;
+    }
+
     if(this.loggedIn) {
       this.setUserProfile();
       this.setCurrentFinancialYear();
@@ -192,5 +224,33 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+.caret-off > .dropdown-toggle::after {
+  display: none;
+}
+.bgColorSelector {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+  align-self: center;
+}
+.bright-red {
+  background-color: #ba3612;
+}
+.green {
+  background-color: #429f40;
+}
+.pink {
+  background-color: #9f3072;
+}
+.purple {
+  background-color: #7d50a1;
+}
+.red {
+  background-color: #ba5f3a;
+}
+.cyan {
+  background-color: #0da6a1;
 }
 </style>
