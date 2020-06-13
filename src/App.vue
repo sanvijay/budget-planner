@@ -201,7 +201,7 @@ export default {
   mounted: function () {
     var bgColor = localStorage.getItem('BGColor');
     if(bgColor == null || bgColor.toString().trim() == '') {
-      this.selectedBGColor = "red";
+      this.selectedBGColor = "cyan";
     } else if(!this.backgroundColors.includes(bgColor)) {
       this.selectedBGColor = "bright-red";
     } else {

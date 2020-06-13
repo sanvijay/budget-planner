@@ -47,7 +47,7 @@
     <div class="row shadow-lg bg-light"><div class="col">
       <div v-if="view == 'monthly'">
         <div class="row">
-          <div v-for="month in monthYear" :key="month[0]" class="col-lg-6 col-md-12">
+          <div v-for="month in monthYear" :key="month[0]" class="col-lg-8 col-md-12">
             <b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b>
             <table class="table-sm table-bordered table-hover table-responsive sectioned">
               <thead class="bg-light">
@@ -205,13 +205,13 @@
                 :key="month[0]"
               >
 
-                <div v-if="monthlyBudget[month[1]][month[0]][category][subCategory.id].logs.length > 0">
+                <div>
                   <b-link class="link-as-text" :id="monthlyBudget[month[1]][month[0]][category][subCategory.id].id">
                     &#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].actual }}
                   </b-link>
 
                   <b-popover variant="dark" triggers="focus" :target="monthlyBudget[month[1]][month[0]][category][subCategory.id].id" :title="plannedTitle(monthlyBudget[month[1]][month[0]][category][subCategory.id].planned)">
-                    <table border="2">
+                    <table border="2" v-if="monthlyBudget[month[1]][month[0]][category][subCategory.id].logs.length > 0">
                       <tr>
                         <th>Description</th>
                         <th>Value</th>
@@ -221,9 +221,9 @@
                         <td>{{ log.value }}</td>
                       </tr>
                     </table>
+                    <div v-else>None.</div>
                   </b-popover>
                 </div>
-                <div v-else>&#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].actual }}</div>
               </td>
             </tr>
 
@@ -299,7 +299,7 @@
     </div></div>
 
     <b-modal v-model="showPrevBalUpdateModal" centered hide-footer hide-header>
-      <p class="h5 float-left">
+      <p class="h6 float-left">
         Update Balance of Previous month of {{ monthFromInt(addPrevBalUpdateForm.month - 1) }} / {{ addPrevBalUpdateForm.year }}
       </p>
       <br><hr>
@@ -336,7 +336,7 @@
       <b-button class="add-recurring-plan" @click="showRecurringPlanModal = !showRecurringPlanModal">+</b-button>
       <b-modal v-model="showRecurringPlanModal" centered hide-footer hide-header>
 
-        <p class="h5 float-left">
+        <p class="h6 float-left">
           Plan your Income / Expense for a duration
         </p>
         <br><hr>
@@ -373,7 +373,7 @@
       <b-button class="add-expense" @click="showAddExpenseModal = !showAddExpenseModal">+</b-button>
       <b-modal v-model="showAddExpenseModal" centered hide-footer hide-header>
 
-        <p class="h5 float-left">
+        <p class="h6 float-left">
           Add Income / Expense
         </p>
         <br><hr>
@@ -528,6 +528,8 @@ export default {
 
             this.$set(this.monthlyBudget[year][month][category], this.addRecurringPlanForm.category_id, {});
             this.monthlyBudget[year][month][category][this.addRecurringPlanForm.category_id].planned = parseFloat(this.addRecurringPlanForm.value);
+            this.monthlyBudget[year][month][category][this.addRecurringPlanForm.category_id].logs = [];
+            this.monthlyBudget[year][month][category][this.addRecurringPlanForm.category_id].actual = 0;
           }
 
           this.resetRecurringPlanModal();
