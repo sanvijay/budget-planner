@@ -121,7 +121,7 @@
 
               <div class="row form-group">
                 <div class="col-md-12">
-                  <input type="submit" value="Send Message" class="btn btn-primary mr-2 mb-2" @click="saveNewPersonalAdvisory()">
+                  <input type="submit" value="Send Message" class="btn btn-primary mr-2 mb-2" @click.prevent="saveNewPersonalAdvisory()">
                 </div>
               </div>
             </form>
@@ -175,14 +175,14 @@ export default {
       this.$router.push({path: 'login', name: 'login'})
     },
     saveNewPersonalAdvisory: function() {
-      this.$http.post('/personal_advisor_request', {
-          personal_advisor: this.newPersonalAdvisory
+      this.$http.post('/personal_advisor_requests', {
+          personal_advisor_request: this.newPersonalAdvisory
         })
         .then(response => {
           this.submit_request_message = true;
         })
         .catch(error => {
-          this.$parent.toast(error);
+          this.$parent.toast("Some error occured. Reach out to us: team.finsey@gmail.com");
         });
     },
   }
