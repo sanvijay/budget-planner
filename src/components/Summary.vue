@@ -5,6 +5,8 @@
         <div class="col-lg-12 col-md-12 col-sm-12">
           <Profile :completeSetup="true" />
           <br>
+          <Loan />
+          <br>
           <Goal />
           <br>
           <Asset :selectedYear="selectedYear" />
@@ -16,6 +18,7 @@
 
 <script>
 import Profile from './Profile.vue'
+import Loan from './Loan.vue'
 import Goal from './Goal.vue'
 import Asset from './Asset.vue'
 
@@ -27,6 +30,7 @@ export default {
   components: {
     Profile,
     Goal,
+    Loan,
     Asset
   }
 }
