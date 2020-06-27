@@ -13,8 +13,9 @@ import RegistrationComplete from '@/components/RegistrationComplete.vue'
 import EmailVerified from '@/components/EmailVerified.vue'
 import Feedback from '@/components/Feedback.vue'
 import Terms from '@/components/Terms.vue'
+import CookiePolicy from '@/components/CookiePolicy.vue'
 import PrivacyPolicy from '@/components/PrivacyPolicy.vue'
-import WhatsNext from '@/components/WhatsNext.vue'
+import NeedHelp from '@/components/NeedHelp.vue'
 import Quiz from '@/components/Quiz.vue'
 
 Vue.use(VueRouter)
@@ -31,8 +32,9 @@ let router = new VueRouter({
     { path: "/dashboard",   name: "dashboard",   component: Dashboard,   meta: { requiresAuth: true, title: 'Dashboard' } },
     { path: "/setting",     name: "setting",     component: Setting,     meta: { requiresAuth: true, title: 'Setting' } },
     { path: "/feedback",    name: "feedback",    component: Feedback,    meta: { requiresAuth: true, title: 'Feedback' } },
-    { path: "/whatsnext",   name: "whatsnext",   component: WhatsNext,   meta: { requiresAuth: true, title: 'WhatsNext' } },
+    { path: "/need-help",   name: "need-help",   component: NeedHelp,    meta: { requiresAuth: true, title: 'Need Help?' } },
 
+    { path: "/cookie-policy",          name: "cookie-policy",          component: CookiePolicy,         meta: { guest: true, title: 'Cookie Policy' } },
     { path: "/privacy-policy",         name: "privacy-policy",         component: PrivacyPolicy,        meta: { guest: true, title: 'Privacy Policy' } },
     { path: "/email-verified",         name: "email-verified",         component: EmailVerified,        meta: { guest: true, title: 'Email Verified' } },
     { path: "/reset-password",         name: "reset-password",         component: ResetPassword,        meta: { guest: true, title: 'Reset Your Password' } },

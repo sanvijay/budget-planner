@@ -5,7 +5,7 @@
         <p class="h5 float-left">
           Accounts <b-link id="tooltip-target-account" style="text-decoration: none;">&#128161;</b-link>
           <b-tooltip target="tooltip-target-account" triggers="hover">
-            Add multiple accounts.
+            Add multiple accounts. Accounts like bank account, credit cards, etc. This helps you to add expenses based on accounts.
           </b-tooltip>
         </p>
         <br><hr>

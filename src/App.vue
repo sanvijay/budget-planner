@@ -24,8 +24,8 @@
           <b-nav-item :to="{ name: 'dashboard' }">Planning and Accounting</b-nav-item>
           <b-nav-item :to="{ name: 'summary' }">Profile</b-nav-item>
           <b-nav-item :to="{ name: 'setting' }">Settings</b-nav-item>
+          <b-nav-item :to="{ name: 'need-help' }">Help</b-nav-item>
           <b-nav-item :to="{ name: 'feedback' }">Feedback</b-nav-item>
-          <b-nav-item :to="{ name: 'whatsnext' }">What's Next</b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav v-if="!loggedIn">
@@ -179,6 +179,69 @@ export default {
     },
     setCurrentFinancialYear: function() {
       this.selectedFinancialYear = this.currentFinancialYear();
+    },
+    helpToast: function() {
+      var completedTutorial = localStorage.getItem('completedTutorial');
+      if(completedTutorial == "true") { return; }
+
+      localStorage.setItem('completedTutorial', "true");
+
+      // Use a shorter name for this.$createElement
+      const h = this.$createElement;
+
+      // Create the message
+      const vNodesMsg = h(
+        'p',
+        { class: ['text-center', 'mb-0'] },
+        [
+          h('p', { }, [
+            "Looks like you are new to the website. Click ",
+            h('router-link', { props: { to: "need-help" } }, 'Learn More'),
+            " to know how to use finsey. Or navigate to Help on top bar."
+            ]
+          )
+        ]
+      );
+
+      // Pass the VNodes as an array for message and title
+      this.$bvToast.toast([vNodesMsg], {
+        title: "Tutorial",
+        solid: true,
+        variant: 'info',
+        noAutoHide: true,
+        toaster: 'b-toaster-top-right'
+      });
+    },
+    loadCookiePolicy: function() {
+      var cookieAccepted = localStorage.getItem('cookieAccepted');
+
+      if(cookieAccepted == "true") { return; }
+
+      // Use a shorter name for this.$createElement
+      const h = this.$createElement;
+
+      // Create the message
+      const vNodesMsg = h(
+        'p',
+        { class: ['text-center', 'mb-0'] },
+        [
+          h('p', { }, [
+            "This website uses cookies to ensure you get the best experience on our website.",
+            h('router-link', { props: { to: "cookie-policy" } }, 'Learn More')
+            ]
+          ),
+          h('button', { class: ['btn', 'btn-primary'], on: { click: function() { localStorage.setItem('cookieAccepted', "true"); } } }, 'Accept & Close')
+        ]
+      );
+
+      // Pass the VNodes as an array for message and title
+      this.$bvToast.toast([vNodesMsg], {
+        title: "Cookie Policy",
+        solid: true,
+        variant: 'default',
+        noAutoHide: true,
+        toaster: 'b-toaster-bottom-left'
+      });
     }
   },
   data: function() {
@@ -208,7 +271,10 @@ export default {
       this.selectedBGColor = bgColor;
     }
 
+    this.loadCookiePolicy();
+
     if(this.loggedIn) {
+      this.helpToast();
       this.setUserProfile();
       this.setCurrentFinancialYear();
       this.setAllFinancialYear();
