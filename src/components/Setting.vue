@@ -7,6 +7,10 @@
           <br>
           <Benefit :selectedYear="selectedYear" />
           <br>
+          <TwoFactorAuth />
+          <br>
+          <Referral />
+          <br>
           <Category />
         </div>
         <div style="min-width: 250px">
@@ -27,6 +31,8 @@
 import Account from './Account.vue'
 import Benefit from './Benefit.vue'
 import Category from './Category.vue'
+import TwoFactorAuth from './TwoFactorAuth.vue'
+import Referral from './Referral.vue'
 
 export default {
   name: 'Setting',
@@ -42,7 +48,9 @@ export default {
   components: {
     Account,
     Benefit,
-    Category
+    Category,
+    TwoFactorAuth,
+    Referral
   }
 }
 </script>

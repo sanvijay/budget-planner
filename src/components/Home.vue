@@ -24,8 +24,8 @@
                 <h1>A full stop to financial worries</h1>
                 <p class="mb-5">When you are looking for an expense manager, you actually need a budget planner. Managing without a plan will make life harder. Finsey helps you to solve this problem seamlessly.</p>
                 <div>
-                  <a href="#" @click="goToSignInPage" style="margin-right: 20px;color: white;">Sign In</a>
-                  <a href="#" class="btn btn-primary mr-2 mb-2" @click="goToRegisterPage">Create an account</a>
+                  <router-link :to="{ name: 'login' }" style="margin-right: 20px;color: white;">Sign In</router-link>
+                  <router-link :to="{ name: 'register' }" class="btn btn-primary mr-2 mb-2">Create an account</router-link>
                 </div>
               </div>
             </div>
@@ -130,6 +130,87 @@
       </div>
     </div>
 
+    <div class="site-section" id="features-section">
+      <div class="container">
+        <div class="row mb-5 justify-content-center text-center"  data-aos="fade-up">
+          <div class="col-7 text-center  mb-5">
+            <h2 class="section-title">Pricing</h2>
+            <p class="lead" style="display: none;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga quos quaerat sapiente nam, id vero.</p>
+          </div>
+        </div>
+        <div class="row align-items-stretch">
+          <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up">
+            <div class="unit-4 d-block">
+              <div class="unit-4-icon mb-3">
+                <span class="icon-wrap"><span>Free</span></span>
+              </div>
+              <div>
+                <p style="text-align: center; font-weight: bold;">&#8377; 0</p><hr>
+                <ul>
+                  <li>Maintain 3 Accounts</li>
+                  <li>Overall 15 Categories</li>
+                  <li>1 year of history</li>
+                  <li>Plan up to 2 years</li>
+                  <li>Set up to 3 goals</li>
+                  <li>Track 3 of your assets/liabilities/debts/benefits</li>
+                  <li>Community Support</li>
+                </ul>
+                <br>
+                <p>
+                  <router-link :to="{ name: 'register' }">Get your account for free</router-link>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="unit-4 d-block">
+              <div class="unit-4-icon mb-3">
+                <span class="icon-wrap"><span>Plus</span></span>
+              </div>
+              <div>
+                <p style="text-align: center; font-weight: bold;">&#8377; 75 / mo (or) &#8377; 600 / yr</p><hr>
+                <ul>
+                  <li>Maintain 5 Accounts</li>
+                  <li>Overall 25 Categories</li>
+                  <li>7 years of history</li>
+                  <li>Plan up to 7 years</li>
+                  <li>Set up to 7 goals</li>
+                  <li>Track 7 of your assets/liabilities/debts/benefits</li>
+                  <li>Community Support</li>
+                </ul>
+                <br>
+                <p>
+                  <a href="#" @click.prevent="clickBuyNow">Buy now</a>
+                  <router-link :to="{ name: 'need-help' }" style="float: right;">Refer and Earn</router-link>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 mb-4 mb-lg-4" data-aos="fade-up"  data-aos-delay="200">
+            <div class="unit-4 d-block">
+              <div class="unit-4-icon mb-3">
+                <span class="icon-wrap"><span>Prime</span></span>
+              </div>
+              <div>
+                <p style="text-align: center; font-weight: bold;">&#8377; 150 / mo (or) &#8377; 1200 / yr</p><hr>
+                <ul>
+                  <li>No Ads</li>
+                  <li>Maintain 50 Accounts</li>
+                  <li>Overall 250 Categories</li>
+                  <li>Unlimited history</li>
+                  <li>Plan up to your 100th birthday</li>
+                  <li>Set 100 goals</li>
+                  <li>Track 100 assets/liabilities/debts/benefits</li>
+                  <li>Personalized Support</li>
+                </ul>
+                <p><a href="#" @click.prevent="clickBuyNow">Buy now</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="site-section">
       <div class="container">
         <div class="row mb-5">
@@ -168,12 +249,6 @@ export default {
     }
   },
   methods: {
-    goToRegisterPage: function() {
-      this.$router.push({path: 'register', name: 'register'})
-    },
-    goToSignInPage: function() {
-      this.$router.push({path: 'login', name: 'login'})
-    },
     saveNewPersonalAdvisory: function() {
       this.$http.post('/personal_advisor_requests', {
           personal_advisor_request: this.newPersonalAdvisory
@@ -185,6 +260,15 @@ export default {
           this.$parent.toast("Some error occured. Reach out to us: team.finsey@gmail.com");
         });
     },
+    clickBuyNow: function() {
+      this.$http.post('/buy_now')
+        .then(response => {
+          this.$parent.toast("Success! Now you are an prime user");
+        })
+        .catch(error => {
+          this.$parent.toast("Some error occured. Reach out to us: team.finsey@gmail.com");
+        });
+    }
   }
 }
 </script>
@@ -267,11 +351,6 @@ h1, h2, h3, h4, h5,
   height: 43px;
   border-radius: 30px;
   font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
-  .form-control:active, .form-control:focus {
-    border-color: #4285f4; }
-  .form-control:hover, .form-control:active, .form-control:focus {
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important; }
 
 .site-section {
   padding: 2.5em 0; }
@@ -496,4 +575,56 @@ h1, h2, h3, h4, h5,
 p {
   color: #000;
 }
+
+.unit-4 {
+  min-height: 425px;
+  padding: 30px;
+  background: #f1f1f1;
+  border-radius: 5px;
+  -webkit-transition: .3s all ease;
+  -o-transition: .3s all ease;
+  transition: .3s all ease;
+  position: relative;
+  top: 0;
+  margin-bottom: 4em;
+  text-align: left;
+  padding-top: 50px; }
+  .unit-4 .unit-4-icon {
+    position: absolute;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    left: 50%;
+    top: -50px; }
+    .unit-4 .unit-4-icon .icon-wrap {
+      width: 80px;
+      height: 80px;
+      position: relative;
+      border-radius: 50%;
+      display: inline-block;
+      background-color: #4285f4;
+      -webkit-box-shadow: 0 4px 20px -5px rgba(66, 133, 244, 0.4);
+      box-shadow: 0 4px 20px -5px rgba(66, 133, 244, 0.4); }
+      .unit-4 .unit-4-icon .icon-wrap span {
+        font-size: 1.5rem;
+        position: absolute;
+        top: 50%;
+        color: #fff !important;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%); }
+  .unit-4 h3 {
+    font-size: 18px;
+    color: #000;
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease; }
+  .unit-4 p {
+    font-weight: 300;
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease; }
+  .unit-4 *:last-child {
+    margin-bottom: 0; }
 </style>

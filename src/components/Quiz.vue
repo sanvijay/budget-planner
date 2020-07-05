@@ -76,8 +76,8 @@
             <p>You have scored {{ quiz.score * 10 }}%.</p>
 
             <p>Share your score on Whatsapp / Facebook and help your friends to know their score.</p>
-            <a :href="whatsappScoreText" data-action="share/whatsapp/share" class="btn btn-success whatsapp-font"><b><font-awesome-icon :icon="['fab', 'whatsapp']" />&nbsp; Share your score on Whatsapp</b></a><br><br>
-            <a :href="fbScoreText" data-action="share/whatsapp/share" class="btn btn-primary whatsapp-font"><b><font-awesome-icon :icon="['fab', 'facebook']" />&nbsp; Share your score on Facebook</b></a>
+            <a target="_blank" :href="whatsappScoreText" data-action="share/whatsapp/share" class="btn btn-success whatsapp-font"><b><font-awesome-icon :icon="['fab', 'whatsapp']" />&nbsp; Share your score on Whatsapp</b></a><br><br>
+            <a target="_blank" :href="fbScoreText" data-action="share/whatsapp/share" class="btn btn-primary whatsapp-font"><b><font-awesome-icon :icon="['fab', 'facebook']" />&nbsp; Share your score on Facebook</b></a>
           </div>
 
           <br>

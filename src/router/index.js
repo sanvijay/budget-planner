@@ -32,7 +32,7 @@ let router = new VueRouter({
     { path: "/dashboard",   name: "dashboard",   component: Dashboard,   meta: { requiresAuth: true, title: 'Dashboard' } },
     { path: "/setting",     name: "setting",     component: Setting,     meta: { requiresAuth: true, title: 'Setting' } },
     { path: "/feedback",    name: "feedback",    component: Feedback,    meta: { requiresAuth: true, title: 'Feedback' } },
-    { path: "/need-help",   name: "need-help",   component: NeedHelp,    meta: { requiresAuth: true, title: 'Need Help?' } },
+    { path: "/need-help",   name: "need-help",   component: NeedHelp,    meta: { title: 'Need Help?' } },
 
     { path: "/cookie-policy",          name: "cookie-policy",          component: CookiePolicy,         meta: { guest: true, title: 'Cookie Policy' } },
     { path: "/privacy-policy",         name: "privacy-policy",         component: PrivacyPolicy,        meta: { guest: true, title: 'Privacy Policy' } },

@@ -267,7 +267,7 @@
                 @click="clickPrevBalUpdateModal(month[1], month[0])"
               >
                 <div v-if="view == 'planned'">&#8377; {{ prevMonthBal(month[0], month[1]) }}</div>
-                <div v-if="view == 'actual'">&#8377; {{ prevMonthBal(month[0], month[1]) }}</div>
+                <div v-if="view == 'actual'">&#8377; {{ prevMonthBal(month[0], month[1]).toFixed(2) }}</div>
               </td>
             </tr>
             <tr>
@@ -681,7 +681,7 @@ export default {
     totalBalance: function(month, year) {
       var difference = this.totalInflow(month, year) - this.totalOutflow(month, year);
       var prevMonthBal = this.prevMonthBal(month, year);
-      return (prevMonthBal + difference);
+      return (prevMonthBal + difference).toFixed(2);
     },
     subTotal: function(category, month, year) {
       var total = 0;

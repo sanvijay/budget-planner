@@ -36,6 +36,25 @@
         <div class="col-12 right-align bg-light">
           <br>
           <p class="h4 float-left">
+            How to refer?
+          </p>
+          <br><hr>
+
+          <ul>
+            <li>Create your account by clicking <router-link :to="{ name: 'register' }">this link</router-link>.</li>
+            <li>Go to Settings page and register your mobile number first (under 'Two Factor Authentication').</li>
+            <li>Share your 'Referral Code' with your friends (You can get that from 'Referral section')</li>
+            <li>Enter the referral code in 'Enter Token' text box and click save.</li>
+          </ul>
+        </div>
+      </div>
+    </div><br>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12 right-align bg-light">
+          <br>
+          <p class="h4 float-left">
             What's Next
           </p>
           <br><hr>
@@ -46,7 +65,6 @@
 
           <ul>
             <li>Reminders and notifications for any of your recurring events.</li>
-            <li>Add multiple accounts and track all in one place.</li>
             <li>Score based on your expenses and savings. From which you can improve your financial life.</li>
             <li>Android and IOS app</li>
           </ul>
