@@ -257,7 +257,7 @@ export default {
           this.submit_request_message = true;
         })
         .catch(error => {
-          this.$parent.toast("Some error occured. Reach out to us: team.finsey@gmail.com");
+          this.$parent.toast("Some error occurred. Reach out to us: team.finsey@gmail.com");
         });
     },
     clickBuyNow: function() {
@@ -266,7 +266,7 @@ export default {
           this.$parent.toast("Success! Now you are an prime user");
         })
         .catch(error => {
-          this.$parent.toast("Some error occured. Reach out to us: team.finsey@gmail.com");
+          this.$parent.toast("Error occurred accessing payment portal. Reach out to us: team.finsey@gmail.com");
         });
     }
   }
