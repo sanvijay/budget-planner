@@ -180,7 +180,7 @@
                 </ul>
                 <br>
                 <p>
-                  <a href="#" @click.prevent="clickBuyNow">Buy now</a>
+                  <a href="#" @click.prevent="clickBuyNow">Coming Soon</a>
                   <router-link :to="{ name: 'need-help' }" style="float: right;">Refer and Earn</router-link>
                 </p>
               </div>
@@ -203,7 +203,7 @@
                   <li>Track 100 assets/liabilities/debts/benefits</li>
                   <li>Personalized Support</li>
                 </ul>
-                <p><a href="#" @click.prevent="clickBuyNow">Buy now</a></p>
+                <p><a href="#" @click.prevent="clickBuyNow">Coming Soon</a></p>
               </div>
             </div>
           </div>
