@@ -34,6 +34,23 @@ Vue.use(require('vue-script2'))
 Vue.use(Ads.AutoAdsense, { adClient: process.env.VUE_APP_ADSENSE_PUB })
 Vue.use(Ads.Adsense)
 
+var VueScrollTo = require('vue-scrollto');
+
+// You can also pass in the default options
+Vue.use(VueScrollTo, {
+  container: "body",
+  duration: 500,
+  easing: "ease",
+  offset: 0,
+  force: true,
+  cancelable: true,
+  onStart: false,
+  onDone: false,
+  onCancel: false,
+  x: false,
+  y: true
+});
+
 import Adsense from 'vue-google-adsense/dist/Adsense.min.js'
 
 Vue.config.productionTip = false
