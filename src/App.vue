@@ -1,16 +1,5 @@
 <template>
   <div id="app">
-    <div class="LeadImage">
-      <div class="image" :style="backgroundImage"></div>
-      <div class="ie-hack-vertical"></div>
-      <div class="ie-hack-horizontal"></div>
-      <div class="triangle">
-        <svg fill="white" preserveAspectRatio="none" viewBox="0 0 25 100" class="jsx-4194311832 Triangle">
-          <polygon points="0,100 25,0 25,100" class="jsx-4194311832"></polygon>
-        </svg>
-      </div>
-    </div>
-
     <b-navbar toggleable="lg" fixed="top" type="light" variant="light" class="shadow-lg" v-if="this.$route.path !== '/'">
       <b-navbar-brand href="#">
         <!-- <img src="./assets/logo.jpg" width="30" height="30" class="d-inline-block align-top" alt=""> -->
@@ -57,7 +46,11 @@
       <Profile />
     </b-modal>
 
-    <div style="padding-top: 70px; margin-bottom: 1000">
+    <div style="padding-top: 90px; margin-bottom: 1000" v-if="this.$route.path !== '/'">
+      <router-view :selectedYear="selectedFinancialYear"></router-view>
+    </div>
+
+    <div v-if="this.$route.path === '/'">
       <router-view :selectedYear="selectedFinancialYear"></router-view>
     </div>
   </div>

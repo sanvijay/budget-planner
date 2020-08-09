@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
 
-    <link rel="stylesheet" href="css/background-image.css">
-    <link rel="stylesheet" href="css/common.css">
-
     <title>finsey. - Budget Planner & Expense Manager</title>
 
     <meta name="description" content="finsey. is the budget planner & expense manager project designed during quarantine period. Planning your budget will make sure to pass any critical stages and have a peaceful future.">
@@ -26,6 +23,17 @@
     <meta property="og:image:height" content="620">
 
     <meta name="verifyownership" content="c736910690f15115a72f424602da532e"/>
+
+    <link rel="shortcut icon" href="favicon.ico"> 
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Maven+Pro:400,500,700|Nunito:400,600,700" rel="stylesheet">
+    <!-- FontAwesome JS-->
+    <script defer src="assets/fontawesome/js/all.min.js"></script>
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="assets/plugins/jquery-flipster/dist/jquery.flipster.min.css">
+    <!-- Theme CSS -->  
+    <link id="theme-style" rel="stylesheet" href="assets/css/theme.css">
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=<%= process.env.VUE_APP_GOOGLE_ANALYTICS_KEY %>"></script>
     <script>
@@ -43,10 +51,68 @@
     <div id="app"></div>
 
     <div style="padding-bottom: 60px;"></div>
-    <footer class="page-footer font-small fixed-bottom shadow-lg bg-light">
-      <div class="text-center py-2">
-        &copy; 2020 Copyright: <a href="/"> <span class="logo">finsey<span class="text-primary">.</span></span></a> | <a href="https://fb.me/team.finsey">Visit us on facebook</a>
+    <footer class="footer theme-bg-primary">
+      <div class="container py-5 mb-3">
+        <div class="row">
+          <div class="footer-col col-6 col-lg-3">
+          </div><!--//footer-col-->
+          <div class="footer-col col-6 col-lg-3">
+            <h4 class="col-heading">Legal</h4>
+            <ul class="list-unstyled">
+              <li><a href="/#/privacy-policy">Privacy</a></li>
+              <li><a href="/#/terms">Terms of Services</a></li>
+              <li><a href="/#/cookie-policy">Cookie Policy</a></li>
+            </ul>
+          </div><!--//footer-col-->
+          <div class="footer-col col-6 col-lg-3">
+            <h4 class="col-heading">Stay Connected</h4>
+            <ul class="social-list list-unstyled mb-0">
+              <li class="list-inline-item"><a href="https://www.instagram.com/team.finsey"><i class="fab fa-instagram fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="https://fb.me/team.finsey"><i class="fab fa-facebook-f fa-fw"></i></a></li>
+                    
+                </ul><!--//social-list-->
+                
+                <div class="mb-2">
+                  Company Name<br>
+                  2419 Locust View Drive <br>
+                  San Francisco, CA, 94143
+                </div>
+                <div>
+                  <a href="#">hello@yourcompany.com</a>
+              </div>
+          </div><!--//footer-col-->
+          <div class="footer-col col-6 col-lg-3">
+
+          </div><!--//footer-col-->
+        </div><!--//row-->
+      </div><!--//container-->
+      <div class="container">
+        <hr>
       </div>
+      <div class="download-area py-4">
+        <div class="container text-center">
+          <h3 class="mb-3">Get the app</h3>
+        <div class="section-intro mb-4 single-col-max-width mx-auto">We want to make sure that you are served well. We are trying to build our app across platforms. Click to download our alpha version. </div>
+          <ul class="app-stores list-unstyled list-inline mx-auto  d-inline-block">
+            <li class="list-inline-item"><a href="https://play.google.com/store/apps/details?id=com.fireflies.finsey"><img class="android" src="assets/images/appstore-android.svg" alt="google play"></a></li>
+          </ul>
+        </div><!--//container-->
+      </div><!--//download-area-->
+      <div class="footer-bottom text-center pb-5">
+          <!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
+            <small class="copyright">Designed with <i class="fas fa-heart" style="color: #fb866a;"></i> by <a href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> for developers</small>
+      </div>
+    
     </footer>
+
+    <!-- Javascript -->          
+    <script type="text/javascript" src="assets/plugins/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/popper.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>  
+    
+    <!-- Page Specific JS -->
+    <script type="text/javascript" src="assets/plugins/jquery-flipster/dist/jquery.flipster.min.js"></script> 
+    <script type="text/javascript" src="assets/js/flipster-custom.js"></script> 
+
   </body>
 </html>
