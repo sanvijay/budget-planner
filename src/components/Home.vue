@@ -6,7 +6,7 @@
       <div class="row align-items-center">
         
         <div class="col-6 col-md-3 col-xl-4  d-block">
-          <h1 class="mb-0 site-logo"><a href="#" class="text-black h2 mb-0">finsey<span class="text-primary">.</span> </a></h1>
+          <h1 class="mb-0 site-logo"><a href="#" class="text-black h2 mb-0">Steven<span class="text-primary">.</span> </a></h1>
           <h1 style="display: none">Budget Planner & Expense Manager</h1>
         </div>
       </div>
@@ -22,7 +22,7 @@
             <div class="row mb-4">
               <div class="col-lg-6 mr-auto">
                 <h1>A full stop to financial worries</h1>
-                <p class="mb-5">When you are looking for an expense manager, you actually need a budget planner. Managing without a plan will make life harder. Finsey helps you to solve this problem seamlessly.</p>
+                <p class="mb-5">When you are looking for an expense manager, you actually need a budget planner. Managing without a plan will make life harder. Steven helps you to solve this problem seamlessly.</p>
                 <div>
                   <router-link :to="{ name: 'login' }" style="margin-right: 20px;color: white;">Sign In</router-link>
                   <router-link :to="{ name: 'register' }" class="btn btn-primary mr-2 mb-2">Create an account</router-link>
@@ -70,7 +70,7 @@
           <div class="col-lg-7 mb-5">
             <div class="row form-group">
               <div class="col-md-12">
-                <a class="btn btn-primary mr-2 mb-2" style="border-radius: 3px" href="https://play.google.com/store/apps/details?id=com.fireflies.finsey" target="blank">
+                <a class="btn btn-primary mr-2 mb-2" style="border-radius: 3px" href="https://play.google.com/store/apps/details?id=com.fireflies.Steven" target="blank">
                   <font-awesome-icon :icon="['fab', 'google-play']" /> Download
                 </a>
               </div>
@@ -224,7 +224,7 @@
           </div>
           <div class="col-lg-5 ml-auto pl-lg-5">
             <h2 class="text-black mb-4 h3 font-weight-bold"></h2>
-            <p class="mb-4">Mail us at <a href="mailto:team.finsey@gmail.com">team.finsey@gmail.com</a></p>
+            <p class="mb-4">Mail us at <a href="mailto:team.steven@gmail.com">team.steven@gmail.com</a></p>
           </div>
         </div>
       </div>
@@ -257,7 +257,7 @@ export default {
           this.submit_request_message = true;
         })
         .catch(error => {
-          this.$parent.toast("Some error occurred. Reach out to us: team.finsey@gmail.com");
+          this.$parent.toast("Some error occurred. Reach out to us: team.steven@gmail.com");
         });
     },
     clickBuyNow: function() {
@@ -266,7 +266,7 @@ export default {
           this.$parent.toast("Success! Now you are an prime user");
         })
         .catch(error => {
-          this.$parent.toast("Error occurred accessing payment portal. Reach out to us: team.finsey@gmail.com");
+          this.$parent.toast("Error occurred accessing payment portal. Reach out to us: team.steven@gmail.com");
         });
     }
   }

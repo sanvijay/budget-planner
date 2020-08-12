@@ -29,10 +29,10 @@
           <br>
           <div v-if="quizStage == 'collectInfo'">
             <p>
-              Hi! Welcome to <b><span class="logo">finsey<span class="text-primary">.</span></span></b>
+              Hi! Welcome to <b><span class="logo">Steven<span class="text-primary">.</span></span></b>
             </p>
 
-            <q><b><span class="logo">finsey<span class="text-primary">.</span></span></b> <span style="font-style: italic;">is the budget planner project designed during quarantine period. Planning your budget will make sure to pass any critical stages and have a peaceful future.</span></q><br><br>
+            <q><b><span class="logo">Steven<span class="text-primary">.</span></span></b> <span style="font-style: italic;">is the budget planner project designed during quarantine period. Planning your budget will make sure to pass any critical stages and have a peaceful future.</span></q><br><br>
 
             <p style="text-align: left !important">Enter your name to continue.</p>
             <input class="form-control input-sm" type="text" v-model="quiz.name">
@@ -88,7 +88,7 @@
       <div class="row">
         <div class="col-md-3 col-lg-3"></div>
         <div class="col-sm-12 col-md-6 col-lg-6 bg-light shadow-lg">
-          <p>Do support us by sharing <b><span class="logo">finsey<span class="text-primary">.</span></span></b> to your friends</p>
+          <p>Do support us by sharing <b><span class="logo">Steven<span class="text-primary">.</span></span></b> to your friends</p>
 
           <div class="row">
             <div class="col-lg-3"></div>
@@ -316,13 +316,13 @@ export default {
   },
   computed: {
     whatsappScoreText() {
-      return "https://wa.me/?text=I+have+scored+" + (this.quiz.score * 10) + "%25+in+finsey+quiz.+Do+you+want+to+know+yours%3F+Click+http%3A%2F%2Ffinsey.in%2F%23%2Fquiz%0D%0A%0D%0Afinsey.+is+the+budget+planner+project+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
+      return "https://wa.me/?text=I+have+scored+" + (this.quiz.score * 10) + "%25+in+Steven+quiz.+Do+you+want+to+know+yours%3F+Click+http%3A%2F%2FSteven.in%2F%23%2Fquiz%0D%0A%0D%0ASteven.+is+the+budget+planner+project+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
     },
     whatsappText() {
-      return "https://wa.me/?text=finsey+is+the+budget+planner+project+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.%0D%0A%0D%0AStart+planning+your+budget+%F0%9F%92%B0by+clicking+below+link%0D%0Ahttp%3A%2F%2Ffinsey.in%2F%0D%0A%0D%0A%0D%0AKindly+support+us+by+sharing+it+with+your+friends.";
+      return "https://wa.me/?text=Steven+is+the+budget+planner+project+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.%0D%0A%0D%0AStart+planning+your+budget+%F0%9F%92%B0by+clicking+below+link%0D%0Ahttp%3A%2F%2FSteven.in%2F%0D%0A%0D%0A%0D%0AKindly+support+us+by+sharing+it+with+your+friends.";
     },
     fbScoreText() {
-      return "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffb.me%2Fteam.finsey%2F&quote=I+have+scored+" + (this.quiz.score * 10) + "+in+finsey+quiz.+Do+you+want+to+know+yours%3F+Click+http%3A%2F%2Ffinsey.in%2F%23%2Fquiz%0D%0A%0D%0Afinsey.+is+the+budget+planner+project+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
+      return "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffb.me%2Fteam.Steven%2F&quote=I+have+scored+" + (this.quiz.score * 10) + "+in+Steven+quiz.+Do+you+want+to+know+yours%3F+Click+http%3A%2F%2FSteven.in%2F%23%2Fquiz%0D%0A%0D%0ASteven.+is+the+budget+planner+project+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
     }
   },
   components: {

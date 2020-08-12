@@ -14,7 +14,7 @@
     <b-navbar toggleable="lg" fixed="top" type="light" variant="light" class="shadow-lg" v-if="this.$route.path !== '/'">
       <b-navbar-brand href="#">
         <!-- <img src="./assets/logo.jpg" width="30" height="30" class="d-inline-block align-top" alt=""> -->
-        <span class="logo">finsey<span class="text-primary">.</span></span>
+        <span class="logo">Steven<span class="text-primary">.</span></span>
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -197,7 +197,7 @@ export default {
           h('p', { }, [
             "Looks like you are new to the website. Click ",
             h('router-link', { props: { to: "need-help" } }, 'Learn More'),
-            " to know how to use finsey. Or navigate to Help on top bar."
+            " to know how to use Steven. Or navigate to Help on top bar."
             ]
           )
         ]

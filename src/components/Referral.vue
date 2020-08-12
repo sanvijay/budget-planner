@@ -41,7 +41,7 @@
           </table>
         </div>
         <div class="bg-light shadow-lg" style="padding: 5px;">
-          <p>Invite your friends to finsey.</p>
+          <p>Invite your friends to Steven.</p>
           <a target="_blank" :href="whatsappInviteText" data-action="share/whatsapp/share" class="btn btn-success whatsapp-font"><b><font-awesome-icon :icon="['fab', 'whatsapp']" />&nbsp; Invite friends on Whatsapp</b></a><br><br>
         </div>
 
@@ -73,7 +73,7 @@ export default {
   },
   computed: {
     whatsappInviteText() {
-      return "https://wa.me/?text=I+have+a+referral+code+for+finsey+plus+account.+Enter+this+code+after+registering+to+finsey.%0D%0A%0D%0AReferral+code%3A+" + this.user_access.referring_token + "%0D%0A%0D%0Afinsey.+is+the+budget+planner+project+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
+      return "https://wa.me/?text=I+have+a+referral+code+for+Steven+plus+account.+Enter+this+code+after+registering+to+Steven.%0D%0A%0D%0AReferral+code%3A+" + this.user_access.referring_token + "%0D%0A%0D%0ASteven.+is+the+budget+planner+project+designed+during+the+quarantine+period.+Planning+your+budget+will+make+sure+to+pass+any+critical+stages+and+have+a+peaceful+future.";
     },
   },
   methods: {
