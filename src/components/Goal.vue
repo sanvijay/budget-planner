@@ -49,14 +49,14 @@
                 </td>
                 <td @click="toggleEditingGoal(goal, 'target')">
                   <div v-if="!showInput(goal, 'target')">
-                    &#8377; {{ goal.target }}
+                    $ {{ goal.target }}
                   </div>
                   <div v-if="showInput(goal, 'target')">
                     <input class="form-control input-sm" v-focus type="text" v-model="goal.target" @blur="updateGoal(goal)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(goal, 'target')">
                   </div>
                 </td>
-                <td>&#8377; {{ goal.planned.toFixed(2) }}</td>
-                <td>&#8377; {{ goal.actual.toFixed(2) }}</td>
+                <td>$ {{ goal.planned.toFixed(2) }}</td>
+                <td>$ {{ goal.actual.toFixed(2) }}</td>
               </tr>
               <tr>
                 <td><input class="form-control input-sm" type="text" v-model="newGoal.description"></td>

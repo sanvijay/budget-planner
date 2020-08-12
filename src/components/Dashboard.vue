@@ -81,33 +81,33 @@
                     {{ subCategory.title }}
                   </td>
 
-                  <td>&#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].planned }}</td>
-                  <td>&#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].actual }}</td>
-                  <td>&#8377; {{ (monthlyBudget[month[1]][month[0]][category][subCategory.id].planned - monthlyBudget[month[1]][month[0]][category][subCategory.id].actual).toFixed(2) }}</td>
+                  <td>$ {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].planned }}</td>
+                  <td>$ {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].actual }}</td>
+                  <td>$ {{ (monthlyBudget[month[1]][month[0]][category][subCategory.id].planned - monthlyBudget[month[1]][month[0]][category][subCategory.id].actual).toFixed(2) }}</td>
                 </tr>
                 <tr>
                   <td class="bg-light truncate"> <b>Sub-Total</b> </td>
                   <td>
                     <div v-if="category != 'Income'">
                       <span v-if="!incomePercentWithinLimit(category, 'planned', month[0], month[1])">&#10071;</span>
-                      <b-link :id="'planned' + category + month[0].toString()" class="link-as-text">&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) }}</b-link>
+                      <b-link :id="'planned' + category + month[0].toString()" class="link-as-text">$ {{ subTotalByType(category, 'planned', month[0], month[1]) }}</b-link>
                       <b-tooltip :target="'planned' + category + month[0].toString()" triggers="hover">
-                        Expected ({{ percentOfCategory(category) }}% of Income): &#8377; {{ percentValueFromIncome(category, 'planned', month[0], month[1]) }}<br>
+                        Expected ({{ percentOfCategory(category) }}% of Income): $ {{ percentValueFromIncome(category, 'planned', month[0], month[1]) }}<br>
                       </b-tooltip>
                     </div>
-                    <div v-else>&#8377; {{ subTotalByType(category, 'planned', month[0], month[1]) }}</div>
+                    <div v-else>$ {{ subTotalByType(category, 'planned', month[0], month[1]) }}</div>
                   </td>
                   <td>
                     <div v-if="category != 'Income'">
                       <span v-if="!incomePercentWithinLimit(category, 'actual', month[0], month[1])">&#10071;</span>
-                      <b-link :id="'actual' + category + month[0].toString()" class="link-as-text">&#8377; {{ subTotalByType(category, 'actual', month[0], month[1]) }}</b-link>
+                      <b-link :id="'actual' + category + month[0].toString()" class="link-as-text">$ {{ subTotalByType(category, 'actual', month[0], month[1]) }}</b-link>
                       <b-tooltip :target="'actual' + category + month[0].toString()" triggers="hover">
-                        Expected ({{ percentOfCategory(category) }}% of Income): &#8377; {{ percentValueFromIncome(category, 'actual', month[0], month[1]) }}<br>
+                        Expected ({{ percentOfCategory(category) }}% of Income): $ {{ percentValueFromIncome(category, 'actual', month[0], month[1]) }}<br>
                       </b-tooltip>
                     </div>
-                    <div v-else>&#8377; {{ subTotalByType(category, 'actual', month[0], month[1]) }}</div>
+                    <div v-else>$ {{ subTotalByType(category, 'actual', month[0], month[1]) }}</div>
                   </td>
-                  <td>&#8377; {{ (subTotalByType(category, 'planned', month[0], month[1]) - subTotalByType(category, 'actual', month[0], month[1])).toFixed(2) }}</td>
+                  <td>$ {{ (subTotalByType(category, 'planned', month[0], month[1]) - subTotalByType(category, 'actual', month[0], month[1])).toFixed(2) }}</td>
                 </tr>
               </tbody>
             </table>
@@ -172,7 +172,7 @@
               </td>
               <td class="left-sticky bg-light"> - </td>
               <td v-for="empty in monthYear" :key="empty[0]">
-                &#8377; 0
+                $ 0
               </td>
             </tr>
             <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id">
@@ -192,7 +192,7 @@
                 :class="{ 'error-cell': erroredCell(monthlyBudget[month[1]][month[0]][category][subCategory.id]) }"
               >
                 <div v-if="!editingCell(monthlyBudget[month[1]][month[0]][category][subCategory.id])">
-                  <div v-if="monthlyBudget[month[1]][month[0]][category][subCategory.id]">&#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].planned }}</div>
+                  <div v-if="monthlyBudget[month[1]][month[0]][category][subCategory.id]">$ {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].planned }}</div>
                 </div>
                 <div v-if="editingCell(monthlyBudget[month[1]][month[0]][category][subCategory.id])">
                   <input v-if="monthlyBudget[month[1]][month[0]][category][subCategory.id]" class="form-control input-sm" @keyup.esc="cancelEditingMoney(monthlyBudget[month[1]][month[0]][category][subCategory.id])" @keyup.enter="$event.target.blur()" @blur="doneEditingMoney(monthlyBudget[month[1]][month[0]][category][subCategory.id], month[0], month[1], subCategory.id)" v-focus type="text" v-model="monthlyBudget[month[1]][month[0]][category][subCategory.id].planned" />
@@ -207,7 +207,7 @@
 
                 <div>
                   <b-link class="link-as-text" :id="monthlyBudget[month[1]][month[0]][category][subCategory.id].id">
-                    &#8377; {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].actual }}
+                    $ {{ monthlyBudget[month[1]][month[0]][category][subCategory.id].actual }}
                   </b-link>
 
                   <b-popover variant="dark" triggers="focus" :target="monthlyBudget[month[1]][month[0]][category][subCategory.id].id" :title="plannedTitle(monthlyBudget[month[1]][month[0]][category][subCategory.id].planned)">
@@ -241,13 +241,13 @@
               <td class="left-sticky bg-light"> <b>Sub-Total</b> </td>
               <td v-for="month in monthYear" :key="month[0]" class="truncate">
                 <div v-if="category == 'Income'">
-                  &#8377; {{ subTotal(category, month[0], month[1]) }}
+                  $ {{ subTotal(category, month[0], month[1]) }}
                 </div>
                 <div v-else>
-                  <b-link :id="category + month[0].toString()" class="link-as-text">&#8377; {{ subTotal(category, month[0], month[1]) }}</b-link>
+                  <b-link :id="category + month[0].toString()" class="link-as-text">$ {{ subTotal(category, month[0], month[1]) }}</b-link>
                   <b-tooltip :target="category + month[0].toString()" triggers="hover">
-                    Sub-Total: &#8377; {{ subTotal(category, month[0], month[1]) }}<br>
-                    Expected ({{ percentOfCategory(category) }}% of Income): &#8377; {{ percentValueFromIncome(category, view, month[0], month[1]) }}<br>
+                    Sub-Total: $ {{ subTotal(category, month[0], month[1]) }}<br>
+                    Expected ({{ percentOfCategory(category) }}% of Income): $ {{ percentValueFromIncome(category, view, month[0], month[1]) }}<br>
                     Percentage Split of Outflow: {{ calculatePercentage(category, month[0], month[1]) }}%<br>
                   </b-tooltip>
                 </div>
@@ -266,22 +266,22 @@
                 :key="month[0]"
                 @click="clickPrevBalUpdateModal(month[1], month[0])"
               >
-                <div v-if="view == 'planned'">&#8377; {{ prevMonthBal(month[0], month[1]) }}</div>
-                <div v-if="view == 'actual'">&#8377; {{ prevMonthBal(month[0], month[1]).toFixed(2) }}</div>
+                <div v-if="view == 'planned'">$ {{ prevMonthBal(month[0], month[1]) }}</div>
+                <div v-if="view == 'actual'">$ {{ prevMonthBal(month[0], month[1]).toFixed(2) }}</div>
               </td>
             </tr>
             <tr>
               <td></td>
               <td class="bg-light left-sticky"><b>Total Inflow</b></td>
               <td v-for="month in monthYear" :key="month[0]" class="truncate">
-                &#8377; {{ totalInflow(month[0], month[1]) }}
+                $ {{ totalInflow(month[0], month[1]) }}
               </td>
             </tr>
             <tr>
               <td></td>
               <td class="bg-light left-sticky"><b>Total Outflow</b></td>
               <td v-for="month in monthYear" :key="month[0]" class="truncate">
-                &#8377; {{ totalOutflow(month[0], month[1]) }}
+                $ {{ totalOutflow(month[0], month[1]) }}
               </td>
             </tr>
             <tr v-if="monthlyBudget[selectedYear + 1] != null && monthlyBudget[selectedYear + 1][3] != null">
@@ -289,7 +289,7 @@
               <td class="bg-light left-sticky"><b>Total Balance</b></td>
               <td v-for="month in monthYear" :key="month[0]" class="truncate" :class="{red: totalBalance(month[0], month[1]) < 0, green: totalBalance(month[0], month[1]) >= 0}">
                 <div>
-                  &#8377; {{ totalBalance(month[0], month[1]) }}
+                  $ {{ totalBalance(month[0], month[1]) }}
                 </div>
               </td>
             </tr>
@@ -436,7 +436,7 @@
 
             <table style="width: 100%">
               <tr v-for="log in monthlyLogs[month[1]][month[0]]" :key="log._id.$oid" style="border-bottom:1pt solid #dadada;">
-                <td class="small">{{ getDateFromTime(log.spent_on) }}: &#8377;{{ log.value }} for '{{ log.description }}' under {{ findCategoryById(log.category_id.$oid)[0] }} ({{ findCategoryById(log.category_id.$oid)[1] }}) in {{ accounts[log.account_id.$oid] }}</td>
+                <td class="small">{{ getDateFromTime(log.spent_on) }}: ${{ log.value }} for '{{ log.description }}' under {{ findCategoryById(log.category_id.$oid)[0] }} ({{ findCategoryById(log.category_id.$oid)[1] }}) in {{ accounts[log.account_id.$oid] }}</td>
                 <td @click="deleteActualCashFlowLogs(log, month[1], month[0])" style="width: 25px; cursor: pointer;" title="delete">&#128465;</td>
               </tr>
             </table>

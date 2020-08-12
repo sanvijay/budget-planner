@@ -145,7 +145,7 @@
                 <span class="icon-wrap"><span>Free</span></span>
               </div>
               <div>
-                <p style="text-align: center; font-weight: bold;">&#8377; 0</p><hr>
+                <p style="text-align: center; font-weight: bold;">$ 0</p><hr>
                 <ul>
                   <li>Maintain 3 Accounts</li>
                   <li>Overall 15 Categories</li>
@@ -168,7 +168,7 @@
                 <span class="icon-wrap"><span>Plus</span></span>
               </div>
               <div>
-                <p style="text-align: center; font-weight: bold;">&#8377; 75 / mo (or) &#8377; 600 / yr</p><hr>
+                <p style="text-align: center; font-weight: bold;">$ 75 / mo (or) $ 600 / yr</p><hr>
                 <ul>
                   <li>Maintain 5 Accounts</li>
                   <li>Overall 25 Categories</li>
@@ -192,7 +192,7 @@
                 <span class="icon-wrap"><span>Prime</span></span>
               </div>
               <div>
-                <p style="text-align: center; font-weight: bold;">&#8377; 150 / mo (or) &#8377; 1200 / yr</p><hr>
+                <p style="text-align: center; font-weight: bold;">$ 150 / mo (or) $ 1200 / yr</p><hr>
                 <ul>
                   <li>No Ads</li>
                   <li>Maintain 50 Accounts</li>

@@ -31,13 +31,13 @@
                 </td>
                 <td @click="toggleEditingBenefit(benefit, 'value')">
                   <div v-if="!showInput(benefit, 'value')">
-                    &#8377; {{ benefit.value }}
+                    $ {{ benefit.value }}
                   </div>
                   <div v-if="showInput(benefit, 'value')">
                     <input class="form-control input-sm" v-focus type="text" v-model="benefit.value" @blur="updateBenefit(benefit)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(benefit, 'value')">
                   </div>
                 </td>
-                <td>&#8377; {{ benefit.yearly_total }}</td>
+                <td>$ {{ benefit.yearly_total }}</td>
               </tr>
               <tr>
                 <td><input class="form-control input-sm" type="text" v-model="newBenefit.title"></td>
