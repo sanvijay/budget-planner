@@ -1341,4 +1341,5 @@ table.sectioned thead {
   color: black;
   text-decoration: none !important
 }
+.bg-light{background-color: #f2f2f2 !important;}
 </style>
