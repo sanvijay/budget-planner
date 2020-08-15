@@ -7,8 +7,8 @@
         </p>
         <br><hr>
         <small style="color: white" class="float-left">(Coming Soon)</small><br>
-        <div class="bg-light shadow-lg" style="padding: 5px;">
-          <table class="table-sm table-bordered">
+        <div class=" shadow-lg" style="padding: 5px;">
+          <table class="table-sm table-striped">
             <tr>
               <th>Phone Number (+91):</th>
               <td v-if="!verified"><input class="form-control input-sm" type="text" v-model="phone_number" required></td>

@@ -10,8 +10,8 @@
         </p>
         <br><hr>
 
-        <div class="shadow-lg bg-light" style="padding: 5px;">
-          <table class="table-sm table-bordered table-responsive">
+        <div class="shadow-lg " style="padding: 5px;">
+          <table class="table-sm table-striped table-responsive">
 
             <thead>
               <th>Name</th>

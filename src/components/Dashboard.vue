@@ -44,15 +44,15 @@
     </div>
     <hr>
 
-    <div class="row shadow-lg bg-light"><div class="col">
+    <div class="row shadow-lg "><div class="col">
       <div v-if="view == 'monthly'">
         <div class="row">
           <div v-for="month in monthYear" :key="month[0]" class="col-lg-8 col-md-12">
             <b>{{ monthFromInt(month[0] - 1) }} / {{ month[1] }}</b>
-            <table class="table-sm table-bordered table-hover table-responsive sectioned">
-              <thead class="bg-light">
+            <table class="table-sm table-striped table-hover table-responsive sectioned">
+              <thead class="">
                 <tr>
-                  <th class="bg-light"></th>
+                  <th class=""></th>
                   <th>Category</th>
                   <th style="min-width: 120px">Planned</th>
                   <th style="min-width: 120px">Actual</th>
@@ -61,10 +61,10 @@
               </thead>
               <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
                 <tr v-if="subCategories.length == 0">
-                  <td rowspan="2" style="border: 2px solid Gray;" class="bg-light">
+                  <td rowspan="2" style="border: 2px solid Gray;" class="">
                     <b>{{ category }}</b>
                   </td>
-                  <td class="bg-light"> - </td>
+                  <td class=""> - </td>
                   <td> - </td>
                   <td> - </td>
                   <td> - </td>
@@ -74,10 +74,10 @@
                   :key="subCategory.id"
                   v-if="monthlyBudget[selectedYear + 1] != null && monthlyBudget[selectedYear + 1][3] != null && monthlyBudget[selectedYear + 1][3][category] != null && monthlyBudget[selectedYear + 1][3][category][subCategory.id] != null"
                 >
-                  <td :rowspan="subCategories.length + 2" v-if="idx == 0" style="border: 2px solid Gray;" class="bg-light">
+                  <td :rowspan="subCategories.length + 2" v-if="idx == 0" style="border: 2px solid Gray;" class="">
                     <b>{{ category }}</b>
                   </td>
-                  <td class="truncate bg-light">
+                  <td class="truncate ">
                     {{ subCategory.title }}
                   </td>
 
@@ -86,7 +86,7 @@
                   <td>&#8377; {{ (monthlyBudget[month[1]][month[0]][category][subCategory.id].planned - monthlyBudget[month[1]][month[0]][category][subCategory.id].actual).toFixed(2) }}</td>
                 </tr>
                 <tr>
-                  <td class="bg-light truncate"> <b>Sub-Total</b> </td>
+                  <td class=" truncate"> <b>Sub-Total</b> </td>
                   <td>
                     <div v-if="category != 'Income'">
                       <span v-if="!incomePercentWithinLimit(category, 'planned', month[0], month[1])">&#10071;</span>
@@ -155,9 +155,10 @@
         </div>
         <br>
       </div>
+
       <div v-if="view == 'planned' || view == 'actual'">
-        <table class="table-sm table-bordered table-hover table-responsive sectioned" style="height: 75vh; overflow: auto;">
-          <thead class="bg-light">
+        <table class="table-sm table-striped table-hover table-responsive sectioned" style="height: 75vh; overflow: auto;">
+          <thead class="">
             <tr>
               <th class="bg-light top-sticky" style="z-index: 1"></th>
               <th class="bg-light top-sticky left-sticky" style="z-index: 1"></th>
@@ -167,7 +168,7 @@
 
           <tbody v-for="(subCategories, category) in categories" :key="category" class="tbody-striped" :class="category.toLowerCase()">
             <tr v-if="subCategories.length == 0">
-              <td rowspan="3" style="border: 2px solid Gray;" class="bg-light">
+              <td rowspan="3" style="border: 2px solid Gray;" class="">
                 <b>{{ category }}</b>
               </td>
               <td class="left-sticky bg-light"> - </td>
@@ -176,7 +177,7 @@
               </td>
             </tr>
             <tr v-for="(subCategory, idx) in subCategories" :key="subCategory.id">
-              <td :rowspan="subCategories.length + 2" v-if="idx == 0" style="border: 2px solid Gray;" class="bg-light">
+              <td :rowspan="subCategories.length + 2" v-if="idx == 0" style="border: 2px solid Gray;" class="">
                 <b>{{ category }}</b>
               </td>
               <td class="truncate bg-light left-sticky">
@@ -228,7 +229,7 @@
             </tr>
 
             <tr>
-              <td class="truncate left-sticky bg-light">
+              <td class="truncate left-sticky ">
                 <form class="add-category-form">
                   <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter.prevent="showAddCategoryButton(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
                   <button class="add-category-button btn btn-primary" @click.prevent="addSubCategory(category)" v-if="newCategoryShowButton[category]">+</button>
@@ -343,8 +344,9 @@
           <b-form @submit="submitRecurringPlanModal" @reset="resetRecurringPlanModal()">
 
             <label for="datepicker">Duration:</label>
-            <b-form-datepicker required v-model="addRecurringPlanForm.from" class="form-control sm-2"></b-form-datepicker><br>
-            <b-form-datepicker required v-model="addRecurringPlanForm.to" class="form-control sm-2"></b-form-datepicker><br>
+
+            <input type="date" required v-model="addRecurringPlanForm.from" class="form-control sm-2" />
+            <input type="date" required v-model="addRecurringPlanForm.to" class="form-control sm-2" /><br>
 
             <b-form-group id="input-group-cat" label="Category:" label-for="input-cat">
               <b-form-select class="input-cat" v-model="addRecurringPlanForm.category">
@@ -379,7 +381,8 @@
         <br><hr>
           <b-form @submit="submitExpenseModal" @reset="resetExpenseModal()">
             <label for="datepicker">Received / Spent On:</label>
-            <b-form-datepicker required v-model="addExpenseForm.spent_on" class="form-control sm-2"></b-form-datepicker><br>
+            <input type="date" required v-model="addExpenseForm.spent_on" class="form-control sm-2" /><br>
+
             <b-form-group id="input-group-2" label="Description:" label-for="input-2">
               <b-form-input
                 id="input-2"

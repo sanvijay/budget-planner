@@ -1,29 +1,5 @@
 <template>
 <div>
-    <header class="header">
-      
-        <div class="branding">
-            
-            <div class="container position-relative">
-
-        <nav class="navbar navbar-expand-lg" >
-                    <h1 class="site-logo"><a class="navbar-brand" href="/"><img class="logo-icon" src="assets/images/logo-icon.svg" alt="logo"> <span class="logo-text">finsey.</span></a></h1>
-        </nav>
-        
-        <!-- // Free Version ONLY -->
-        <ul class="social-list list-inline mb-0 position-absolute">
-                  <li class="list-inline-item"><a class="text-dark" href="https://fb.me/team.finsey"><i class="fab fa-facebook-f fa-fw"></i></a></li>
-                  <li class="list-inline-item"><a class="text-dark" href="https://www.instagram.com/team.finsey"><i class="fab fa-instagram fa-fw"></i></a></li>
-              </ul><!--//social-list-->
-              
-            </div><!--//container-->
-            
-        </div><!--//branding-->
-        
-        
-    </header><!--//header-->
-    
-    
     <section class="hero-section">
       <div class="container">
         <div class="row figure-holder">

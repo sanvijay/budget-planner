@@ -6,8 +6,8 @@
           Referral
         </p>
         <br><hr>
-        <div class="bg-light shadow-lg" style="padding: 5px;">
-          <table class="table-sm table-bordered">
+        <div class=" shadow-lg" style="padding: 5px;">
+          <table class="table-sm table-striped">
             <tr>
               <th>Current Plan:</th>
               <td>{{ user_access.plan }}</td>
@@ -40,14 +40,14 @@
             </tr>
           </table>
         </div>
-        <div class="bg-light shadow-lg" style="padding: 5px;">
+        <div class=" shadow-lg" style="padding: 5px;">
           <p>Invite your friends to finsey.</p>
           <a target="_blank" :href="whatsappInviteText" data-action="share/whatsapp/share" class="btn btn-success whatsapp-font"><b><font-awesome-icon :icon="['fab', 'whatsapp']" />&nbsp; Invite friends on Whatsapp</b></a><br><br>
         </div>
 
-        <div class="bg-light shadow-lg" style="padding: 5px;" v-if="user_access.referred_by == null">
+        <div class=" shadow-lg" style="padding: 5px;" v-if="user_access.referred_by == null">
           <p>Do you have an referral code?</p>
-          <table class="table-sm table-bordered">
+          <table class="table-sm table-striped">
             <tr>
               <th>Enter Token:</th>
               <td>

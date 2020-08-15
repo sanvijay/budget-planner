@@ -6,8 +6,8 @@
           User Profile
         </p>
         <br><hr>
-        <div class="bg-light shadow-lg" style="padding: 5px;">
-          <table class="table-sm table-bordered">
+        <div class=" shadow-lg" style="padding: 5px;">
+          <table class="table-sm table-striped">
             <tr>
               <th>First Name</th>
               <td><input class="form-control input-sm" type="text" v-model="user_profile.first_name" required></td>

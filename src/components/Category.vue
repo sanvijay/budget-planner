@@ -10,8 +10,8 @@
         </p>
         <br><hr>
 
-        <div class="shadow-lg bg-light" style="padding: 5px;">
-          <table class="table-sm table-bordered table-responsive">
+        <div class="shadow-lg " style="padding: 5px;">
+          <table class="table-sm table-striped table-responsive">
             <thead>
               <th>Super Category</th>
               <th>Category</th>
@@ -67,7 +67,7 @@
                 </td>
               </tr>
               <tr>
-                <td class="truncate left-sticky bg-light">
+                <td class="truncate left-sticky ">
                   <form class="add-category-form">
                     <input class="form-control input-sm add-category-input" type="text" placeholder="Add category" @focus="showAddCategoryButton(category)" @blur="hideAddCategoryButton(category)" @keyup.enter.prevent="showAddCategoryButton(category)" @keyup.esc="cancelAddingSubCategory(category)" v-model="newCategory[category]" />
                     <button class="add-category-button btn btn-primary" @click="addCategory(category)" v-if="newCategoryShowButton[category]">+</button>

@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="row">
-        <div class="col-12 bg-light right-align">
+        <div class="col-12 right-align">
           <h2><strong>Terms and Conditions</strong></h2>
 
           <p>Welcome to finsey!</p>

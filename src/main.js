@@ -26,7 +26,7 @@ Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 Axios.defaults.headers.post['Access-Control-Allow-Origin'] = process.env.VUE_APP_API_URL;
 
 // import 'bootstrap/dist/css/bootstrap.css'
-// import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 
 Vue.use(require('vue-script2'))

@@ -1,7 +1,7 @@
 <template>
-  <a v-if="showGoogleSignIn" id="signinButton" @click="googleSignIn" class="btn shadow-sm" href="#" role="button" style="text-transform:none; background-color: #ffffff">
-    <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="img/google-logo.webp" />
-    Sign in with Google
+  <a v-if="showGoogleSignIn" id="signinButton" @click="googleSignIn" class="btn btn-social btn-google btn-block" href="#">
+    <span class="icon-holder"><i class="fab fa-google fa-fw" ></i></span>
+    <span class="btn-text">Sign In with Google</span>
   </a>
 </template>
 

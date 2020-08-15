@@ -4,31 +4,26 @@
       <div class="row" v-html="thanksMessage" style="text-align: center; display: inline-block"></div>
       <div class="row justify-content-center">
 
-        <div class="col-md-6 col-sm-6 col-lg-6 bg-light shadow-lg">
-          <b-form @submit="handleSubmit" class="form-container">
-            <b-form-group
-              id="input-group-1"
-              :description="charactersLeft"
-            >
-              <b-form-textarea
-                id="input-1"
-                v-model="content"
-                type="textarea"
-                required
-                placeholder="Write your feedback"
-              ></b-form-textarea>
-            </b-form-group>
-            <small>Your responses will be anonymous.</small>
-
-            <b-button type="submit" variant="primary" class="btn-block">Send Feedback</b-button>
-          </b-form>
-        </div>
-      </div>
-      <hr>
-      <div class="row justify-content-center">
-        <div class="col-md-6 col-sm-6 col-lg-6 bg-light shadow-lg">
-          <p>Consider supporting us. Please email us to <a href="mailto:team.finsey@gmail.com">team.finsey@gmail.com</a></p>
-        </div>
+        <section class="contact-form-section pb-5">
+          <div class="container pb-5">
+               <div class="form-wrapper shadow-lg single-col-max-width mx-auto p-5">
+                  <form @submit="handleSubmit" id="contact-form" class="contact-form" method="post" action="">
+                    <h3 class="text-center mb-4">Feedback</h3>
+                    <div class="form-row">
+                          <div class="form-group col-12">
+                              <label class="sr-only" for="cmessage">Write your feedback</label>
+                              <textarea v-model="content" class="form-control" id="cmessage" name="message" placeholder="Write your feedback" rows="10" required="" aria-required="true"></textarea>
+                              <small>Your responses will be anonymous.</small>
+                          </div>
+                           <div class="form-group col-12">
+                              <button type="submit" class="btn btn-block btn-primary py-2">Send Feedback</button>
+                          </div>
+                          <hr><p>Consider supporting us. Please email us to <a href="mailto:team.finsey@gmail.com">team.finsey@gmail.com</a></p>                   
+                      </div><!--//form-row-->
+                  </form>
+               </div>
+          </div><!--//container-->
+        </section><!--//contact-form-section-->
       </div>
     </div>
   </div>

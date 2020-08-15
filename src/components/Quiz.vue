@@ -15,7 +15,7 @@
 
       <div class="row">
         <div class="col-md-3 col-lg-3"></div>
-        <div class="col-sm-12 col-md-6 col-lg-6 bg-light shadow-lg">
+        <div class="col-sm-12 col-md-6 col-lg-6 shadow-lg"><br>
           Get your <router-link :to="{ name: 'register' }">account</router-link> now for free.<br>
           <br>
         </div>
@@ -25,7 +25,7 @@
 
       <div class="row">
         <div class="col-md-3 col-lg-3"></div>
-        <div class="col-sm-12 col-md-6 col-lg-6 bg-light shadow-lg">
+        <div class="col-sm-12 col-md-6 col-lg-6 shadow-lg">
           <br>
           <div v-if="quizStage == 'collectInfo'">
             <p>
@@ -87,7 +87,7 @@
       <br>
       <div class="row">
         <div class="col-md-3 col-lg-3"></div>
-        <div class="col-sm-12 col-md-6 col-lg-6 bg-light shadow-lg">
+        <div class="col-sm-12 col-md-6 col-lg-6 shadow-lg"><br>
           <p>Do support us by sharing <b><span class="logo">finsey<span class="text-primary">.</span></span></b> to your friends</p>
 
           <div class="row">

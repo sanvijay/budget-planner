@@ -1,64 +1,72 @@
 <template>
-  <div class="parent">
-    <div class="container-fluid">
-      <div class="row justify-content-center">
+<div class="signup-section auth-section">
+        
+        <div class="row m-0" style="background-color: #EFF2F5;">
+          <div class="auth-col-main bg-white col-12 col-lg-8 order-2 text-center p-5 h-100 align-self-stretch">
+            <h1 class="site-logo mb-3"><a class="navbar-brand mr-0" href="index.html"><img class="svg-ie-fix logo-icon" src="assets/images/logo-icon.svg" alt="logo"> <span class="logo-text">finsey.</span></span></a></h1>
 
-        <div class="col-md-6 col-sm-6 col-lg-3 bg-light shadow-lg">
-          <b-form @submit="handleSubmit" class="form-container">
-            <b-form-group
-              id="input-group-1"
-              description="We'll never share your email with anyone else."
-            >
-              <b-form-input
-                id="input-1"
-                v-model="email"
-                type="email"
-                required
-                placeholder="Enter email"
-              ></b-form-input>
-            </b-form-group>
-
-            <b-form-group id="input-group-2">
-              <b-form-input
-                id="input-2"
-                v-model="password"
-                required
-                placeholder="Enter Password"
-                type="password"
-              ></b-form-input>
-            </b-form-group>
-
-            <b-form-group id="input-group-3">
-              <b-form-input
-                id="input-3"
-                v-model="password_confirmation"
-                required
-                placeholder="Confirm Password"
-                type="password"
-              ></b-form-input>
-            </b-form-group>
-
-            <div><small>By clicking Register, you agree to our <router-link :to="{ name: 'terms' }">Terms and Conditions</router-link> and that you have read our <router-link :to="{ name: 'privacy-policy' }">Privacy Policy</router-link></small></div><br>
-
-            <b-button type="submit" variant="primary" class="btn-block">Register</b-button>
-          </b-form>
-
-          <div class="or-text">
-            <span>OR</span>
-          </div>
-
-          <GoogleSignIn></GoogleSignIn>
-
-          <br><br>
-          <hr>
-
-          <div class="form-group text-center">
-            Already a User: <router-link :to="{ name: 'login' }">Sign In</router-link>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+            <div class="auth-wrapper mx-auto">
+              <h2 class="auth-heading mb-2">Create your free account</h2>
+              <div class="auth-intro mb-4">Try finsey for free. No credit card needed.</div>
+              
+            
+              <div class="social-auth text-center mx-auto">                        
+                      <ul class="social-buttons list-unstyled">
+                          <li class="mb-3">
+                            <GoogleSignIn></GoogleSignIn>
+                          </li>
+                      </ul>
+                  </div>
+                  
+                  <div class="divider my-5">
+                      <span class="or-text">OR</span>
+                  </div>
+                  
+                  <div class="auth-form-container text-left mx-auto">
+                      <form  @submit="handleSubmit" class="auth-form signup-form">         
+                          <div class="form-group email">
+                              <label class="sr-only" for="signup-email">Your Email</label>
+                              <input v-model="email" id="signup-email" name="signup-email" type="email" class="form-control signup-email" placeholder="Your email" required="required">
+                          </div><!--//form-group-->
+                          <div class="form-group password">
+                              <label class="sr-only" for="signup-password">Password</label>
+                              <input v-model="password" id="signup-password" name="signup-password" type="password" class="form-control signup-password" placeholder="Create a password" required="required">
+                          </div><!--//form-group-->
+                          <div class="form-group password">
+                              <label class="sr-only" for="signup-password">Password</label>
+                              <input v-model="password_confirmation" id="signup-password-confirmation" name="signup-password" type="password" class="form-control signup-password" placeholder="Create a password" required="required">
+                          </div><!--//form-group-->
+                          <div class="legal-note mb-3 text-light text-center">By signing up, you agree to our <router-link :to="{ name: 'terms' }">terms of service</router-link> and <router-link :to="{ name: 'privacy-policy' }">privacy policy</router-link>.</div>
+                          <div class="text-center">
+                              <button type="submit" class="btn btn-primary theme-btn mx-auto">Register</button>
+                          </div>
+                      </form>
+                  </div><!--//auth-form-container-->
+                  
+                  <div class="option-container my-4 pt-3">
+                    <div class="lead-text">Already have an account? <router-link :to="{ name: 'login' }">Sign In</router-link> </div> 
+                  </div><!--//option-container-->
+            </div><!--//auth-wrapper-->
+            
+            
+          </div><!--//col-auth-->
+            
+          <div class="auth-col-promo col-lg-4 d-none d-lg-block order-1 theme-bg-primary h-100 align-self-stretch">
+            <div class="auth-col-promo-inner h-100 position-relative p-0">
+              <div class="auth-quote-box mt-5 mb-3 px-3 py-4 rounded text-center shadow-lg bg-white mx-auto">
+                    <h5 class="auth-quote-title">An absolute time-saver!</h5>
+                  <div>You can use this area to add customer testimonial or reinforce your app's key benefits. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</div>
+              </div>
+              <div class="auth-user-figure-holder mt-5">
+                
+              </div>
+            </div>
+          
+          </div><!--//col-promo-->
+          
+        </div><!--//row-->
+   
+    </div><!--//signup-section-->
 </template>
 
 <script>
@@ -102,22 +110,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.parent {
-  padding-top: 5vh;
-}
-.form-container {
-  padding: 30px;
-}
-.or-text {
-   width: 100%; 
-   text-align: center; 
-   border-bottom: 1px solid #D3D3D3; 
-   line-height: 0.05em;
-   margin: 10px 0 20px; 
-} 
-
-.or-text span { 
-    background:#f8f9fa; 
-    padding:0 10px; 
-}
 </style>

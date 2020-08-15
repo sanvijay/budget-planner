@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-12 bg-light right-align">
+      <div class="col-12 right-align">
         <h2><strong>Cookie Policy for finsey.</strong></h2>
 
         <p>This is the Cookie Policy for finsey., accessible from www.finsey.in</p>

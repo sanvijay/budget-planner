@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="row">
-        <div class="col-12 right-align bg-light">
+        <div class="col-12 right-align">
           <br>
           <p class="h4 float-left">
             How to refer?
@@ -22,7 +22,7 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-12 right-align bg-light">
+        <div class="col-12 right-align">
           <br>
           <p class="h4 float-left">
             Help
@@ -53,7 +53,7 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-12 right-align bg-light">
+        <div class="col-12 right-align">
           <br>
           <p class="h4 float-left">
             What's Next

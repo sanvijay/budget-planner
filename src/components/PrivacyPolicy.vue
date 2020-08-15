@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="row">
-        <div class="col-12 bg-light right-align">
+        <div class="col-12 right-align">
           <h3><strong>Privacy Policy for finsey</strong></h3>
 
           <p>At finsey, accessible from www.finsey.com, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by finsey and how we use it.</p>

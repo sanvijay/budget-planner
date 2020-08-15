@@ -11,8 +11,8 @@
         <br><hr>
         <small style="color: white" class="float-left">(Coming Soon: Better tool to close your loans efficiently.)</small><br>
 
-        <div class="shadow-lg bg-light" style="padding: 5px;">
-          <table class="table-sm table-bordered table-responsive">
+        <div class="shadow-lg " style="padding: 5px;">
+          <table class="table-sm table-striped table-responsive">
             <thead>
               <th>Description</th>
               <th>Start Date</th>

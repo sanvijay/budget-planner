@@ -1,52 +1,91 @@
 <template>
   <div id="app">
-    <b-navbar toggleable="lg" fixed="top" type="light" variant="light" class="shadow-lg" v-if="this.$route.path !== '/'">
-      <b-navbar-brand href="#">
-        <!-- <img src="./assets/logo.jpg" width="30" height="30" class="d-inline-block align-top" alt=""> -->
-        <span class="logo">finsey<span class="text-primary">.</span></span>
-      </b-navbar-brand>
 
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <header class="header">
+      
+      <div class="branding">
+            
+        <div class="container position-relative">
 
-      <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav v-if="loggedIn">
-          <b-nav-item :to="{ name: 'dashboard' }">Planning and Accounting</b-nav-item>
-          <b-nav-item :to="{ name: 'summary' }">Profile</b-nav-item>
-          <b-nav-item :to="{ name: 'setting' }">Settings</b-nav-item>
-          <b-nav-item :to="{ name: 'need-help' }">Help</b-nav-item>
-          <b-nav-item :to="{ name: 'feedback' }">Feedback</b-nav-item>
-        </b-navbar-nav>
+          <nav class="navbar navbar-expand-lg" >
+                      <h1 class="site-logo"><a class="navbar-brand" href="/"><img class="logo-icon" src="assets/images/logo-icon.svg" alt="logo"> <span class="logo-text">finsey.</span></span></a></h1>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse p-1 p-lg-0" id="navigation">
+              <ul class="navbar-nav ml-lg-auto">
+                <li class="nav-item active mr-lg-4" v-if="!loggedIn">
+                    <router-link class="nav-link" :to="{ name: 'home' }">Home</router-link>
+                </li>
+                <li class="nav-item mr-lg-4" v-if="!loggedIn">
+                    <router-link class="nav-link" :to="{ name: 'register' }">Sign Up</router-link>
+                </li>
+                <li class="nav-item mr-lg-4" v-if="!loggedIn">
+                  <router-link class="nav-link" :to="{ name: 'login' }">Login</router-link>
+                </li>
+                <li class="nav-item mr-lg-4" v-if="!loggedIn">
+                  <router-link class="nav-link" :to="{ name: 'quiz' }">Quiz</router-link>
+                </li>
 
-        <b-navbar-nav v-if="!loggedIn">
-          <b-nav-item :to="{ name: 'home' }">Home</b-nav-item>
-          <b-nav-item :to="{ name: 'register' }">Sign Up</b-nav-item>
-          <b-nav-item :to="{ name: 'login' }">Login</b-nav-item>
-          <b-nav-item :to="{ name: 'quiz' }">Quiz<span class="badge badge-primary" style="overflow: auto;">check this</span></b-nav-item>
-        </b-navbar-nav>
+                <li class="nav-item mr-lg-4" v-if="loggedIn">
+                    <router-link class="nav-link" :to="{ name: 'dashboard' }">Dashboard</router-link>
+                </li>
+                <li class="nav-item mr-lg-4" v-if="loggedIn">
+                    <router-link class="nav-link" :to="{ name: 'summary' }">Profile</router-link>
+                </li>
+                <li class="nav-item mr-lg-4" v-if="loggedIn">
+                    <router-link class="nav-link" :to="{ name: 'setting' }">Settings</router-link>
+                </li>
 
-        <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto" v-if="loggedIn">
-          <b-nav-item-dropdown :class="selectedBGColor" class="caret-off bgColorSelector">
-            <b-dropdown-item v-for="color in backgroundColors" :key="color" @click="changeBGColor(color)">
-              <span :class="color" class="bgColorSelector"></span>
-            </b-dropdown-item>
-          </b-nav-item-dropdown>
+                <li class="dropdown mr-lg-4" v-if="loggedIn">
+                  <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">{{ selectedFinancialYearText }}
+                  <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li v-for="financialYear in allFinancialYear" :key="financialYear" @click="selectFinancialYear(financialYear)">
+                      <a href="#" class="nav-link">{{ financialYear }} - {{ financialYear + 1 }}</a>
+                    </li>
+                  </ul>
+                </li>
 
-          <b-nav-item-dropdown :text="selectedFinancialYearText">
-            <b-dropdown-item v-for="financialYear in allFinancialYear" :key="financialYear" @click="selectFinancialYear(financialYear)">{{ financialYear }} - {{ financialYear + 1 }}</b-dropdown-item>
-          </b-nav-item-dropdown>
+                <li class="dropdown mr-lg-4" v-if="loggedIn">
+                  <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">Hi {{ userProfile.first_name }}!
+                  <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <router-link class="nav-link" :to="{ name: 'feedback' }">Feedback</router-link>
+                    </li>
+                    <li>
+                      <router-link class="nav-link" :to="{ name: 'need-help' }">Help</router-link>
+                    </li>
+                    <li>
+                      <a href="#" class="nav-link" @click="logout">Logout</a>
+                    </li>
+                  </ul>
+                </li>
 
-          <b-nav-item href="#" v-if="userProfile.first_name">Hi {{ userProfile.first_name }}!</b-nav-item>
-          <b-nav-item href="#" @click="logout">Logout</b-nav-item>
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
+              </ul>
+            </div>
+          </nav>
+
+          <!-- // Free Version ONLY -->
+          <ul class="social-list list-inline mb-0 position-absolute d-none">
+            <li class="list-inline-item"><a class="text-dark" href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
+            <li class="list-inline-item"><a class="text-dark" href="#"><i class="fab fa-facebook-f fa-fw"></i></a></li>
+            <li class="list-inline-item"><a class="text-dark" href="#"><i class="fab fa-instagram fa-fw"></i></a></li>
+            <li class="list-inline-item"><a class="text-dark" href="#"><i class="fab fa-youtube fa-fw"></i></a></li>
+        </ul><!--//social-list-->
+      </div><!--//container-->
+
+      </div><!--//branding-->
+    </header>
+
 
     <b-modal id="ask-for-user-profile" :no-close-on-esc="true" :no-close-on-backdrop="true" :hide-header-close="true" :hide-footer="true" :hide-header="true">
       <Profile />
     </b-modal>
 
-    <div style="padding-top: 90px; margin-bottom: 1000" v-if="this.$route.path !== '/'">
+    <div style="margin-bottom: 1000" v-if="this.$route.path !== '/'">
       <router-view :selectedYear="selectedFinancialYear"></router-view>
     </div>
 
@@ -223,7 +262,7 @@ export default {
             h('router-link', { props: { to: "cookie-policy" } }, 'Learn More')
             ]
           ),
-          h('button', { class: ['btn', 'btn-primary'], on: { click: function() { localStorage.setItem('cookieAccepted', "true"); } } }, 'Accept & Close')
+          h('button', { class: ['btn', 'btn-primary'], on: { click: function() { localStorage.setItem('cookieAccepted', "true"); location.reload(); } } }, 'Accept & Close')
         ]
       );
 

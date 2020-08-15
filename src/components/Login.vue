@@ -1,57 +1,67 @@
 <template>
-  <div class="parent">
-    <div class="container-fluid">
-      <div class="row justify-content-center">
-          <div class="col-lg-3 col-md-6 col-sm-6 bg-light shadow-lg">
-            <b-form @submit="handleSubmit" class="form-container">
-              <b-form-group id="input-group-1">
-                <b-form-input
-                  id="input-1"
-                  v-model="email"
-                  type="email"
-                  required
-                  placeholder="Enter email"
-                ></b-form-input>
-              </b-form-group>
+  <div class="signup-section auth-section">
+        
+        <div class="row m-0" style="background-color: #EFF2F5;">
+          <div class="auth-col-main bg-white col-12 col-lg-8 order-2 text-center p-5 h-100 align-self-stretch">
+            <h1 class="site-logo mb-3"><a class="navbar-brand mr-0" href="index.html"><img class="svg-ie-fix logo-icon" src="assets/images/logo-icon.svg" alt="logo"> <span class="logo-text">finsey.</span></span></a></h1>
 
-              <b-form-group id="input-group-2">
-                <b-form-input
-                  id="input-2"
-                  v-model="password"
-                  required
-                  placeholder="Enter Password"
-                  type="password"
-                ></b-form-input>
-              </b-form-group>
-
-              <b-form-group id="input-group-3">
-                <b-form-checkbox-group id="checkboxes-3">
-                  <b-form-checkbox>Remember me</b-form-checkbox>
-                </b-form-checkbox-group>
-              </b-form-group>
-
-              <b-button type="submit" variant="primary" class="btn-block">Login</b-button>
-            </b-form>
-
-            <div class="or-text">
-              <span>OR</span>
+            <div class="auth-wrapper mx-auto">            
+              <div class="social-auth text-center mx-auto">                        
+                      <ul class="social-buttons list-unstyled">
+                          <li class="mb-3">
+                            <GoogleSignIn></GoogleSignIn>
+                          </li>
+                      </ul>
+                  </div>
+                  
+                  <div class="divider my-5">
+                      <span class="or-text">OR</span>
+                  </div>
+                  
+                  <div class="auth-form-container text-left mx-auto">
+                      <form  @submit="handleSubmit" class="auth-form signup-form">         
+                          <div class="form-group email">
+                              <label class="sr-only" for="signup-email">Your Email</label>
+                              <input v-model="email" id="signup-email" name="signup-email" type="email" class="form-control signup-email" placeholder="Your email" required="required">
+                          </div><!--//form-group-->
+                          <div class="form-group password">
+                              <label class="sr-only" for="signup-password">Password</label>
+                              <input v-model="password" id="signup-password" name="signup-password" type="password" class="form-control signup-password" placeholder="Create a password" required="required">
+                          </div><!--//form-group-->
+                          <div class="text-center">
+                              <button type="submit" class="btn btn-primary theme-btn mx-auto">Login</button>
+                          </div>
+                          
+                      </form>
+                  </div><!--//auth-form-container-->
+                  
+                  <div class="option-container my-4 pt-3">
+                      New User: <a href="#" @click="goToRegisterPage">Sign Up</a>
+                  </div><!--//option-container-->
+                  <div class="option-container my-4 pt-3">
+                    <a href="#" @click="goToForgotPasswordPage">Forgot Password</a>&nbsp;|&nbsp;<a href="/">Home</a>
+                  </div>
+            </div><!--//auth-wrapper-->
+            
+            
+          </div><!--//col-auth-->
+            
+          <div class="auth-col-promo col-lg-4 d-none d-lg-block order-1 theme-bg-primary h-100 align-self-stretch">
+            <div class="auth-col-promo-inner h-100 position-relative p-0">
+              <div class="auth-quote-box mt-5 mb-3 px-3 py-4 rounded text-center shadow-lg bg-white mx-auto">
+                    <h5 class="auth-quote-title">An absolute time-saver!</h5>
+                  <div>You can use this area to add customer testimonial or reinforce your app's key benefits. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</div>
+              </div>
+              <div class="auth-user-figure-holder mt-5">
+                
+              </div>
             </div>
-
-            <GoogleSignIn></GoogleSignIn>
-            <br><br>
-            <hr>
-
-            <div class="form-group text-center">
-              New User: <a href="#" @click="goToRegisterPage">Sign Up</a>
-            </div>
-            <div class="form-group text-center">
-              <a href="#" @click="goToForgotPasswordPage">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>
-            </div>
-
-          </div>
-      </div>
-    </div>
-  </div>
+          
+          </div><!--//col-promo-->
+          
+        </div><!--//row-->
+   
+    </div><!--//signup-section-->
 </template>
 
 <script>
@@ -110,22 +120,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.parent {
-  padding-top: 5vh;
-}
-.form-container {
-  padding: 30px;
-}
-.or-text {
-   width: 100%; 
-   text-align: center; 
-   border-bottom: 1px solid #D3D3D3; 
-   line-height: 0.05em;
-   margin: 10px 0 20px; 
-} 
 
-.or-text span { 
-    background:#f8f9fa; 
-    padding:0 10px; 
-}
 </style>
