@@ -4,7 +4,7 @@
       <div class="col-12 right-align">
         <h2><strong>Cookie Policy for finsey.</strong></h2>
 
-        <p>This is the Cookie Policy for finsey., accessible from www.finsey.in</p>
+        <p>This is the Cookie Policy for Steven., accessible from www.steven.in</p>
 
         <p><strong>What Are Cookies</strong></p>
 
@@ -67,7 +67,7 @@
         <p>However if you are still looking for more information then you can contact us through one of our preferred contact methods:</p>
 
         <ul>
-        <li>Email: team.finsey@gmail.com</li>
+        <li>Email: team.steven@gmail.com</li>
 
         </ul>
       </div>

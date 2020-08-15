@@ -19,7 +19,7 @@ export default {
 
             var percent = ((value / total) * 100).toFixed(2);
 
-            return label + ": ₹" + value + " (" + percent + "%)"; // should have replaced with &#8377;
+            return label + ": $" + value + " (" + percent + "%)"; // should have replaced with $
           }
         }
       }

@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <header class="header">
       
       <div class="branding">
@@ -79,7 +78,6 @@
 
       </div><!--//branding-->
     </header>
-
 
     <b-modal id="ask-for-user-profile" :no-close-on-esc="true" :no-close-on-backdrop="true" :hide-header-close="true" :hide-footer="true" :hide-header="true">
       <Profile />
@@ -229,7 +227,7 @@ export default {
           h('p', { }, [
             "Looks like you are new to the website. Click ",
             h('router-link', { props: { to: "need-help" } }, 'Learn More'),
-            " to know how to use finsey. Or navigate to Help on top bar."
+            " to know how to use Steven. Or navigate to Help on top bar."
             ]
           )
         ]

@@ -51,7 +51,7 @@
                 </td>
                 <td @click="toggleEditingLoan(loan, 'value')">
                   <div v-if="!showInput(loan, 'value')">
-                    &#8377; {{ loan.value }}
+                    $ {{ loan.value }}
                   </div>
                   <div v-if="showInput(loan, 'value')">
                     <input class="form-control input-sm" v-focus type="text" v-model="loan.value" @blur="updateLoan(loan)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(loan, 'value')">
@@ -60,15 +60,15 @@
 
                 <td @click="toggleEditingLoan(loan, 'emi')">
                   <div v-if="!showInput(loan, 'emi')">
-                    &#8377; {{ loan.emi }}
+                    $ {{ loan.emi }}
                   </div>
                   <div v-if="showInput(loan, 'emi')">
                     <input class="form-control input-sm" v-focus type="text" v-model="loan.emi" @blur="updateLoan(loan)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(loan, 'emi')">
                   </div>
                 </td>
 
-                <td>&#8377; {{ loan.planned.toFixed(2) }}</td>
-                <td>&#8377; {{ loan.actual.toFixed(2) }}</td>
+                <td>$ {{ loan.planned.toFixed(2) }}</td>
+                <td>$ {{ loan.actual.toFixed(2) }}</td>
               </tr>
               <tr>
                 <td><input class="form-control input-sm" type="text" v-model="newLoan.description"></td>

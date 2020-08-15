@@ -44,8 +44,8 @@ let router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.title == null) { document.title = "finsey. - Budget Planner & Expense Manager" }
-    else { document.title = "finsey. " + to.meta.title; }
+    if (to.meta.title == null) { document.title = "Steven. - Budget Planner & Expense Manager" }
+    else { document.title = "Steven. " + to.meta.title; }
 
     if(to.matched.some(record => record.meta.requiresAuth)) {
         if (localStorage.getItem('jwt') == null) {

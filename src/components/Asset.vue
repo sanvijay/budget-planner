@@ -32,7 +32,7 @@
                 </td>
                 <td @click="toggleEditingAsset(asset, 'value')">
                   <div v-if="!showInput(asset, 'value')">
-                    &#8377; {{ asset.value }}
+                    $ {{ asset.value }}
                   </div>
                   <div v-if="showInput(asset, 'value')">
                     <input class="form-control input-sm" v-focus type="text" v-model="asset.value" @blur="updateAsset(asset)" @keyup.enter="$event.target.blur()" @keyup.esc="cancelEdit(asset, 'value')">
