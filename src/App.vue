@@ -227,7 +227,7 @@ export default {
           h('p', { }, [
             "Looks like you are new to the website. Click ",
             h('router-link', { props: { to: "need-help" } }, 'Learn More'),
-            " to know how to use Steven. Or navigate to Help on top bar."
+            " to know how to use finsey. Or navigate to Help on top bar."
             ]
           )
         ]
